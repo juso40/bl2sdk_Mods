@@ -4,7 +4,7 @@ import unrealsdk
 class BGOOBL(unrealsdk.BL2MOD):
     Name = "Be Gone Out Of Bounds Loot"
     Version = "1.1"
-    Type = [ModTypes.Utility]
+    Type = [unrealsdk.ModTypes.Utility]
     Description = "Adds a keybind option to the game that allows you to teleport all loot on the ground to your " \
                   f"current location. By default the key is binded to ENTER.\n\n{Version}"
     Author = "Juso"
@@ -26,10 +26,10 @@ class BGOOBL(unrealsdk.BL2MOD):
                 Location = tuple(lst)
 
     def Enable(self):
-        self.RegisterGameInput("Teleport Loot To Me", "Enter")
+        pass
 
     def Disable(self):
-        self.UnregisterGameInput("Teleport Loot To Me")
+        pass
 
 
 unrealsdk.RegisterMod(BGOOBL())
