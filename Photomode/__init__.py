@@ -7,7 +7,7 @@ class Photo(BL2MOD):
     Name = "Photomode"
     Version = "1.0"
     Types = [ModTypes.Utility]
-    Description = "Simple Photo Mode for BL2."
+    Description = f"Simple Photo Mode for BL2.\n\n{Version}"
     Author = "Juso"
 
     Keybinds = []
