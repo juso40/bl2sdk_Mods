@@ -13,7 +13,7 @@ The names of the files do not really matter, as most mods will add new objects, 
 shouldn't cause any compatibility issues.  
 If you do care about load order, the files will be loaded in alphabetical order of their respective directory.
 
-##Using normal text mods alongside of the Constructor
+## Using normal text mods alongside of the Constructor
 As always, use BLCMM to configure your mods and decrease compatibility issues. 
 After you are done in BLCMM make sure the files extension is `.blcm` and then place the file inside of the `Constructor` directory.  
 It's basically the same as with constructor addons/Non replacing mods. Load order of the `.blcm` files is again, alphabetically.
