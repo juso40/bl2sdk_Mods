@@ -1,0 +1,21 @@
+
+- '/' is similar to hotfixes on map load
+- /mappackage means that the following code will only be executed if the mappackage got loaded
+- /None means on any map load
+/None
+
+- We want to add our newly constructed Item to the Knuckledragger chest
+#GD_Itempools.EarlyGame.Pool_Knuckledragger_Chest_Shotgun
+
+- The following code is the same as in your .blcm files, as you would do with any set command
+- only difference is, we remove all "(" ")" "," "="
+ItemPoolDefinition None
+InvBalanceDefinition GD_Weap_Pistol.A_Weapons_Legendary.Pistol_Jakobs_5_XX
+BaseValueConstant 0.000000
+BaseValueAttribute None
+InitializationDefinition AttributeInitializationDefinition'GD_Balance.Weighting.Weight_1_Common'
+BaseValueScaleConstant 1.000000
+bDropOnDeath True
+
+- To show that you are done with the pool simply place a "+" in the end, this will set all the items you've listed above to the pool.
++

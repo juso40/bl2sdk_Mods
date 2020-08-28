@@ -1,0 +1,19 @@
+- Heyho Vault Hunter
+- Files with the suffix '.loaded' are files used to load an Object from a known Package and keep it loaded
+- '.loaded' files are the first files to be processed, that means you should be good with using them in your regular "set"
+- commands at any point in your mods.
+- As you should know by now, lines starting with '-' are comments and will be skipped by this pythons script.
+
+- Empty lines are also skipped
+
+#SanctuaryAir_Dynamic
+-The line above, starting with '#' means, load package 'SanctuaryAir_Dynamic', in python it is 'unrealsdk.LoadPackage("SanctuaryAir_Dynamic")'
+FX_ENV_Misc.Particles.Part_Confetti
+- If a line does not start with "#" or "-" it will be read as an Object and the sdk will try to keep it loaded.
+- In Python it is 'unrealsdk.KeepAlive(unrealsdk.FindObject("Object", "FX_ENV_Misc.Particles.Part_Confetti"))'
+
+- You can also load character packages ->
+#GD_Mercenary_Streaming_SF
+D_Attributes.DamageEnhancementModifiers.LastShotInClipBonusModifier
+- now we have the money shot attribute loaded to work with :)
+

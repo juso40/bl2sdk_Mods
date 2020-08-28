@@ -40,6 +40,10 @@ You are free to use any of my mods as resource for your mods.
 - Includes Snake, playable in the console.
 - [YouTube](https://www.youtube.com/watch?v=4prs9ELj0z8)
 
+### [Constructor](Constructor/)
+- Mod/Ressource that allows the easy creation and use of new non replacing Objects.
+- Used by [BL2: Exodus](https://www.nexusmods.com/borderlands2/mods/257)
+
 ### [CritsOnlyGameMode](CritsOnlyGameMode/)
 - Challenge game mode, only crits count.
 - Enemies without a crit spot can take direct damage.

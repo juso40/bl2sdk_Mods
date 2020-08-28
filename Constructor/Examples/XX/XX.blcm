@@ -1,0 +1,50 @@
+<BLCMM v="1">
+#<!!!You opened a file saved with BLCMM in FilterTool. Please update to BLCMM to properly open this file!!!>
+	<head>
+		<type name="BL2" offline="false"/>
+		<profiles>
+			<profile name="default" current="true"/>
+		</profiles>
+	</head>
+	<body>
+		<category name="root">
+			<category name="PartList">
+				<code profiles="default">set GD_Weap_Pistol.A_Weapons_Legendary.Pistol_Jakobs_5_XX:WeaponPartListCollectionDefinition_1000 BarrelPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=2)))</code>
+				<code profiles="default">set GD_Weap_Pistol.A_Weapons_Legendary.Pistol_Jakobs_5_XX:WeaponPartListCollectionDefinition_1000 MaterialPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Pistol.ManufacturerMaterials.Mat_Jakobs_5_Legendary_XX',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=1)))</code>
+			</category>
+			<category name="Barrel">
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher PrefixList ()</code>
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher TitleList (WeaponNamePartDefinition'GD_Weap_Pistol.Name.Title_Jakobs.Title_Legendary_XX')</code>
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher GestaltModeSkeletalMeshName Pistol_Barrel_Jakobs</code>
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher CustomFiringModeDefinition FiringModeDefinition'GD_Weap_Pistol.FiringModes.Bullet_Pistol_XX'</code>
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher WeaponAttributeEffects ((AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponProjectilesPerShot',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=2.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponDamage',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-3.500000,BaseValueAttribute=AttributeDefinition'D_Attributes.WeaponManufacturer.Weapon_Is_Jakobs',InitializationDefinition=None,BaseValueScaleConstant=1.0000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponPerShotAccuracyImpulse',ModifierType=MT_PreAdd,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=AttributeDefinition'D_Attributes.WeaponManufacturer.Weapon_Is_Jakobs',InitializationDefinition=None,BaseValueScaleConstant=-0.600000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponSpread',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=3.500000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponFireInterval',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponKnockback',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-7.500000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=-7.500000)))</code>
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher ExternalAttributeEffects ((AttributeToModify=AttributeDefinition'D_Attributes.GameplayAttributes.PlayerCriticalHitBonus',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)))</code>
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher WeaponCardAttributes ((Attribute=AttributeDefinition'D_Attributes.GameplayAttributes.PlayerCriticalHitBonus',PriorityIncrease=0.600000))</code>
+				<code profiles="default">set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher rarity (BaseValueConstant=-1.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)</code>
+			</category>
+			<category name="Name">
+				<code profiles="default">set GD_Weap_Pistol.Name.Title_Jakobs.Title_Legendary_XX PartName XX</code>
+				<code profiles="default">set GD_Weap_Pistol.Name.Title_Jakobs.Title_Legendary_XX:AttributePresentationDefinition_1000 NoConstraintText Step off.</code>
+			</category>
+			<category name="Material">
+				<code profiles="default">set GD_Weap_Pistol.ManufacturerMaterials.Mat_Jakobs_5_Legendary_XX WeaponCardAttributes ()</code>
+			</category>
+		</category>
+	</body>
+</BLCMM>
+
+#Commands:
+set GD_Weap_Pistol.A_Weapons_Legendary.Pistol_Jakobs_5_XX:WeaponPartListCollectionDefinition_1000 BarrelPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=2)))
+set GD_Weap_Pistol.A_Weapons_Legendary.Pistol_Jakobs_5_XX:WeaponPartListCollectionDefinition_1000 MaterialPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Pistol.ManufacturerMaterials.Mat_Jakobs_5_Legendary_XX',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=1)))
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher PrefixList ()
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher TitleList (WeaponNamePartDefinition'GD_Weap_Pistol.Name.Title_Jakobs.Title_Legendary_XX')
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher GestaltModeSkeletalMeshName Pistol_Barrel_Jakobs
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher CustomFiringModeDefinition FiringModeDefinition'GD_Weap_Pistol.FiringModes.Bullet_Pistol_XX'
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher WeaponAttributeEffects ((AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponProjectilesPerShot',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=2.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponDamage',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-3.500000,BaseValueAttribute=AttributeDefinition'D_Attributes.WeaponManufacturer.Weapon_Is_Jakobs',InitializationDefinition=None,BaseValueScaleConstant=1.0000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponPerShotAccuracyImpulse',ModifierType=MT_PreAdd,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=AttributeDefinition'D_Attributes.WeaponManufacturer.Weapon_Is_Jakobs',InitializationDefinition=None,BaseValueScaleConstant=-0.600000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponSpread',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=3.500000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponFireInterval',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponKnockback',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-7.500000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=-7.500000)))
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher ExternalAttributeEffects ((AttributeToModify=AttributeDefinition'D_Attributes.GameplayAttributes.PlayerCriticalHitBonus',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)))
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher WeaponCardAttributes ((Attribute=AttributeDefinition'D_Attributes.GameplayAttributes.PlayerCriticalHitBonus',PriorityIncrease=0.600000))
+set GD_Weap_Pistol.Barrel.Pistol_Barrel_XX_Masher rarity (BaseValueConstant=-1.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)
+set GD_Weap_Pistol.Name.Title_Jakobs.Title_Legendary_XX PartName XX
+set GD_Weap_Pistol.Name.Title_Jakobs.Title_Legendary_XX:AttributePresentationDefinition_1000 NoConstraintText Step off.
+set GD_Weap_Pistol.ManufacturerMaterials.Mat_Jakobs_5_Legendary_XX WeaponCardAttributes ()
+

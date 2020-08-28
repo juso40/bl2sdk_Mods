@@ -1,0 +1,44 @@
+- The ".construct" files are basically the bread and butter of this sdk resource/mod
+- It aims to ease you of having manually to construct every teeny tiny object, it also tries to maintain the games
+- integrity while adding your newly created objects.
+- For example, if you construct a new "ClassModDefinition" it will automatically be appended to the
+- "ClassModDefinitions" array in "ClassModBalanceDefinition".
+
+- For this example lets create a custom gun.
+- For a completely new gun we want to start with its "WeaponBalanceDefinition"
+- The "#" in the ".construct" files is used to determine the class which our to be cloned object is an instance of.
+
+#WeaponBalanceDefinition
+- To construct a new object the syntax is as follows: <object_template> [new object Name] [new object Outer]
+- For this "WeaponBalanceDefinition" we do not need a different Outer, but we want our own Name to easily tell our objects apart.
+
+GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_SledgesShotgun SG_Bandit_5_Confetti
+- The line above will now construct a "WeaponBalanceDefinition'GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_Confetti'"
+
+- We also may want a new "WeaponPartDefinition" for our weapon, in most cases this will be a unique Barrel
+#WeaponPartDefinition
+GD_Weap_Shotgun.Barrel.SG_Barrel_Jakobs_Sledges SG_Barrel_Confetti
+- Now we have successfully constructed the object "WeaponPartDefinition'GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti'"
+
+- Just for the sake of it, lets add also a new Material, so that we can later add our own custom skin to it:
+GD_Weap_Shotgun.ManufacturerMaterials.Mat_Bandit_5_Legendary Mat_Bandit_5_Legendary_Confetti
+
+
+- A unique weapon without a "FiringModeDefinition" is just boring, so lets just add one.
+#FiringModeDefinition
+GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Teeth Bullet_Shotgun_Confetti
+
+
+- Our new Weapon also needs a Title (the object related to its name and redtext)
+#WeaponNamePartDefinition
+GD_Weap_Shotgun.Name.Title_Bandit.Title_Legendary_Shotgun Title_Legendary_Confetti
+
+- Awesome, we now have constructed all the needed objects for our own custom weapon.
+- Keep in mind, the new objects all used templates, this means it uses all the values from the object we used as a template.
+- So the next thing we want to do is go in to BLCMM and "glue" our new objects together. (See "example1.blcm")
+
+- You may have noticed, that we did not manually constructed the "WeaponPartListCollectionDefinition"
+- That is because it will be automatically be constructed if you decide to construct a "WeaponBalanceDefinition"
+- For our WeaponBalanceDefinition'GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_Confetti' will also
+- "GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_Confetti:WeaponPartListCollectionDefinition_1000" constructed and assigned to it.
+- So that you can easily add or change parts for your new guns.

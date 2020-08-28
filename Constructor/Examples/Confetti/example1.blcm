@@ -1,0 +1,56 @@
+<BLCMM v="1">
+#<!!!You opened a file saved with BLCMM in FilterTool. Please update to BLCMM to properly open this file!!!>
+	<head>
+		<type name="BL2" offline="false"/>
+		<profiles>
+			<profile name="default" current="true"/>
+		</profiles>
+	</head>
+	<body>
+		<category name="Confetti Shotgun">
+			<category name="PartList">
+				<code profiles="default">set GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_Confetti:WeaponPartListCollectionDefinition_1000 BarrelPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=1)))</code>
+				<code profiles="default">set GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_Confetti:WeaponPartListCollectionDefinition_1000 MaterialPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Shotgun.ManufacturerMaterials.Mat_Bandit_5_Legendary_Confetti',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=1)))</code>
+			</category>
+			<category name="Barrel">
+				<category name="FiringMode">
+					<code profiles="default">set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti CustomFiringModeDefinition FiringModeDefinition'GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti'</code>
+					<code profiles="default">set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti PartSysTemplate ParticleSystem'FX_ENV_Misc.Particles.Part_Confetti'</code>
+					<code profiles="default">set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti:Behavior_Explode_0 DamageSource Class'WillowGame.WillowDmgSource_Melee'</code>
+					<code profiles="default">set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti:Behavior_Explode_0 DamageRadiusFormula (BaseValueConstant=10.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)</code>
+					<code profiles="default">set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti:Behavior_Explode_0 DamageFormula (BaseValueConstant=0.000000,BaseValueAttribute=AttributeDefinition'D_Attributes.Weapon.WeaponDamage',InitializationDefinition=None,BaseValueScaleConstant=1.000000)</code>
+				</category>
+				<code profiles="default">set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti PrefixList ()</code>
+				<code profiles="default">set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti TitleList (WeaponNamePartDefinition'GD_Weap_Shotgun.Name.Title_Bandit.Title_Legendary_Confetti')</code>
+				<code profiles="default">set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti GestaltModeSkeletalMeshName SG_Barrel_Torgue</code>
+				<code profiles="default">set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti WeaponAttributeEffects ((AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponFireInterval',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-1.250000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponReloadSpeed',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-0.250000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponShotCost',ModifierType=MT_PreAdd,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponProjectilesPerShot',ModifierType=MT_PreAdd,BaseModifierValue=(BaseValueConstant=-3.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponClipSize',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)))</code>
+			</category>
+			<category name="Name">
+				<code profiles="default">set GD_Weap_Shotgun.Name.Title_Bandit.Title_Legendary_Confetti PartName Confetti</code>
+				<code profiles="default">set GD_Weap_Shotgun.Name.Title_Bandit.Title_Legendary_Confetti:AttributePresentationDefinition_1000 NoConstraintText *Puff*</code>
+			</category>
+			<category name="Material">
+				<comment>As you may notice, we do not "set" our custom skin in here, also we did not construct a new "MaterialInstanceConstant", thats because the MatInstConsts need to be generated in runtime, we cant copy an existing Material for some reason.</comment>
+				<comment>That means the name of the object will be random and thus cannot be "set" in the blcm file, for this case we will use ".material" files. To see the skin of this weapon look into the "example1.material" file.</comment>
+				<code profiles="default">set GD_Weap_Shotgun.ManufacturerMaterials.Mat_Bandit_5_Legendary_Confetti WeaponCardAttributes ()</code>
+			</category>
+		</category>
+	</body>
+</BLCMM>
+
+#Commands:
+set GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_Confetti:WeaponPartListCollectionDefinition_1000 BarrelPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=1)))
+set GD_Weap_Shotgun.A_Weapons_Legendary.SG_Bandit_5_Confetti:WeaponPartListCollectionDefinition_1000 MaterialPartData (bEnabled=True,WeightedParts=((Part=WeaponPartDefinition'GD_Weap_Shotgun.ManufacturerMaterials.Mat_Bandit_5_Legendary_Confetti',Manufacturers=,MinGameStageIndex=0,MaxGameStageIndex=1,DefaultWeightIndex=1)))
+set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti CustomFiringModeDefinition FiringModeDefinition'GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti'
+set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti PartSysTemplate ParticleSystem'FX_ENV_Misc.Particles.Part_Confetti'
+set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti:Behavior_Explode_0 DamageSource Class'WillowGame.WillowDmgSource_Melee'
+set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti:Behavior_Explode_0 DamageRadiusFormula (BaseValueConstant=10.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)
+set GD_Weap_Shotgun.FiringModes.Bullet_Shotgun_Confetti:Behavior_Explode_0 DamageFormula (BaseValueConstant=0.000000,BaseValueAttribute=AttributeDefinition'D_Attributes.Weapon.WeaponDamage',InitializationDefinition=None,BaseValueScaleConstant=1.000000)
+set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti PrefixList ()
+set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti TitleList (WeaponNamePartDefinition'GD_Weap_Shotgun.Name.Title_Bandit.Title_Legendary_Confetti')
+set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti GestaltModeSkeletalMeshName SG_Barrel_Torgue
+set GD_Weap_Shotgun.Barrel.SG_Barrel_Confetti WeaponAttributeEffects ((AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponFireInterval',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-1.250000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponReloadSpeed',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=-0.250000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponShotCost',ModifierType=MT_PreAdd,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponProjectilesPerShot',ModifierType=MT_PreAdd,BaseModifierValue=(BaseValueConstant=-3.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)),(AttributeToModify=AttributeDefinition'D_Attributes.Weapon.WeaponClipSize',ModifierType=MT_Scale,BaseModifierValue=(BaseValueConstant=0.000000,BaseValueAttribute=None,InitializationDefinition=None,BaseValueScaleConstant=1.000000)))
+set GD_Weap_Shotgun.Name.Title_Bandit.Title_Legendary_Confetti PartName Confetti
+set GD_Weap_Shotgun.Name.Title_Bandit.Title_Legendary_Confetti:AttributePresentationDefinition_1000 NoConstraintText *Puff*
+set GD_Weap_Shotgun.ManufacturerMaterials.Mat_Bandit_5_Legendary_Confetti WeaponCardAttributes ()
+

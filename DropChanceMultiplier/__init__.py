@@ -18,7 +18,7 @@ class DropChanceMultiplier(unrealsdk.BL2MOD):
     def Enable(self):
         def Loot(caller: UObject, function: UFunction, params: FStruct) -> bool:
             for _ in range(self.multiplier):
-                unrealsdk.DoInjectedCallNext()
+                # unrealsdk.DoInjectedCallNext()
                 caller.DropLootOnDeath(params.Killer, params.DamageType, params.DamageTypeDefinition)
             return True
 
