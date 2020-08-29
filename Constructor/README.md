@@ -30,7 +30,10 @@ The `.blcm` mods will then automatically be merged and enabled.
   - No.
 
 ## Getting Addons
-- No Addons have currently been uploaded. If you've created a Repo or mod page with your creations message me, and I'll happily add it to this list :)
+- [Borderlands 2 Reloaded](https://www.nexusmods.com/borderlands2/mods/272) 
+ adds 20+ new items to the base game, all of which can be farmed from specific sources. Planning on overhauling parts of the vanilla game later on, just wanting to get a beta out.
+--------------------------------
+*If you've created a Repo or mod page with your creations message me, and I'll happily add it to this list :)*
 
 ### Contact me
 - Discord `juso#6352`
