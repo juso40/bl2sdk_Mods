@@ -14,7 +14,7 @@ from . import bl2tools
 
 class Main(BL2MOD):
     Name = "Constructor"
-    Version = "1.0"
+    Version = "1.0.1"
     Description = f"Mod/Ressource that allows the easy creation and use of new non replacing Objects.\n\nVersion: " \
                   f"{Version}"
     Author = "Juso"
@@ -122,18 +122,20 @@ class Main(BL2MOD):
     @staticmethod
     def optimize():
         path = os.path.dirname(os.path.realpath(__file__))
-        for extension in (".construct", ".loaded", ".mission", ".itempool", ".assign",
+        for extension in (".construct", ".loaded", ".itempool", ".assign",
                           ".set", ".lootable", ".reward", ".material", ".popdef", ".pawn"):
             with open(os.path.join(path, "src", f"MASTER{extension}"), "w", encoding="cp1252") as master_file:
                 for root, dirs, files in os.walk(path):
                     for file in files:
+                        if file.split(".")[0] == "MASTER":
+                            continue
                         if file.lower().endswith(extension):
                             with open(os.path.join(root, file), encoding="cp1252") as f:
                                 for line in f:
                                     if not line.rstrip():
                                         continue
                                     if line.lstrip()[0] != "-":
-                                        master_file.write(line)
+                                        master_file.write(f"{line.rstrip()}\n")
             for root, dirs, files in os.walk(path):
                 for file in files:
                     if file == f"MASTER{extension}":

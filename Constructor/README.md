@@ -31,7 +31,7 @@ The `.blcm` mods will then automatically be merged and enabled.
 
 ## Getting Addons
 - [Borderlands 2 Reloaded](https://www.nexusmods.com/borderlands2/mods/272) 
- adds 20+ new items to the base game, all of which can be farmed from specific sources. Planning on overhauling parts of the vanilla game later on, just wanting to get a beta out.
+ adds 20+ new items to the base game, all of which can be farmed from specific sources. Planning on overhauling parts of the vanilla game later on, just wanting to get a beta out. -Created By: SteveKiller568
 --------------------------------
 *If you've created a Repo or mod page with your creations message me, and I'll happily add it to this list :)*
 

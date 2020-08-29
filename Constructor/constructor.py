@@ -380,7 +380,8 @@ class Constructor:
 
                             if in_class in ("ProjectileDefinition", "WeaponPartDefinition", "ShieldPartDefinition",
                                             "ShieldDefinition", "SkillDefinition", "ArtifactDefinition",
-                                            "GrenadeModDefinition", "ClassModDefinition", "UsableItemDefinition"):
+                                            "GrenadeModDefinition", "ClassModDefinition", "UsableItemDefinition",
+                                            "ArtifactPartDefinition"):
                                 self.bpd_copy_helper(new_object)
                             if in_class == "FiringModeDefinition":
                                 self.on_any_impact_helper(new_object)
