@@ -18,4 +18,7 @@ BaseValueScaleConstant 1.000000
 bDropOnDeath True
 
 - To show that you are done with the pool simply place a "+" in the end, this will set all the items you've listed above to the pool.
+- Instead of only one "+" you can alternatively use "++" wich won't overwrite the original data, but only add your data too it.
+- Using "++" will help with compatibility issues between addons, but is way slower than one simple "+", so if you decide to
+- use "++" please don't use "/None", use the correct map package where the object is needed. This can drastically speed things up if you have many addons.
 +

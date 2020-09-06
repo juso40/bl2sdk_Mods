@@ -113,7 +113,22 @@ class Assignor:
                     b_drop_on_death
                 )
                 temp_list.append(ArrayEntry)
-            elif line.strip() == "+":
+            elif line.split()[0] in ["+", "++"]:
+                if line.split()[0] == "++":
+                    existing = [
+                        (
+                            x.ItmPoolDefinition, x.InvBalanceDefinition, (
+                                x.Probability.BaseValueConstant, x.Probability.BaseValueAttribute,
+                                x.Probability.InitializationDefinition, x.Probability.BaseValueScaleConstant
+                            ),
+                            x.bDropOnDeath
+                        )
+                        for x in item_pool.BalancedItems
+                    ]
+                    # if all our appended items are already exist in the pool, dont append them.
+                    if not all(x in existing for x in temp_list):
+                        existing.extend(temp_list)
+                    temp_list = existing
                 item_pool.BalancedItems = temp_list
                 temp_list.clear()
 
@@ -192,7 +207,25 @@ class Assignor:
                     )
                 )
                 temp_list.append(array_entry)
-            elif line.strip() == "+":
+            elif line.split()[0] in ["+", "++"]:
+                if line.split()[0] == "++":
+                    if bl2tools.obj_is_in_class(drop_source, "Behavior_SpawnItems"):
+                        existing = drop_source.ItemPoolList
+                    else:
+                        existing = drop_source.DefaultItemPoolList
+                    existing = [
+                        (
+                            x.ItemPool, (
+                                x.PoolProbability.BaseValueConstant, x.PoolProbability.BaseValueAttribute,
+                                x.PoolProbability.InitializationDefinition, x.PoolProbability.BaseValueScaleConstant
+                            )
+                        ) for x in existing
+                    ]
+                    # if all our appended items are already exist in the pool, dont append them.
+                    if not all(x in existing for x in temp_list):
+                        existing.extend(temp_list)
+                    temp_list = existing
+
                 if bl2tools.obj_is_in_class(drop_source, "Behavior_SpawnItems"):
                     drop_source.ItemPoolList = temp_list
                 else:
@@ -257,11 +290,41 @@ class Assignor:
                 att_point = line.split()[1].strip()
                 array_entry = (item_pool, (pool_bvc, pool_bva, pool_ini, pool_bvsc), att_point)
                 temp_list.append(array_entry)
-            elif line[0] == "+":
+            elif line.split()[0] in ["+", "++"]:  # either overwrite or append to existing lootlist
                 default_loot.append((configuration_name,
                                      loot_game_stage_variance_formula,
                                      (weight_bvc, weight_bva, weight_ini, weight_bvsc),
                                      temp_list))
+                if line.split()[0] == "++":  # append
+                    if bl2tools.obj_is_in_class(lootable_obj, "InteractiveObjectLootListDefinition"):
+                        existing = lootable_obj.LootData
+                    else:
+                        existing = lootable_obj.DefaultLoot
+                    existing = [
+                        (
+                            x.ConfigurationName, x.LootGameStageVarianceFormula,
+                            (
+                                x.Weight.BaseValueConstant, x.Weight.BaseValueAttribute,
+                                x.Weight.InitializationDefinition, x.Weight.BaseValueScaleConstant
+                            ),
+                            [
+                                (
+                                    y.ItemPool,
+                                    (
+                                        y.PoolProbability.BaseValueConstant, y.PoolProbability.BaseValueAttribute,
+                                        y.PoolProbability.InitializationDefinition,
+                                        y.PoolProbability.BaseValueScaleConstant
+                                    ),
+                                    y.AttachmentPointName
+                                ) for y in x.ItemAttachments
+                            ]
+                        ) for x in existing]
+
+                    # if all our appended items are already exist in the pool, dont append them.
+                    if not all(x in existing for x in temp_list):
+                        existing.extend(default_loot)
+                    default_loot = existing
+
                 if bl2tools.obj_is_in_class(lootable_obj, "InteractiveObjectLootListDefinition"):
                     lootable_obj.LootData = default_loot
                 else:

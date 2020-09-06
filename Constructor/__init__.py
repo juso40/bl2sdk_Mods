@@ -14,7 +14,7 @@ from . import bl2tools
 
 class Main(BL2MOD):
     Name = "Constructor"
-    Version = "1.0.1"
+    Version = "1.0.2"
     Description = f"Mod/Ressource that allows the easy creation and use of new non replacing Objects.\n\nVersion: " \
                   f"{Version}"
     Author = "Juso"
