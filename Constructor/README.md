@@ -33,7 +33,9 @@ The `.blcm` mods will then automatically be merged and enabled.
 - [Borderlands 2 Reloaded](https://www.nexusmods.com/borderlands2/mods/272) 
  adds 20+ new items to the base game, all of which can be farmed from specific sources. Planning on overhauling parts of the vanilla game later on, just wanting to get a beta out. -Created By: SteveKiller568  
  - [TPS Lasers in BL2](https://www.nexusmods.com/borderlands2/mods/281)
- attempts to recreate the Laser weapon category from The Pre-Sequel in BL2. 
+ attempts to recreate the Laser weapon category from The Pre-Sequel in BL2.   
+ - [MoxxiCard](https://github.com/zondaken/bl2-mods/tree/main/sdk-mods/MoxxiCard)
+   is a simple QoL mod which adds card information to the card about the life steal amount.  
 --------------------------------
 *If you've created a Repo or mod page with your creations message me, and I'll happily add it to this list :)*
 
