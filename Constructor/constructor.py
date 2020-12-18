@@ -83,9 +83,13 @@ class Constructor:
     def inv_partlist_helper(self, obj, newBalance):
         if obj.PartListCollection:
             part_list = obj.PartListCollection
+            if obj.PathName(part_list).rsplit(".", 1)[0] == obj.PathName(obj).rsplit(".", 1)[0]:
+                new_name = f"Parts_{newBalance.Name}"
+            else:
+                new_name = newBalance.Name
             new_part_list = unrealsdk.ConstructObject(Class="ItemPartListCollectionDefinition",
                                                       Outer=part_list.Outer,
-                                                      Name=newBalance.Name, SetFlags=0x83, Template=part_list)
+                                                      Name=new_name, SetFlags=0x83, Template=part_list)
             KeepAlive(new_part_list)
             newBalance.PartListCollection = new_part_list
 
