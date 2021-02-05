@@ -37,10 +37,14 @@ class Photo(BL2MOD):
                     world_info.bPlayersOnly = True
                     self.b_photo = True
         elif input.Name == "Photomode Roll+":
-            if self.b_photo:
+            pc = bl2tools.get_player_controller()
+            world_info = GetEngine().GetCurrentWorldInfo()
+            if self.b_photo and world_info.bPlayersOnly:
                 bl2tools.get_player_controller().Rotation.Roll += 128
         elif input.Name == "Photomode Roll-":
-            if self.b_photo:
+            pc = bl2tools.get_player_controller()
+            world_info = GetEngine().GetCurrentWorldInfo()
+            if self.b_photo and world_info.bPlayersOnly:
                 bl2tools.get_player_controller().Rotation.Roll -= 128
 
     def Enable(self):
