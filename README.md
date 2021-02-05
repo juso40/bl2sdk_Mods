@@ -48,6 +48,9 @@ You are free to use any of my mods as resource for your mods.
 - Challenge game mode, only crits count.
 - Enemies without a crit spot can take direct damage.
 
+### [dialograndomizer](dialograndomizer/)
+- Randomizes the dialogs in the game.
+
 ### [DPS and TTK](DPS and TTK/)
 - Show your DPS and your TTK after killing an enemy.
 
