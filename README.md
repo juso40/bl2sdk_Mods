@@ -51,7 +51,7 @@ You are free to use any of my mods as resource for your mods.
 ### [dialograndomizer](dialograndomizer/)
 - Randomizes the dialogs in the game.
 
-### [DPS and TTK](DPS and TTK/)
+### [DPS and TTK](DPS%20and%20TTK/)
 - Show your DPS and your TTK after killing an enemy.
 
 ### [DropChanceMultiplier](DropChanceMultiplier/)
