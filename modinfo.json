@@ -1,0 +1,392 @@
+{
+  "defaults": {
+    "authors": "juso",
+    "source": "https://github.com/juso40/bl2sdk_Mods/",
+    "issues": "https://github.com/juso40/bl2sdk_Mods/issues",
+    "supports": [
+      "BL2",
+      "TPS"
+    ],
+    "license": "MIT"
+  },
+  "mods": [
+    {
+      "name": "Better Spawns and Better Travel (BSABT)",
+      "description": [
+        "Ports back some qol features of BL3:\n",
+        "- open the fast travel from anywhere\n",
+        "- teleport in your vehicle from the map menu\n",
+        "- spawn at the last triggered spawn station\n",
+        "![yt](https://www.youtube.com/watch?v=pY17YkKkTqg)"
+      ],
+      "tagline": "Spawning and traveling like in BL3.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/BSABT/BSABT.zip"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Be Gone Out Of Bounds Loot",
+      "description": [
+        "Gone are the times of missing loot because it fell out of the reachable area.\n",
+        "This mod adds a configurable keybind, that will allow you to teleport\n",
+        "all loot on the ground directly in front of you.\n Default Key: ``Enter``"
+      ],
+      "tagline": "Teleport all loot in front of you, with the simple press of a button!",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.1",
+      "versions": {
+        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/BeGoneOutOfBoundsLoot/BeGoneOutOfBoundsLoot.rar"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Bossbar",
+      "description": [
+        "Adds a Boss-/Health-bar to most named enemies."
+      ],
+      "tagline": "Adds a Boss-/Health-bar to most named enemies.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/bossbar/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Chronos",
+      "description": [
+        "A replacement for the Skullmasher.\n",
+        "- Slows down time while scoping.\n",
+        "- Randomizes the weapons skin after scoping in with the weapon equipped.\n",
+        "![yt](https://www.youtube.com/watch?v=lS_Dl43om0s)"
+      ],
+      "tagline": "A replacement for the Skullmasher Sniper Rifle.",
+      "types": [
+        "Content"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/blob/master/Chronos/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Combocounter",
+      "description": [
+        "This mod keeps track of combos when killing enemies.\n",
+        "If no enemy has been killed in the last 6 seconds, the combo will vanish.\n",
+        "- 15 different combo names\n",
+        "- adds an announcer, will randomly get triggered on kill\n",
+        "- the higher your combo the more xp you will gain\n",
+        "![yt](https://www.youtube.com/watch?v=l_nP-QVjaJA)"
+      ],
+      "tagline": "Adds a combocounter to the game.",
+      "types": [
+        "Content",
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ComboCounter/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "ConfigurableViewModel (CVM)",
+      "description": [
+        "A mod that allows you to change the viewmodel of any WeaponType.\n",
+        "To change your viewmodel go ingame,\n ``Escape``->``Mods``->``CVM``",
+        "![yt](https://www.youtube.com/watch?v=nABmVIYpuXg)"
+      ],
+      "tagline": "Allows you to easily change the ViewModel for each WeaponType with ingame sliders.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ConfigurableViewmodel/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "ConsoleGames",
+      "description": [
+        "Adds a simple framework for modders to use the console as an ASCII canvas.\n",
+        "This mod only includes snake, other games may be added later.",
+        "![yt](https://www.youtube.com/watch?v=4prs9ELj0z8)"
+      ],
+      "tagline": "Play ASCII games in the ingame-console!",
+      "types": [
+        "Content",
+        "Library"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/tree/master/ConsoleGames"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Constructor",
+      "description": [
+        "# Constructor V.1.0.2\n[PythonSDK](https://github.com/bl-sdk/PythonSDK) Mod/Ressource that allows the easy creation and use of new non replacing Objects.\n\n## Installation\n1. Download and install [PythonSDK](https://github.com/bl-sdk/PythonSDK)  \n2. Download this mod by downloading the provided `.zip`  \n3. Extract the `.zip` archive into the `/Binaries/Win32/Mods` directory of your game.\n4. To enable the mod go start the game, go to `Mods` menu and press `Enter` on the `Constructor`  \n\n## Installing constructor addons/Non replacing mods\nSimply place the provided files/folders anywhere inside `/Binaries/Win32/Mods/Constructor`.  \nThe names of the files do not really matter, as most mods will add new objects, so they won't overwrite each other and\nshouldn't cause any compatibility issues.  \nIf you do care about load order, the files will be loaded in alphabetical order of their respective directory.\n\n## Using normal text mods alongside of the Constructor\nAs always, use BLCMM to configure your mods and decrease compatibility issues. \nAfter you are done in BLCMM make sure the files extension is `.blcm` and then place the file inside of the `Constructor` directory.  \nIt's basically the same as with constructor addons/Non replacing mods. Load order of the `.blcm` files is again, alphabetically.\nThe `.blcm` mods will then automatically be merged and enabled. \n\n## FAQ\n- Can I use gibbeds Save editor to acquire new objects? \n  - No, all your items will be stored in a `.json` file instead of the `.sav` file the game uses. You can open this `.json` with any text editor and simply give yourself any item you want, but you will need to know the parts object name.\n- Do I need all DLCs to use this mod?\n  - No, you only need the base game. But if you plan on using an addon that uses an DLC item as its base, then you will ofc need the DLC to use this new item.\n- Why does my game crash when I throw a grenade?\n  - This is related to multiple objects having the same name. So you either have a duplicate copy of an addon inside the Constructor directory or one of the addons you use has a bug/duplicate entry.\n- Does this work in coop?\n  - No.\n\n## Getting Addons\n- [Borderlands 2 Reloaded](https://www.nexusmods.com/borderlands2/mods/272) \n adds 20+ new items to the base game, all of which can be farmed from specific sources. Planning on overhauling parts of the vanilla game later on, just wanting to get a beta out. -Created By: SteveKiller568  \n - [TPS Lasers in BL2](https://www.nexusmods.com/borderlands2/mods/281)\n attempts to recreate the Laser weapon category from The Pre-Sequel in BL2.   \n - [MoxxiCard](https://github.com/zondaken/bl2-mods/tree/main/sdk-mods/MoxxiCard)\n   is a simple QoL mod which adds card information to the card about the life steal amount.  \n--------------------------------\n*If you've created a Repo or mod page with your creations message me, and I'll happily add it to this list :)*\n\n### Contact me\n- Discord `juso#6352`\n- Discord servers that can help you:\n  - [Borderlands 2 Modding](https://discord.gg/DK74kjy)\n  - [BL: Exodus](https://discord.gg/tdK5MGK)\n  "
+      ],
+      "tagline": "Mod/Ressource that allows the easy creation and use of new non replacing Objects.",
+      "types": [
+        "Content",
+        "Library"
+      ],
+      "latest": "1.0.2",
+      "versions": {
+        "1.0.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/Constructor/Constructor.zip"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Crits-Only GameMode",
+      "description": [
+        "If an enemy has a crit spot, you'll have to hit it to deal damage.\n",
+        "Enemies without crit spots take normal damage."
+      ],
+      "tagline": "Only crits count!",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/CritsOnlyGameMode/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Dialog Randomizer",
+      "description": [
+        "If it talks, it gets randomized.\n",
+        "DLC dialogs are only loaded while in the DLC, therefore they can only be played/randomized inside the DLC."
+      ],
+      "tagline": "Randomizes dialogs.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "2.0",
+      "versions": {
+        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/dialograndomizer/dialograndomizer.zip"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "DPS and TTK",
+      "description": [
+        "After killing an enemy, this mod will display your DPS and the TTK."
+      ],
+      "tagline": "Show your DPS and your TTK after killing an enemy.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/DPS%20and%20TTK/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "DropChanceMultiplier",
+      "description": [
+        "Increase the times enemies drop loot from their pool.\n",
+        "You can easily change the amount of rolls from the pool from the ingame menues.\n",
+        "![yt](https://www.youtube.com/watch?v=i2FpWyEcRrM)"
+      ],
+      "tagline": "Increase the amount of loot enemies drop.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/DropChanceMultiplier/DropChanceMultiplier.zip"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Emotes",
+      "description": [
+        "Adds a list of different emotes.\n",
+        "Check ``Modded Keybinds`` to configure the mod.",
+        "![yt](https://www.youtube.com/watch?v=NFrye102ENY)"
+      ],
+      "tagline": "Express yourself.",
+      "types": [
+        "Utility",
+        "Content"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/Emotes/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "FirstPersonDriver",
+      "description": [
+        "Drive the Vehicles from first person perspective.\n",
+        "Adds a keybind to toggle between 1st and 3rd person.\n",
+        "You can change the keybinds in ``Modded Keybinds`` menu."
+      ],
+      "tagline": "Switch between 1st/3rd person while driving.",
+      "types": [
+        "Utility",
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/tree/master/FirstPersonDriver"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "HitSounds",
+      "description": [
+        "- Plays a sound on hit.\n",
+        "- Spawns confetti on critical hit."
+      ],
+      "tagline": "Plays a sound on enemy hit.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/blob/master/HitSounds/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "LootNotificator",
+      "description": [
+        "Plays special Particles and sounds depending on the loot rarity.\n",
+        "Supports Reborn and Exodus (non SDK version).\n",
+        "![yt](https://www.youtube.com/watch?v=lUML6lXfW14)"
+      ],
+      "tagline": "Plays special Particles and sounds depending on the loot rarity.",
+      "types": [
+        "Utility",
+        "Content"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/LootNotificator/__init__.py"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2"
+      ]
+    },
+    {
+      "name": "ModMerger",
+      "description": [
+        "Merges any ``.blcm`` file in the ModMergers folder.\n",
+        "Automatically chooses the right hotfix method depending on whether you are offline or connected to SHIFT."
+      ],
+      "tagline": "Merges any .blcm file in the ModMergers folder.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ModMerger/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "NoCrosshair",
+      "description": [
+        "Disables your Crosshair."
+      ],
+      "tagline": "Disables your Crosshair.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/NoCrosshair/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Photomode",
+      "description": [
+        "Adds a keybind to toggle ``Photomode``, by default ``P``."
+      ],
+      "tagline": "A lightweight photomode for BL2/TPS.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/Photomode/Photomode.zip"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "PizzaForFastball",
+      "description": [
+        "Replaces the Fastballs mesh with the one of a Pizza."
+      ],
+      "tagline": "Replaces the Fastballs mesh with the one of a Pizza.",
+      "types": [
+        "Content"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/PizzaForFastball/__init__.py"
+      },
+      "requirements": {}
+    },
+    {
+      "name": "Pokelands",
+      "description": [
+        "# Setup\n\n1. Download: [Pawn Grenade](https://www.nexusmods.com/borderlands2/mods/234)  \n2. Add the ``Pokelands.blcm`` to the ``PawnGrenade.blcm`` using BLCMM and let it overwrite anything it wants.  \n2b. Tick the ``Offline`` box in BLCMM to change the Hotfix method. For me the normal online one didn't work when tested.  \n2c. Save the changes, you may now close BLCMM.\n3. Add the ``Nasty Suprise`` to your characters inventory, preferably with a low fuse.\n4. In Game, first ``exec PawnGrenade.blcm``, then enable the Pokelands SDK mod.\n5. Thats it.\n![yt](https://www.youtube.com/watch?v=r1H_Z9LRDUU&t)"
+      ],
+      "tagline": "Pokemon, but in Borderlands 2. Kinda.",
+      "types": [
+        "Content",
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/Pokelands/Pokelands.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2"
+      ]
+    },
+    {
+      "name": "Sliding",
+      "description": [
+        "Slide!\n",
+        "Kinda buggy, for whatever reason it removes all status effects from you when sliding.\n",
+        "![yt](https://www.youtube.com/watch?v=u0Ao8SGIbVU&t)"
+      ],
+      "tagline": "Adds Sliding to BL2.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/tree/master/Sliding"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2"
+      ]
+    }
+  ]
+}

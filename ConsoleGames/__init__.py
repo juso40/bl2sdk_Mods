@@ -1,7 +1,7 @@
 import bl2sdk
 from bl2sdk import *
 
-from ConsoleGames import snake
+from . import snake
 
 
 class Console(BL2MOD):
