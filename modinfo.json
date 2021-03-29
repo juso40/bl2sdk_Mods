@@ -268,6 +268,26 @@
       "requirements": {}
     },
     {
+      "name": "Inventory Editor",
+      "description": [
+        "Allows you to add/edit items to/in your inventory, directly ingame.\n",
+        "This mod will work with any constructed item, this means its 100% compatible with ``Exodus``",
+        "and other mods that add new Items to the game.\n",
+        "The default button to open up the Inventory Editor UI is binded to ``F1``.\n"
+      ],
+      "tagline": "Edit/Add items to your inventory while ingame!",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
+      },
+      "requirements": {
+        "PyImgui": "Any"
+      }
+    },
+    {
       "name": "LootNotificator",
       "description": [
         "Plays special Particles and sounds depending on the loot rarity.\n",
@@ -366,6 +386,27 @@
       "requirements": {},
       "supports": [
         "BL2"
+      ]
+    },
+      {
+      "name": "PyImgui",
+      "description": [
+        "A simple ``pyd_imgui`` wrapper mod/library for use in Borderlands 2/TPS.\n",
+        "By itself this mod won't do anything, it's only a dependency for some other mods.\n",
+        "If you do not know what this is, you probably wont need it."
+         ],
+      "tagline": "Imgui python bindings library.",
+      "types": [
+        "Library"
+      ],
+      "latest": "dev",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/PyImgui/PyImgui.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2",
+        "TPS"
       ]
     },
     {

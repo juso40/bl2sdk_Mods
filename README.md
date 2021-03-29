@@ -71,6 +71,11 @@ You are free to use any of my mods as resource for your mods.
 - Plays a sound on hit.
 - Spawns confetti on crits.
 
+### [InventoryEditor](InventoryEditor/)
+- Edit/Add items in/to your inventory while ingame.
+- 100% compatible with constructed items (eg. Exodus).
+- Requires [PyImgui](PyImgui/)
+
 ### [LootNotificator](LootNotificator/)
 - Plays special Particles and sounds depending on the loot rarity.
 - [YouTube](https://www.youtube.com/watch?v=lUML6lXfW14)
@@ -91,6 +96,14 @@ You are free to use any of my mods as resource for your mods.
 
 ### [Pokelands](Pokelands/)
 - [YouTube](https://www.youtube.com/watch?v=r1H_Z9LRDUU&t)
+
+### [PyImgui](PyImgui/)
+- Imgui python bindings as a mod for bl2/tps.
+- If you are using an AMD GPU, you might need to ALT-TAB while not in the main menu,
+ else the AMD Overlay will break the GUI.
+  Enable the mods that rely on this module before you receive the
+   [Radeon Software](https://www.digitalcitizen.life/wp-content/uploads/2020/10/radeon_software.png) pop up on your screen. 
+- The source of the ``pyd_imgui.pyd`` is available [here](https://github.com/juso40/pydImgui)
 
 ### [Sliding](Sliding/)
 - Allows you to slide in BL2
