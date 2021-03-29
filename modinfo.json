@@ -284,7 +284,7 @@
         "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
       },
       "requirements": {
-        "PyImgui": "Any"
+        "PyImgui": ""
       }
     },
     {
