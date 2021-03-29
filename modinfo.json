@@ -388,20 +388,20 @@
         "BL2"
       ]
     },
-      {
+    {
       "name": "PyImgui",
       "description": [
         "A simple ``pyd_imgui`` wrapper mod/library for use in Borderlands 2/TPS.\n",
         "By itself this mod won't do anything, it's only a dependency for some other mods.\n",
         "If you do not know what this is, you probably wont need it."
-         ],
+      ],
       "tagline": "Imgui python bindings library.",
       "types": [
         "Library"
       ],
       "latest": "dev",
       "versions": {
-        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/PyImgui/PyImgui.zip"
+        "dev": "https://github.com/juso40/bl2sdk_Mods/raw/master/PyImgui/PyImgui.zip"
       },
       "requirements": {},
       "supports": [
