@@ -72,8 +72,9 @@ You are free to use any of my mods as resource for your mods.
 - Spawns confetti on crits.
 
 ### [InventoryEditor](InventoryEditor/)
-- Edit/Add items in/to your inventory while ingame.
-- 100% compatible with constructed items (eg. Exodus).
+- Edit/Add items in/to your inventory while ingame.  
+- The items don't always update correctly in your inventory, so you might need to drop it and pick it back up.  
+- 100% compatible with constructed items (eg. Exodus).  
 - Requires [PyImgui](PyImgui/)
 
 ### [LootNotificator](LootNotificator/)
