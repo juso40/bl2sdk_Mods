@@ -20,7 +20,7 @@ class InventoryEditor(SDKMod):
     Name: str = "Inventory Editor"
     Author: str = "Juso"
     Description: str = "Allows you to edit/add/remove items in your Inventory while ingame."
-    Version: str = "0.9"
+    Version: str = "1.0"
 
     SupportedGames: Game = Game.BL2 | Game.TPS
     Types: ModTypes = ModTypes.Utility
@@ -45,6 +45,7 @@ class InventoryEditor(SDKMod):
 
     u_class_index: int = 0
     u_classes: List[str] = ["WillowWeapon",
+                            "WillowShield",
                             "WillowUsableItem",
                             "WillowArtifact",
                             "WillowClassMod",

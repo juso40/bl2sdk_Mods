@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 import unrealsdk
 
@@ -7,7 +7,6 @@ from .. import bl2tools
 
 weapon_data: dict = weapon_helper.data
 item_data: dict = item_helper.data
-item_classes: List[str] = item_helper.classes
 
 player_inventory: List[unrealsdk.UObject] = []
 player_inventory_readable: List[str] = []

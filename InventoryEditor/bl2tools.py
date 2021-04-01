@@ -38,7 +38,7 @@ def obj_is_in_class(obj, inClass):
     :param inClass: String, the Class to compare with
     :return: Bool, whether or not it's in the Class.
     """
-    return bool(obj.Class == unrealsdk.FindClass(inClass))
+    return obj.Class == unrealsdk.FindClass(inClass)
 
 
 def get_weapon_holding():
