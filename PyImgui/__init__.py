@@ -22,15 +22,19 @@ __all__ = [
 
 _on_end_scene: Set[Callable[[], None]] = set()
 
+_d3d9_success: bool = False
+_enabled: bool = False
+
 
 def d3d9hook() -> None:
+    global _d3d9_success
     if not pyd_imgui.d3d9_hook_init(end_scene_callback):
         unrealsdk.Log("[PyImgui] Could not initialize D3D9 Hook!")
-        raise ProcessLookupError("Something wen't wrong while hooking io/d3d9")
+        _d3d9_success = False
+    _d3d9_success = True
 
 
 def end_scene_callback() -> None:
-    pyd_imgui.new_frame()
     # noinspection PyBroadException
     try:
         for func in _on_end_scene:
@@ -38,19 +42,6 @@ def end_scene_callback() -> None:
     except Exception:
         unrealsdk.Log(f"[PyImgui] An exception was raised in drawthread! Game might crash now.")
         unrealsdk.Log(traceback.format_exc())
-
-    pyd_imgui.end_frame()
-    pyd_imgui.render()
-
-
-def toggle_gui() -> bool:
-    """
-    Toggle the imgui rendering on/off.
-
-    :return: True if imgui rendering is on, else off.
-    """
-
-    return pyd_imgui.toggle_imgui()
 
 
 def toggle_cursor() -> bool:
@@ -64,9 +55,6 @@ def toggle_cursor() -> bool:
     return ret
 
 
-__enabled: bool = False
-
-
 def subscribe_end_scene(func: Callable[[None], None]) -> None:
     """
     Add a function that should be called each d3d9 EndScene call.
@@ -74,13 +62,7 @@ def subscribe_end_scene(func: Callable[[None], None]) -> None:
     :param func: The function that should be called each EndScene call.
     :return:
     """
-    global __enabled
     _on_end_scene.add(func)
-    if not __enabled:
-        __enabled = True
-        __draw_thread = threading.Thread(target=d3d9hook, daemon=True)
-        __draw_thread.start()
-        __draw_thread.join()
 
 
 def unsubscribe_end_scene(func: Callable[[None], None]) -> None:
@@ -94,8 +76,16 @@ def unsubscribe_end_scene(func: Callable[[None], None]) -> None:
         _on_end_scene.remove(func)
 
 
+if not _enabled:
+    _enabled = True
+    _draw_thread = threading.Thread(target=d3d9hook, daemon=True)
+    _draw_thread.start()
+    _draw_thread.join()
+
+
 class GUI(SDKMod):
-    # Dummy Class to
+    global _d3d9_success
+    # Dummy Class to show that this library is loaded.
     Name = "PyImgui"
     Author = "Juso"
     Version = pyd_imgui.__version__
@@ -106,7 +96,10 @@ class GUI(SDKMod):
     SupportedGames = Game.BL2 | Game.TPS
     SettingsInputs = {}
 
-    Status = "Enabled"
+    Status = "Enabled" if _d3d9_success else "Error"
 
 
 unrealsdk.RegisterMod(GUI())
+
+if not _d3d9_success:
+    Exception("Something went wrong while hooking DX9!")
