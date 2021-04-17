@@ -100,10 +100,6 @@ You are free to use any of my mods as resource for your mods.
 
 ### [PyImgui](PyImgui/)
 - Imgui python bindings as a mod for bl2/tps.
-- If you are using an AMD GPU, you might need to ALT-TAB while not in the main menu,
- else the AMD Overlay will break the GUI.
-  Enable the mods that rely on this module before you receive the
-   [Radeon Software](https://www.digitalcitizen.life/wp-content/uploads/2020/10/radeon_software.png) pop up on your screen. 
 - The source of the ``pyd_imgui.pyd`` is available [here](https://github.com/juso40/pydImgui)
 
 ### [Sliding](Sliding/)

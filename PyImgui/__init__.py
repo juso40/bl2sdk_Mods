@@ -1,5 +1,4 @@
-from typing import List, Callable, Set
-import threading
+from typing import Callable, Set
 import traceback
 
 import unrealsdk
@@ -40,6 +39,18 @@ def end_scene_callback() -> None:
         for func in _on_end_scene:
             func()
     except Exception:
+        # call new_frame to override the current draw stack
+        pyd_imgui.new_frame()
+        # instead show the error message
+        pyd_imgui.begin("An Exception occured!", flags=pyd_imgui.WINDOW_FLAGS_ALWAYS_AUTO_RESIZE)
+        pyd_imgui.text("[PyImgui] An exception was raised in drawthread!")
+        pyd_imgui.text("Please fix the error before continuing using this mod!")
+        pyd_imgui.text("Full traceback:")
+        pyd_imgui.separator()
+        pyd_imgui.text_unformatted(traceback.format_exc())
+        pyd_imgui.end()
+        pyd_imgui.end_frame()
+
         unrealsdk.Log(f"[PyImgui] An exception was raised in drawthread! Game might crash now.")
         unrealsdk.Log(traceback.format_exc())
 
@@ -53,6 +64,15 @@ def toggle_cursor() -> bool:
     ret = pyd_imgui.toggle_wnd_proc()
     unrealsdk.GetEngine().GamePlayers[0].Actor.IgnoreLookInput(ret)
     return ret
+
+
+def toggle_gui() -> bool:
+    """
+    Toggle the callback to python from rendering thread.
+
+    :return: True if python will be called on endScene, else false.
+    """
+    return pyd_imgui.toggle_imgui()
 
 
 def subscribe_end_scene(func: Callable[[None], None]) -> None:
@@ -78,9 +98,7 @@ def unsubscribe_end_scene(func: Callable[[None], None]) -> None:
 
 if not _enabled:
     _enabled = True
-    _draw_thread = threading.Thread(target=d3d9hook, daemon=True)
-    _draw_thread.start()
-    _draw_thread.join()
+    d3d9hook()
 
 
 class GUI(SDKMod):

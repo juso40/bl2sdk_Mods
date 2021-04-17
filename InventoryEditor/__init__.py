@@ -13,7 +13,7 @@ from ..PyImgui import pyd_imgui
 IMGUI_SHOW: bool = False
 def _toggle() -> None:
     global IMGUI_SHOW
-    IMGUI_SHOW = not IMGUI_SHOW
+    IMGUI_SHOW = PyImgui.toggle_gui()
     if PyImgui.toggle_cursor():
         inventory.update_inventory()
 
@@ -22,7 +22,7 @@ class InventoryEditor(SDKMod):
     Name: str = "Inventory Editor"
     Author: str = "Juso"
     Description: str = "Allows you to edit/add/remove items in your Inventory while ingame."
-    Version: str = "1.1"
+    Version: str = "1.2"
 
     SupportedGames: Game = Game.BL2 | Game.TPS
     Types: ModTypes = ModTypes.Utility
