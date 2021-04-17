@@ -279,12 +279,12 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.1",
+      "latest": "1.2",
       "versions": {
-        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
+        "1.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
       },
       "requirements": {
-        "PyImgui": ">=1.0"
+        "PyImgui": ">=1.2"
       }
     },
     {
@@ -399,9 +399,9 @@
       "types": [
         "Library"
       ],
-      "latest": "1.0",
+      "latest": "1.2",
       "versions": {
-        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/PyImgui/PyImgui.zip"
+        "1.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/PyImgui/PyImgui.zip"
       },
       "requirements": {},
       "supports": [
