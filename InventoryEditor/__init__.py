@@ -89,25 +89,27 @@ class InventoryEditor(SDKMod):
             self.b_update_helper = True
         pyd_imgui.end()
 
+        if not inventory.player_inventory:
+            return
+        try:
+            self.edit_obj = inventory.player_inventory[self.backpack_index]
+        except IndexError:
+            # in case the user removed too many objects from his inventory we might run into this exception
+            # so let's just reset his backpack index to -1
+            self.backpack_index = len(inventory.player_inventory) - 1
+            self.edit_obj = inventory.player_inventory[self.backpack_index]
+            self.b_update_helper = True
+
+        if not self.edit_obj:
+            return
+
         self.edit_helper()
 
     edit_obj: Optional[unrealsdk.UObject] = None
 
     def edit_helper(self) -> None:
         pyd_imgui.begin("Helper")
-        if not inventory.player_inventory:
-            return pyd_imgui.end()
 
-        try:
-            self.edit_obj = inventory.player_inventory[self.backpack_index]
-        except IndexError:
-            # in case the user removed too many objects from his inventory we might run into this exception
-            # so let's just reset his backpack index to -1
-            self.backpack_index = -1
-            self.edit_obj = inventory.player_inventory[self.backpack_index]
-
-        if not self.edit_obj:
-            return pyd_imgui.end()
         if bl2tools.obj_is_in_class(self.edit_obj, "WillowWeapon"):
             self.weapon_part_selector()
         else:
