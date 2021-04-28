@@ -22,7 +22,7 @@ class InventoryEditor(SDKMod):
     Name: str = "Inventory Editor"
     Author: str = "Juso"
     Description: str = "Allows you to edit/add/remove items in your Inventory while ingame."
-    Version: str = "1.2"
+    Version: str = "1.3"
 
     SupportedGames: Game = Game.BL2 | Game.TPS
     Types: ModTypes = ModTypes.Utility
@@ -98,7 +98,14 @@ class InventoryEditor(SDKMod):
         if not inventory.player_inventory:
             return pyd_imgui.end()
 
-        self.edit_obj = inventory.player_inventory[self.backpack_index]
+        try:
+            self.edit_obj = inventory.player_inventory[self.backpack_index]
+        except IndexError:
+            # in case the user removed too many objects from his inventory we might run into this exception
+            # so let's just reset his backpack index to -1
+            self.backpack_index = -1
+            self.edit_obj = inventory.player_inventory[self.backpack_index]
+
         if not self.edit_obj:
             return pyd_imgui.end()
         if bl2tools.obj_is_in_class(self.edit_obj, "WillowWeapon"):
