@@ -102,8 +102,11 @@ You are free to use any of my mods as resource for your mods.
 - Imgui python bindings as a mod for bl2/tps.
 - The source of the ``pyd_imgui.pyd`` is available [here](https://github.com/juso40/pydImgui)
 
+### [TPS SkinFix](SkinFix)
+- Allows the editing of Materials for TPS.
+
 ### [Sliding](Sliding/)
-- Allows you to slide in BL2
+- Allows you to slide in BL2.
 - sometimes a bit buggy, for some reason it disables all DOTs on you.
 - [YouTube](https://www.youtube.com/watch?v=u0Ao8SGIbVU&t)
 

@@ -410,6 +410,24 @@
       ]
     },
     {
+      "name": "TPS SkinFix",
+      "description": [
+        "Allows the exec and set command for MaterialInstanceConstant Objects.\nThis allows the editing of Skins in TPS.\nSimply place this mod inside your TPS Mods folder, no enabling of this mod needed."
+      ],
+      "tagline": "Enables Material editing for TPS.",
+      "types": [
+        "Library"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/SkinFix/SkinFix.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "TPS"
+      ]
+    },
+    {
       "name": "Sliding",
       "description": [
         "Slide!\n",
