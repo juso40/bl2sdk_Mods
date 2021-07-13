@@ -229,7 +229,7 @@
       ],
       "latest": "1.0",
       "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/Emotes/__init__.py"
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/Emotes/Emotes.zip"
       },
       "requirements": {}
     },
