@@ -1,8 +1,9 @@
-from typing import Callable, Set
+from typing import Any, Callable, Set
 import traceback
 
 import unrealsdk
 
+from ..ModMenu import OptionManager
 from ..ModMenu import *
 
 try:
@@ -33,15 +34,29 @@ def d3d9hook() -> None:
     _d3d9_success = True
 
 
+color_scheme = "Dark"
+last_color = "Dark"
+
+
 def end_scene_callback() -> None:
+    global last_color, color_scheme
+    if last_color != color_scheme:
+        last_color = color_scheme
+        if last_color == "Dark":
+            pyd_imgui.style_colors_dark()
+        elif last_color == "Light":
+            pyd_imgui.style_colors_light()
+        elif last_color == "Classic":
+            pyd_imgui.style_colors_classic()
+
     # noinspection PyBroadException
     try:
-        for func in _on_end_scene:
+        for func in _on_end_scene.copy():  # a copy should fix 'RuntimeError: Set changed size during iteration'
             func()
     except Exception:
         # call new_frame to override the current draw stack
         pyd_imgui.new_frame()
-        # instead show the error message
+        # instead, show the error message
         pyd_imgui.begin("An Exception occured!", flags=pyd_imgui.WINDOW_FLAGS_ALWAYS_AUTO_RESIZE)
         pyd_imgui.text("[PyImgui] An exception was raised in drawthread!")
         pyd_imgui.text("Please fix the error before continuing using this mod!")
@@ -100,6 +115,9 @@ if not _enabled:
     _enabled = True
     d3d9hook()
 
+_color_styles = Options.Spinner("Style Color", Description="Determines the color scheme of the UI",
+                                StartingValue="Dark", Choices=["Dark", "Classic", "Light"])
+
 
 class GUI(SDKMod):
     global _d3d9_success
@@ -116,8 +134,23 @@ class GUI(SDKMod):
 
     Status = "Enabled" if _d3d9_success else "Error"
 
+    def Enable(self) -> None:
+        super().Enable()
+        global color_scheme
+        color_scheme = self.Options[0].CurrentValue
 
+    Options = [
+        _color_styles
+    ]
+
+    def ModOptionChanged(self, option: OptionManager.Options.Base, new_value: Any) -> None:
+        global color_scheme
+        color_scheme = new_value
+
+
+_instance = GUI()
 unrealsdk.RegisterMod(GUI())
+_instance.Enable()
 
 if not _d3d9_success:
     Exception("Something went wrong while hooking DX9!")
