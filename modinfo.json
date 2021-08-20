@@ -309,6 +309,28 @@
       ]
     },
     {
+      "name": "MapLoader",
+      "description": [
+        "Allows the use of custom map files created by the MapEditor.\n ",
+        "To add/remove a custom map simply place/remove the .json map file into/from the <MapLoader/Maps/> directory.\n",
+        "Each map file has its own Options/Mods entry that you can either enable or disable."
+      ],
+      "tagline": "Load and play with custom Maps!",
+      "types": [
+        "Utility",
+        "Content"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/MapLoader/MapLoader.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2",
+        "TPS"
+      ]
+    },
+    {
       "name": "ModMerger",
       "description": [
         "Merges any ``.blcm`` file in the ModMergers folder.\n",
