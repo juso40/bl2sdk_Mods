@@ -81,6 +81,9 @@ You are free to use any of my mods as resource for your mods.
 - Plays special Particles and sounds depending on the loot rarity.
 - [YouTube](https://www.youtube.com/watch?v=lUML6lXfW14)
 
+### [MapLoader](MapLoader/)
+- Load and play with custom maps created in the [MapEditor](https://github.com/juso40/BLMapEditor).
+
 ### [ModMerger](ModMerger/)
 - Merges any .blcm file in the ModMergers folder.
 - Automatically chooses the right hotfix method depending on whether you are offline or connected to SHIFT.
