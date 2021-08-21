@@ -6,7 +6,7 @@ from .. import bl2tools
 
 
 def set_materials(iobject: unrealsdk.UObject, materials: List[unrealsdk.UObject]) -> None:
-    if materials is None:
+    if materials is None or iobject.ObjectMesh is None:
         return
     iobject.ObjectMesh.Materials = materials
 

@@ -98,7 +98,11 @@ def _set_smc_attrs(smc: unrealsdk.UObject, attrs: dict) -> None:
     static_mesh.set_rotation(smc, attrs.get("Rotation", (0, 0, 0)))
     static_mesh.set_scale(smc, attrs.get("Scale", 1))
     static_mesh.set_scale3d(smc, attrs.get("Scale3D", (1, 1, 1)))
-    static_mesh.set_materials(smc, attrs.get("Materials", None))
+
+    mats = attrs.get("Materials", None)
+    if mats is not None:
+        mats = [unrealsdk.FindObject("MaterialInstanceConstant", m) for m in mats]
+    static_mesh.set_materials(smc, mats)
 
 
 def _set_io_attrs(io: unrealsdk.UObject, attrs: dict) -> None:
@@ -108,7 +112,12 @@ def _set_io_attrs(io: unrealsdk.UObject, attrs: dict) -> None:
     interactive_objects.set_rotation(io, attrs.get("Rotation", (0, 0, 0)))
     interactive_objects.set_scale(io, attrs.get("Scale", 1))
     interactive_objects.set_scale3d(io, attrs.get("Scale3D", (1, 1, 1)))
-    interactive_objects.set_materials(io, attrs.get("Materials", None))
+
+    mats = attrs.get("Materials", None)
+    if mats is not None:
+        mats = [unrealsdk.FindObject("MaterialInstanceConstant", m) for m in mats]
+
+    interactive_objects.set_materials(io, mats)
 
 
 def _set_pawn_attrs(pawn: unrealsdk.UObject, attrs: dict) -> None:
@@ -118,4 +127,8 @@ def _set_pawn_attrs(pawn: unrealsdk.UObject, attrs: dict) -> None:
     ai_pawn.set_rotation(pawn, attrs.get("Rotation", (0, 0, 0)))
     ai_pawn.set_scale(pawn, attrs.get("Scale", 1))
     ai_pawn.set_scale3d(pawn, attrs.get("Scale3D", (1, 1, 1)))
-    ai_pawn.set_materials(pawn, attrs.get("Materials", None))
+
+    mats = attrs.get("Materials", None)
+    if mats is not None:
+        mats = [unrealsdk.FindObject("MaterialInstanceConstant", m) for m in mats]
+    ai_pawn.set_materials(pawn, mats)

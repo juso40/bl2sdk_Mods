@@ -14,7 +14,7 @@ from . import placeablehelper
 
 class MapLoader(SDKMod):
     Name = "Map Loader"
-    Version = "1.1"
+    Version = "1.2"
     Types = ModTypes.Utility | ModTypes.Content
     Description = "Allows the use of custom map files created by the MapEditor.\n " \
                   "To add/remove a custom map simply place/remove the .json map file into/from the <MapLoader/Maps/> " \
