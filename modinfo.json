@@ -313,16 +313,20 @@
       "description": [
         "Allows the use of custom map files created by the MapEditor.\n ",
         "To add/remove a custom map simply place/remove the .json map file into/from the <MapLoader/Maps/> directory.\n",
-        "Each map file has its own Options/Mods entry that you can either enable or disable."
+        "Each map file has its own Options/Mods entry that you can either enable or disable.\n",
+        "Because loading in and creating hundreds of new objects takes time, this mod will increase your Loading screen times.\n",
+        "If you absolutely can't live with ~4 additional seconds of Loading, check out the Options>Mod Menu.\n",
+        "This mod comes with an optional ``Threaded Loading`` option. Enabling this option will remove any additional loading screen time,",
+        "instead the custom map changes will load in over time."
       ],
       "tagline": "Load and play with custom Maps!",
       "types": [
         "Utility",
         "Content"
       ],
-      "latest": "1.0",
+      "latest": "1.1",
       "versions": {
-        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/MapLoader/MapLoader.zip"
+        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/MapLoader/MapLoader.zip"
       },
       "requirements": {},
       "supports": [
