@@ -177,9 +177,9 @@
       "types": [
         "Gameplay"
       ],
-      "latest": "2.0",
+      "latest": "2.1",
       "versions": {
-        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/dialograndomizer/dialograndomizer.zip"
+        "2.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/dialograndomizer/dialograndomizer.zip"
       },
       "requirements": {}
     },
