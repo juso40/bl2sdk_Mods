@@ -55,9 +55,9 @@
       "types": [
         "Gameplay"
       ],
-      "latest": "1.0",
+      "latest": "1.1",
       "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/bossbar/__init__.py"
+        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/bossbar/bossbar.zip"
       },
       "requirements": {}
     },
