@@ -1,36 +1,25 @@
 import unrealsdk
-from unrealsdk import *
-from ..OptionManager import Options
+from ..ModMenu import EnabledSaveType, Hook, SDKMod, OptionManager, RegisterMod
 
 
-class DropChanceMultiplier(unrealsdk.BL2MOD):
+class DropChanceMultiplier(SDKMod):
     Name = "Drop Chance Multiplier"
     Description = "Runs multiple times the function that decides whether or not the Enemy should drop loot."
     Author = "Juso"
-
-    Options = [
-        Options.Slider("Drop Multiplier", "How often should loot be dropped from the same Lootpool.", 1, 0, 100, 1),
-    ]
+    Version = "2.0"
+    SaveEnabledState = EnabledSaveType.LoadOnMainMenu
 
     def __init__(self):
-        self.multiplier = 0
+        self.multiplier_option = OptionManager.Options.Slider(
+            "Drop Multiplier", "How often should loot be dropped from the same Lootpool.", 1, 0, 100, 1
+        )
+        self.Options = [self.multiplier_option]
 
-    def Enable(self):
-        def Loot(caller: UObject, function: UFunction, params: FStruct) -> bool:
-            for _ in range(self.multiplier):
-                # unrealsdk.DoInjectedCallNext()
-                caller.DropLootOnDeath(params.Killer, params.DamageType, params.DamageTypeDefinition)
-            return True
-
-        unrealsdk.RegisterHook("WillowGame.WillowPawn.DropLootOnDeath", "LootHook", Loot)
-
-    def Disable(self):
-        unrealsdk.RemoveHook("WillowGame.WillowPawn.DropLootOnDeath", "LootHook")
-
-    def ModOptionChanged(self, option, newValue):
-        if option in self.Options:
-            if option.Caption == "Drop Multiplier":
-                self.multiplier = newValue
+    @Hook("WillowGame.WillowPawn.DropLootOnDeath")
+    def Loot(self, caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
+        for _ in range(self.multiplier_option.CurrentValue):
+            caller.DropLootOnDeath(params.Killer, params.DamageType, params.DamageTypeDefinition)
+        return True
 
 
-unrealsdk.RegisterMod(DropChanceMultiplier())
+RegisterMod(DropChanceMultiplier())
