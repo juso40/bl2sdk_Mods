@@ -1,20 +1,21 @@
-from unrealsdk import *
 import unrealsdk
+from unrealsdk import *
 
 from . import bl2tools
+from ..ModMenu import EnabledSaveType, Hook, KeybindManager, ModTypes, SDKMod
 
 
-class FPDriver(unrealsdk.BL2MOD):
+class FPDriver(SDKMod):
     Name = "First Person Driver"
-    Version = "1.0"
-    Description = f"Experience all vehicles in first person. Toggle between 3rd and 1st person using '5'\n\nVersion: " \
-                  f"{Version}"
+    Version = "2.0"
+    Description = f"Experience all vehicles in first person. Toggle between 3rd and 1st person using by default '5'."
     Author = "Juso"
-    Types = [unrealsdk.ModTypes.Gameplay]
+    Types = ModTypes.Gameplay
+    SaveEnabledState = EnabledSaveType.LoadOnMainMenu
 
     def __init__(self):
         self.is_first_person = True
-        self.Keybinds = [["Driver Cam", "Five"], ]
+        self.Keybinds = [KeybindManager.Keybind("Driver Cam", "Five")]
         self.settings = {
             "mercenary": {"GD_Runner_Streaming.CameraDefs.Camera_DriverSeat": ["CameraOffset 0",
                                                                                "CameraPitchDownOffset -20",
@@ -190,19 +191,13 @@ class FPDriver(unrealsdk.BL2MOD):
                                                                               ]}
         }
 
-    def Enable(self):
-        def EndLoad(caller: UObject, function: UFunction, params: FStruct) -> bool:
-            self.calc_driver_cam()
-            return True
+    @Hook("WillowGame.VehicleSpawnStationTerminal.UnlockForOtherUsers")
+    def EndLoad(self, caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
+        self.calc_driver_cam()
+        return True
 
-        unrealsdk.RegisterHook("WillowGame.VehicleSpawnStationTerminal.UnlockForOtherUsers", "LoadCar",
-                               EndLoad)
-
-    def Disable(self):
-        unrealsdk.RemoveHook("WillowGame.VehicleSpawnStationTerminal.UnlockForOtherUsers", "LoadCar")
-
-    def GameInputPressed(self, input):
-        if input.Name == "Driver Cam":
+    def GameInputPressed(self, bind: KeybindManager.Keybind):
+        if bind.Name == "Driver Cam":
             self.is_first_person = not self.is_first_person
             self.calc_driver_cam()
 
