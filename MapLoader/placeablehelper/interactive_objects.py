@@ -6,6 +6,9 @@ from .. import bl2tools
 
 
 def set_materials(iobject: unrealsdk.UObject, materials: List[unrealsdk.UObject]) -> None:
+    # As of now, the MapEditor doesent handle Materials for IO 100% correctly and sometimes exports wrong MICs.
+    # So for now we simply ignore any materials, else the game might crash.
+    return
     if materials is None or iobject.ObjectMesh is None:
         return
     iobject.ObjectMesh.Materials = materials
