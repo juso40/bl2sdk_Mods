@@ -16,7 +16,7 @@ class Viewmodel(SDKMod):
     Description = "<B><U><font size='18' color='#e8131d'>Configurable Viewmodel</font></U></B>\n" \
                   "A mod that allows you to set your viewmodel the way you like it!"
     Author = "Juso"
-    Version = "2.0"
+    Version = "2.1"
     SaveEnabledState = EnabledSaveType.LoadWithSettings
     Options = [
         OptionManager.Options.Spinner("Save current type to file", "Save the current configuration for"
