@@ -1,15 +1,20 @@
+import os
+import re
+
 import unrealsdk
-from ..ModManager import BL2MOD, RegisterMod
 from unrealsdk import *
 
-import os
+from ..ModMenu import EnabledSaveType, ModTypes, SDKMod, RegisterMod
 
 
-class ModMerger(BL2MOD):
+class ModMerger(SDKMod):
     Name = "Mod Merger"
     Description = "Small mod that Merges any .blcm mod file in its subfolders. Will also guarantee that the mods " \
                   "hotfixes will work, both online and offline."
     Author = "Juso"
+    Version = "2.0"
+    Types = ModTypes.Utility
+    SaveEnabledState = EnabledSaveType.LoadOnMainMenu
 
     def __init__(self):
         self.PATH = os.path.dirname(os.path.realpath(__file__))
@@ -39,16 +44,16 @@ class ModMerger(BL2MOD):
         """
         file = os.path.join(self.PATH, "merge.txt")
         exec_path = str(file).split("Binaries\\", 1)[1]
-        GetEngine().GamePlayers[0].Actor.ConsoleCommand("exec " + exec_path, False)
+        unrealsdk.GetEngine().GamePlayers[0].Actor.ConsoleCommand("exec " + exec_path, False)
         # Clean up the file
         os.remove(file)
 
-    def merge_files(self):
+    def merge_files(self) -> None:
         SparkServiceConfiguration = None
         set_cmd = "set {} {} ({})\n"
-        with open(os.path.join(self.PATH, "merge.txt"), "w") as merge_fp:
+        with open(os.path.join(self.PATH, "merge.txt"), "w", encoding="cp1252") as merge_fp:
             for file in self.definition_files:
-                with open(file, "r") as fp:
+                with open(file, "r", encoding="cp1252") as fp:
                     for line in fp:
                         if line.lstrip().lower().startswith("set"):
                             if "SparkService" not in line:
@@ -73,7 +78,25 @@ class ModMerger(BL2MOD):
                 gb_acc = unrealsdk.FindAll("GearboxAccountData")[-1]
                 merge_fp.write(
                     "set {} Services (Transient.SparkServiceConfiguration_0)\n".format(gb_acc.PathName(gb_acc)))
-            merge_fp.write(set_cmd.format(SparkServiceConfiguration, "Keys", ",".join(self.keys)))
-            merge_fp.write(set_cmd.format(SparkServiceConfiguration, "Values", ",".join(self.values)))
+                # remove double gearbox hotfixes
+            all_keys = ",".join(self.keys)
+            all_vals = ",".join(self.values)
+
+            pat = re.compile(r"\"([^\"\\]*(?:\\.[^\"\\]*)*)\"")
+
+            gbx_keys = set()
+            gbx_vals = set()
+            own_keys = list()
+            own_vals = list()
+            for k, v in zip(re.findall(pat, all_keys), re.findall(pat, all_vals)):
+                if k not in gbx_keys:
+                    own_keys.append(f"\"{k}\"")
+                    own_vals.append(f"\"{v}\"")
+                if "gbx_fixes" in k.lower():  # filter out all duplicate gbx hotfixes
+                    gbx_keys.add(k)
+                    gbx_vals.add(v)
+
+            merge_fp.write(set_cmd.format(SparkServiceConfiguration, "Keys", ",".join(own_keys)))
+            merge_fp.write(set_cmd.format(SparkServiceConfiguration, "Values", ",".join(own_vals)))
 
 RegisterMod(ModMerger())
