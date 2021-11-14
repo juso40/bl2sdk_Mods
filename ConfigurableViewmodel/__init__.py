@@ -44,6 +44,7 @@ class Viewmodel(SDKMod):
     @Hook("WillowGame.WillowHUD.CreateWeaponScopeMovie")
     def apply_settings(self, caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct):
         self.load_from_files()
+        return True
 
     def change_MeshFOV(self, value, WT):
         if not WT:
@@ -114,14 +115,6 @@ class Viewmodel(SDKMod):
                             for attr, value in settings.items():
                                 try:
                                     self.change_ViewOffset(attr, value, WeaponType)
-                                except:
-                                    pass
-                    else:
-                        with open(os.path.join(root, file), "r") as f:
-                            settings = json.load(f)
-                            for attr, value in settings.items():
-                                try:
-                                    self.change_RelativeRotation(attr, value)
                                 except:
                                     pass
 
