@@ -111,9 +111,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "2.0",
+      "latest": "2.1",
       "versions": {
-        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/ConfigurableViewmodel/ConfigurableViewmodel.zip"
+        "2.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/ConfigurableViewmodel/ConfigurableViewmodel.zip"
       },
       "requirements": {}
     },
@@ -344,9 +344,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.0",
+      "latest": "2.0",
       "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ModMerger/__init__.py"
+        "2.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ModMerger/__init__.py"
       },
       "requirements": {}
     },
