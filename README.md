@@ -105,6 +105,10 @@ You are free to use any of my mods as resource for your mods.
 - Imgui python bindings as a mod for bl2/tps.
 - The source of the ``pyd_imgui.pyd`` is available [here](https://github.com/juso40/pydImgui)
 
+### [Scaled TVHM (AoDK Standalone)](ScaledTVHM)
+- Scales the TVHM to your level
+- Only works for Tiny Tinas Attack on Dragons Keep One Shot Adventure
+
 ### [TPS SkinFix](SkinFix)
 - Allows the editing of Materials for TPS.
 
