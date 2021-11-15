@@ -108,6 +108,7 @@ You are free to use any of my mods as resource for your mods.
 ### [Scaled TVHM (AoDK Standalone)](ScaledTVHM)
 - Scales the TVHM to your level
 - Only works for "Tiny Tina's Assault on Dragon Keep: A Wonderlands One-shot Adventure"
+- [YouTube](https://www.youtube.com/watch?v=zolku2b4yb4)
 
 ### [TPS SkinFix](SkinFix)
 - Allows the editing of Materials for TPS.
