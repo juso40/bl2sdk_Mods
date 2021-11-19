@@ -129,7 +129,6 @@ class GUI(SDKMod):
 
     Types = ModTypes.Library
     Priority = ModPriorities.Library
-    SupportedGames = Game.BL2 | Game.TPS
     SettingsInputs = {}
 
     Status = "Enabled" if _d3d9_success else "Error"

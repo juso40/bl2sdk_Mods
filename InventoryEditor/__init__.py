@@ -22,9 +22,8 @@ class InventoryEditor(SDKMod):
     Name: str = "Inventory Editor"
     Author: str = "Juso"
     Description: str = "Allows you to edit/add/remove items in your Inventory while ingame."
-    Version: str = "1.3"
+    Version: str = "1.3.1"
 
-    SupportedGames: Game = Game.BL2 | Game.TPS
     Types: ModTypes = ModTypes.Utility
     Priority: int = ModPriorities.Standard
     SaveEnabledState: EnabledSaveType = EnabledSaveType.NotSaved
