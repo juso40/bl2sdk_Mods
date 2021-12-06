@@ -1,5 +1,15 @@
-# Constructor V.1.0.2
+# Constructor V.1.1.0
 [PythonSDK](https://github.com/bl-sdk/PythonSDK) Mod/Ressource that allows the easy creation and use of new non replacing Objects.
+
+### Whats new in V.1.1.0?
+- Thanks to [apple](https://github.com/apple1417/bl-sdk-mods), most of the custom files are not needed anymore.  
+Instead of having to rely on janky `.assign/itempool/lootable/reward` files you can now manage all of the constructed objects directly in your `.blcm` file.
+(Those custom files are still fully supported, just not required anymore.)
+- Fixed multiple save file related bugs, for example you won't force equip mission items anymore on save quits.  
+- Added support for custom .spawn files, check the `Examples` folder for more information. (This will let you spawn almost any kind of object anywhere,
+ with support for special conditions, like only after a certain mission is done!)
+ -  Some smaller code optimizations for slightly faster load times (compared to the older version).
+
 
 ## Installation
 1. Download and install [PythonSDK](https://github.com/bl-sdk/PythonSDK)  

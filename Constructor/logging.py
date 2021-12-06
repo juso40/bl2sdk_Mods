@@ -35,7 +35,7 @@ class Logger:
         unrealsdk.Log(log)
 
 
-logger = None
+logger = None  # type: Logger
 
 
 def call_logger(func):

@@ -1,7 +1,11 @@
+from typing import Union, Any
+
 import unrealsdk
 
+import random
 
-def get_player_controller():
+
+def get_player_controller() -> unrealsdk.UObject:
     """
     Get the current WillowPlayerController Object.
     :return: WillowPlayerController
@@ -9,19 +13,19 @@ def get_player_controller():
     return unrealsdk.GetEngine().GamePlayers[0].Actor
 
 
-def get_obj_path_name(object):
+def get_obj_path_name(uobject: unrealsdk.UObject) -> str:
     """
     Get the full correct name of the provided object.
-    :param object: UObject
+    :param uobject: UObject
     :return: String of the Path Name
     """
-    if object:
-        return object.PathName(object)
+    if uobject:
+        return uobject.PathName(uobject)
     else:
         return "None"
 
 
-def console_command(command, bWriteToLog=False):
+def console_command(command: str, bWriteToLog: bool = False) -> None:
     """
     Executes a normal console command
     :param command: String, the command to execute.
@@ -31,14 +35,14 @@ def console_command(command, bWriteToLog=False):
     get_player_controller().ConsoleCommand(command, bWriteToLog)
 
 
-def obj_is_in_class(obj, inClass):
+def obj_is_in_class(obj: unrealsdk.UObject, in_class: str) -> bool:
     """
     Compares the given Objects class with the given class.
     :param obj: UObject
-    :param inClass: String, the Class to compare with
-    :return: Bool, whether or not it's in the Class.
+    :param in_class: String, the Class to compare with
+    :return: Bool, whether it's in the Class.
     """
-    return bool(obj.Class == unrealsdk.FindClass(inClass))
+    return bool(obj.Class == unrealsdk.FindClass(in_class))
 
 
 def get_weapon_holding():
@@ -49,5 +53,12 @@ def get_weapon_holding():
     return unrealsdk.GetEngine().GamePlayers[0].Actor.Pawn.Weapon
 
 
-def get_world_info():
+def get_world_info() -> unrealsdk.UObject:
     return unrealsdk.GetEngine().GetCurrentWorldInfo()
+
+
+def choice(seq) -> Union[Any, None]:
+    """Return a random element from the sequence seq. If seq is empty, return None."""
+    if not seq:
+        return None
+    return random.choice(seq)

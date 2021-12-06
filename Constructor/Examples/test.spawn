@@ -1,0 +1,53 @@
+- / comman is used as a fake level hotfix
+- /None means exec the following code in any level
+- /Sanctuary_P means, exec only in Sanctuary
+
+/None
+
+- use # to determine the type of object to spawn
+- supported is:
+- #WeaponBalanceDefinition
+- #InventoryBalanceDefinition
+- #AIPawnBalanceDefinition
+- #InteractiveObjectBalanceDefinition
+- #InteractiveObjectDefinition
+
+#WeaponBalanceDefinition
+
+- object.path.name (X=123, Y=123, Z=123) (Pitch=0, Yaw=35000, Roll=0) (Zonelevel + val1, Zonelevel + val2)
+- object.path.name = the object to spawn
+- (X=123, Y=123, Z=123) = the location where it should spawn
+- (Pitch=0, Yaw=35000, Roll=0) = the global rotation of the spawned object
+- (Zonelevel + val1, Zonelevel + val2) = The objects level is a random number between the current zone level +val1 and current zone level + val2
+
+GD_Weap_Launchers.A_Weapons.RL_Bandit_4_VeryRare (X=100, Y=100, Z=100) (Pitch=0, Yaw=35000, Roll=0) (-5, 5)
+
+#InventoryBalanceDefinition
+GD_ItemGrades.Shields.ItemGrade_Gear_Shield_Spike_Acid_05_Legendary (X=100, Y=100, Z=150) (Pitch=0, Yaw=35000, Roll=0) (10, 15)
+
+- most of the stuff is like above, except of the new addition of "conditions"
+- supported conditions are:
+- cond_level = Check if the current region stage is > or < than the given number usage: + cond_level<72; if region stage is lower than 72 spawn the item
+- cond_mission_completed_true = spawn item only if the given mission is completed, usage: cond_mission_completed_true=GD_Episode06.M_Ep6_RescueRoland; Spawn if mission is done
+- cond_mission_completed_false = spawn item only if the given mission is not completed, usage: cond_mission_completed_true=GD_Episode06.M_Ep6_RescueRoland; Spawn if mission is not done
+- cond_add_random = spawn one of the items in this condition group, randomly, usage: + cond_add_random=funny name for group; If multiple spawn commands use the same random group name, spawn only one of them.
+
+- You may have noted, that all conditions start with + and end with ;
+- You need the + to start a condition and a ; to end it
+- You can chain multiple conditions like follow:
+- +cond_level<30;cond_mission_completed_false=GD_Episode06.M_Ep6_RescueRoland;
+- This means, only if both conditions are true, spawn the item.
+- More in the following example
+
+/HypInterlude_P
+#WeaponBalanceDefinition
++ cond_mission_completed_true=GD_Episode06.M_Ep6_RescueRoland; cond_add_random=launcher group;
+GD_Weap_Launchers.A_Weapons.RL_Bandit_4_VeryRare (X=40431, Y=40049 ,Z=2700) (Pitch=0, Yaw=35000, Roll=0) (0, 2)
++ cond_mission_completed_true=GD_Episode06.M_Ep6_RescueRoland; cond_add_random=launcher group;
+GD_Weap_Launchers.A_Weapons.RL_Bandit_4_VeryRare (X=47350, Y=46640 ,Z=2116) (Pitch=0, Yaw=38000, Roll=0) (0, 2)
+
+- The example from above will spawn 1 purple Bandit rocket launcher in "HypInterlude_P"
+- But only if "GD_Episode06.M_Ep6_RescueRoland" is completed in the current playthrough
+- The launcher will spawn either at the location (X=40431, Y=40049 ,Z=2700) or (X=47350, Y=46640 ,Z=2116)
+- The spawned launcher will spawn between the current Region Stages level or the current Region Stages level+2
+- Because both spawn commands are in the same "cond_add_random" group, only one of them will spawn
