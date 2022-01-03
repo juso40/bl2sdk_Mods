@@ -380,6 +380,21 @@
       },
       "requirements": {}
     },
+        {
+      "name": "Pickup Message",
+      "description": [
+        "Shows a message with the item you just picked up."
+      ],
+      "tagline": "Shows a message with the item you just picked up.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/PickupMessages/PickupMessages.zip"
+      },
+      "requirements": {}
+    },
     {
       "name": "PizzaForFastball",
       "description": [
