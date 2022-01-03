@@ -95,6 +95,9 @@ You are free to use any of my mods as resource for your mods.
 - Adds a lightweight photomode to BL2
 - Access the photomode by default using the 'P' key.
 
+### [PickupMessages](PickupMessages/)
+- Shows a message with the item you just picked up.
+
 ### [PizzaForFastball](PizzaForFastball/)
 - Replaces the Fastballs mesh with the one of a Pizza.
 
