@@ -1,0 +1,5 @@
+cocos
+cocos/actions
+cocos/audio
+cocos/layer
+cocos/scenes

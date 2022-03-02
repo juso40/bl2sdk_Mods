@@ -1,0 +1,14 @@
+glfw-2.5.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+glfw-2.5.1.dist-info/LICENSE.txt,sha256=g-Z1p3FOsB2x7XXO3PNJq53ZYweC-BwIFhy1jMZ8oco,1085
+glfw-2.5.1.dist-info/METADATA,sha256=STToP2Cab9SFFIFfyRPIEcWkZ4xv3Qi6SWIvLcQSAb0,4827
+glfw-2.5.1.dist-info/RECORD,,
+glfw-2.5.1.dist-info/WHEEL,sha256=YdvtOsxFpQGQCQAzf4B9qbtyw4oyaSYUhW0JWmY5uNI,324
+glfw-2.5.1.dist-info/top_level.txt,sha256=n6GNY584FzIdaCsyFH_mQw_kXzRH9bZ9wYb8VvDeT3k,5
+glfw/GLFW.py,sha256=-OYhiqsk8_g5jZpa9Ih5RSNF-4jPaJ-Qxj-mBe89B6U,19175
+glfw/__init__.py,sha256=FfmMxWSfOpPxWIf0tD5dM9aNUt-jifvoAUNaKAv5Inw,114573
+glfw/__pycache__/GLFW.cpython-37.pyc,,
+glfw/__pycache__/__init__.cpython-37.pyc,,
+glfw/__pycache__/library.cpython-37.pyc,,
+glfw/glfw3.dll,sha256=EBgOiTgOtCKKugmDJbQBtwHBL8IQ9CgZD0giFoXPfr8,191488
+glfw/library.py,sha256=tCMLm66dwnwJ9gfGGOwdnpulkGNC-CBtZ9yhhjQ81tE,6800
+glfw/msvcr100.dll,sha256=h5M1NGGCb71I8l6ouDW-IEt1jOdRDbKvYxsohQNVvRg,773968

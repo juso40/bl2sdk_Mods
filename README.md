@@ -17,6 +17,10 @@ You are free to use any of my mods as resource for your mods.
 - Spawn at the last triggered spawn station.
 - [YouTube](https://www.youtube.com/watch?v=pY17YkKkTqg)
 
+### [blimgui](blimgui/)
+- A pyimgui library for PythonSDK.
+- Allows Modders to create a new window on the fly for easy gui creation.
+
 ### [Chronos](Chronos/)
 - Replaces the Skullmasher Sniper Rifle.
 - Randomizes the weapons skin after scoping in with the weapon equipped.

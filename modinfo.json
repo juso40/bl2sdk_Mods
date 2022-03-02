@@ -47,6 +47,23 @@
       "requirements": {}
     },
     {
+      "name": "blimgui",
+      "description": [
+        "A [PythonSDK](https://github.com/bl-sdk/PythonSDK) library that wraps boilerplate code for [pyimgui](https://github.com/pyimgui/pyimgui).\n",
+        "This library allows modders to easily create and interact with a new opengl window with an existing imgui context.\n",
+        "This mod is a spiritual successor to my [PyImgui SDK Mod](https://github.com/juso40/bl2sdk_Mods/tree/master/PyImgui)."
+      ],
+      "tagline": "Adds imgui support to PythonSDK Mods.",
+      "types": [
+        "Library"
+      ],
+      "latest": "0.1.0",
+      "versions": {
+        "0.1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/blimgui/blimgui.zip"
+      },
+      "requirements": {}
+    },
+    {
       "name": "Bossbar",
       "description": [
         "Adds a Boss-/Health-bar to most named enemies."
@@ -270,7 +287,7 @@
     {
       "name": "Inventory Editor",
       "description": [
-        "Allows you to add/edit items to/in your inventory, directly ingame.\n",
+        "Allows you to add/edit items to/in your inventory, in a seperate toggleable window.\n",
         "This mod will work with any constructed item, this means its 100% compatible with ``Exodus``",
         "and other mods that add new Items to the game.\n",
         "The default button to open up the Inventory Editor UI is binded to ``F1``.\n"
@@ -279,12 +296,12 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.3.1",
+      "latest": "1.4.0",
       "versions": {
-        "1.3.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
+        "1.4.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
       },
       "requirements": {
-        "PyImgui": ">=1.2"
+        "blimgui": ">=0.1.0"
       }
     },
     {
@@ -380,7 +397,7 @@
       },
       "requirements": {}
     },
-        {
+    {
       "name": "Pickup Message",
       "description": [
         "Shows a message with the item you just picked up."
