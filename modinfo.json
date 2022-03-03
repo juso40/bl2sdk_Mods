@@ -351,6 +351,28 @@
         "TPS"
       ]
     },
+        {
+      "name": "mateditor",
+      "description": [
+        "This SDK mod is a Tool for modders. It allows the user to easily change any `MaterialInstanceConstant` in realtime.\n",
+        "You can filter all Materials and Textures using a search field.\n",
+        "To change the colors you have the choice between using a slider, inputting your own values (by CNRTL+Leftclick) or using a color wheel.",
+        "All changes can easily be exported to a `.blcm` file to use as a standalone mod or for a modpack."
+      ],
+      "tagline": "Edit Materials in realtime.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0.0",
+      "versions": {
+        "1.0.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/mateditor/mateditor.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2",
+        "TPS"
+      ]
+    },
     {
       "name": "ModMerger",
       "description": [
