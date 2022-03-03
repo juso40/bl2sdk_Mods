@@ -79,7 +79,7 @@ You are free to use any of my mods as resource for your mods.
 - Edit/Add items in/to your inventory while ingame.  
 - The items don't always update correctly in your inventory, so you might need to drop it and pick it back up.  
 - 100% compatible with constructed items (eg. Exodus).  
-- Requires [PyImgui](PyImgui/)
+- Requires [blimgui](blimgui/)
 
 ### [LootNotificator](LootNotificator/)
 - Plays special Particles and sounds depending on the loot rarity.
@@ -87,6 +87,12 @@ You are free to use any of my mods as resource for your mods.
 
 ### [MapLoader](MapLoader/)
 - Load and play with custom maps created in the [MapEditor](https://github.com/juso40/BLMapEditor).
+
+### [mateditor](mateditor/)
+- Change `MaterialInstanceConstant` Parameters using a GUI
+- All changes are realtime
+- Export to `.blcm` file
+- Requires [blimgui](blimgui)
 
 ### [ModMerger](ModMerger/)
 - Merges any .blcm file in the ModMergers folder.
