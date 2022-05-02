@@ -385,7 +385,7 @@
       ],
       "latest": "2.0",
       "versions": {
-        "2.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ModMerger/__init__.py"
+        "2.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ModMerger/ModMerger.zip"
       },
       "requirements": {}
     },
