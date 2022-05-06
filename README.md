@@ -123,6 +123,9 @@ You are free to use any of my mods as resource for your mods.
 - Only works for "Tiny Tina's Assault on Dragon Keep: A Wonderlands One-shot Adventure"
 - [YouTube](https://www.youtube.com/watch?v=zolku2b4yb4)
 
+### [SimpleZoom](SimpleZoom)
+- Adds a keybind that allows you to zoom in and out (lowers your FOV).
+
 ### [TPS SkinFix](SkinFix)
 - Allows the editing of Materials for TPS.
 

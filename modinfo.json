@@ -508,6 +508,45 @@
       ]
     },
     {
+      "name": "ScaledTVHM",
+      "description": [
+        "Fixes the TVHM scaling for TTAoDK One Shot Adventure.\n",
+        "Now everything will scale with the player level in TVHM."
+      ],
+      "tagline": "Adds scaling to TVHM for TTAoDK One Shot Adventure.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "2.0",
+      "versions": {
+        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/ScaledTVHM/ScaledTVHM.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "AoDK"
+      ]
+    },
+     {
+      "name": "SimpleZoom",
+      "description": [
+        "Adds a keybind that allows you to zoom.\n"
+      ],
+      "tagline": "Adds a keybind that allows you to zoom.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "2.0",
+      "versions": {
+        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/SimpleZoom/SimpleZoom.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2",
+        "TPS",
+        "AoDK"
+      ]
+    },
+    {
       "name": "Sliding",
       "description": [
         "Slide!\n",
