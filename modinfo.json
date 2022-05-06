@@ -517,9 +517,9 @@
       "types": [
         "Gameplay"
       ],
-      "latest": "2.0",
+      "latest": "1.0",
       "versions": {
-        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/ScaledTVHM/ScaledTVHM.zip"
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/ScaledTVHM/ScaledTVHM.zip"
       },
       "requirements": {},
       "supports": [
@@ -535,9 +535,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "2.0",
+      "latest": "1.0.0",
       "versions": {
-        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/SimpleZoom/SimpleZoom.zip"
+        "1.0.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/SimpleZoom/SimpleZoom.zip"
       },
       "requirements": {},
       "supports": [
