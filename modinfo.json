@@ -296,9 +296,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.4.0",
+      "latest": "1.5.0",
       "versions": {
-        "1.4.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
+        "1.5.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
       },
       "requirements": {
         "blimgui": ">=0.1.0"

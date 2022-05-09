@@ -26,7 +26,7 @@ class InventoryEditor(SDKMod):
     Name: str = "Inventory Editor"
     Author: str = "Juso"
     Description: str = "Allows you to edit/add/remove items in your Inventory while ingame."
-    Version: str = "1.4.0"
+    Version: str = "1.5.0"
 
     Types: ModTypes = ModTypes.Utility
     Priority: int = ModPriorities.Standard
@@ -44,20 +44,58 @@ class InventoryEditor(SDKMod):
     def Disable(self) -> None:
         super().Disable()
 
+    @Hook("WillowGame.WillowPlayerController.ShowStatusMenu")
+    def on_show_status_menu(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        self.backpack_index = -1
+        inventory.update_inventory()
+        return True
+
+    @Hook("WillowGame.WillowPlayerController.WillowClientShowLoadingMovie")
+    def on_start_load(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        if params.MovieName is None:
+            return True
+        global IMGUI_SHOW
+        if IMGUI_SHOW:
+            _toggle()
+        self.backpack_index = -1
+        return True
+
+    @Hook("WillowGame.WillowPlayerController.WillowClientDisableLoadingMovie")
+    def on_end_load(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        self.backpack_index = -1
+        inventory.update_inventory()
+        return True
+
     backpack_index: int = -1
 
     b_update_helper: bool = False
 
     u_class_index: int = 0
-    u_classes: List[str] = ["WillowWeapon",
-                            "WillowShield",
-                            "WillowUsableItem",
-                            "WillowArtifact",
-                            "WillowClassMod",
-                            "WillowGrenadeMod",
-                            "WillowMissionItem",
-                            "WillowUsableCustomizationItem",
-                            ]
+    u_classes: List[str] = [
+        "WillowWeapon",
+        "WillowShield",
+        "WillowUsableItem",
+        "WillowArtifact",
+        "WillowClassMod",
+        "WillowGrenadeMod",
+        "WillowMissionItem",
+        "WillowUsableCustomizationItem",
+    ]
 
     def end_scene(self) -> None:
         if not IMGUI_SHOW:
