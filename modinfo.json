@@ -373,6 +373,21 @@
         "TPS"
       ]
     },
+     {
+      "name": "MissionQuickswitcher",
+      "description": [
+        "Adds two keybinds to the game that allow you to quickly switch between missions without having to open the mission menu."
+      ],
+      "tagline": "Quickly switch between missions.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/MissionQuickswitcher/MissionQuickswitcher.zip"
+      },
+      "requirements": {}
+    },
     {
       "name": "ModMerger",
       "description": [

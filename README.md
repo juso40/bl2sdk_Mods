@@ -94,6 +94,10 @@ You are free to use any of my mods as resource for your mods.
 - Export to `.blcm` file
 - Requires [blimgui](blimgui)
 
+### [MissionQuickswitcher](MissionQuickswitcher)
+- Quickly switch between missions using keybinds.
+
+
 ### [ModMerger](ModMerger/)
 - Merges any .blcm file in the ModMergers folder.
 - Automatically chooses the right hotfix method depending on whether you are offline or connected to SHIFT.
