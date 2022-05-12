@@ -4,18 +4,24 @@ import os
 
 from . import travel
 from . import betterspawns
-from Mods.ModMenu import SDKMod, EnabledSaveType, Keybind
+from ..ModMenu import SDKMod, EnabledSaveType, Keybind, ModTypes, RegisterMod
+
 
 class Main(SDKMod):
     Name: str = "BSABT"
     Description: str = "<B><U><font size='14' color='#e8131d'>Better Spawns and Better Travel</font></U></B>\n" \
-                  "This Mod reimplements some of the BL3 QoL features, such as spawning at the last respawn station " \
-                  "you triggered in game, allowing you to open the FT list form anywhere and directly spawning in " \
-                  "your car or near a FT Station directly from the map menu. To teleport in your car or near a FT " \
-                  "simply place and remove a waypoint near the car/FT on your map. To open the FT menu press the (by " \
-                  "default) F1 key."
+                       "This Mod reimplements some of the BL3 QoL features," \
+                       " such as spawning at the last respawn station " \
+                       "you triggered in game," \
+                       " allowing you to open the FT list form anywhere and directly spawning in " \
+                       "your car or near a FT Station directly from the map menu." \
+                       " To teleport in your car or near a FT " \
+                       "simply place and remove a waypoint near the car/FT on your map." \
+                       " To open the FT menu press the (by " \
+                       "default) F1 key."
     Author: str = "Juso"
-    
+    Version = "1.1.0"
+
     Types: ModTypes = ModTypes.Utility
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadWithSettings
 
@@ -40,5 +46,4 @@ class Main(SDKMod):
         self.Spawns.Disable()
 
 
-if __name__.startswith("Mods"):
-    RegisterMod(Main())
+RegisterMod(Main())

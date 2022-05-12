@@ -1,17 +1,23 @@
 import unrealsdk
+
 from . import bl2tools
 
 from math import sqrt
 
 
-class MapFT(unrealsdk.BL2MOD):
+class MapFT:
 
     def __init__(self):
         self.RemovedMarker = False
         self.MapObjects = []
         self.ObjectDelta = []
 
-    def get_location(self, caller, function, params):
+    def get_location(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
         if self.RemovedMarker:
             self.ObjectDelta.clear()
             pawn = bl2tools.get_player_controller().Pawn
@@ -56,8 +62,8 @@ class MapFT(unrealsdk.BL2MOD):
     def Enable(self):
         def Teleport(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
             return self.get_location(caller, function, params)
+
         unrealsdk.RegisterHook("WillowGame.StatusMenuMapGFxObject.PlaceCustomObjective", "MarkerHook", Teleport)
 
     def Disable(self):
         unrealsdk.RemoveHook("WillowGame.StatusMenuMapGFxObject.PlaceCustomObjective", "MarkerHook")
-
