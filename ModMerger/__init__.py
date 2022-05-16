@@ -6,13 +6,18 @@ from unrealsdk import *
 
 from ..ModMenu import EnabledSaveType, ModTypes, SDKMod, RegisterMod
 
+try:
+    from Mods import CommandExtensions
+except ImportError:
+    CommandExtensions = None
+
 
 class ModMerger(SDKMod):
     Name = "Mod Merger"
     Description = "Small mod that Merges any .blcm mod file in its subfolders. Will also guarantee that the mods " \
                   "hotfixes will work, both online and offline."
     Author = "Juso"
-    Version = "2.0"
+    Version = "2.1"
     Types = ModTypes.Utility
     SaveEnabledState = EnabledSaveType.LoadOnMainMenu
 
@@ -44,7 +49,10 @@ class ModMerger(SDKMod):
         """
         file = os.path.join(self.PATH, "merge.txt")
         exec_path = str(file).split("Binaries\\", 1)[1]
-        unrealsdk.GetEngine().GamePlayers[0].Actor.ConsoleCommand("exec " + exec_path, False)
+        if CommandExtensions is not None:
+            CommandExtensions.try_handle_command("exec", f"\"{exec_path}\"")
+        else:
+            unrealsdk.GetEngine().GamePlayers[0].Actor.ConsoleCommand("exec " + exec_path, False)
         # Clean up the file
         os.remove(file)
 
@@ -98,5 +106,6 @@ class ModMerger(SDKMod):
 
             merge_fp.write(set_cmd.format(SparkServiceConfiguration, "Keys", ",".join(own_keys)))
             merge_fp.write(set_cmd.format(SparkServiceConfiguration, "Values", ",".join(own_vals)))
+
 
 RegisterMod(ModMerger())
