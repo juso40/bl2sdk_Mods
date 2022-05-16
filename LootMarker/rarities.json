@@ -1,0 +1,74 @@
+{
+  "BL2": {
+    "Vanilla/UCP": [
+      {
+        "name": "Legendary",
+        "min_level": 5,
+        "max_level": 5
+      },
+      {
+        "name": "Legendary",
+        "min_level": 7,
+        "max_level": 10
+      },
+      {
+        "name": "Seraph",
+        "min_level": 501,
+        "max_level": 501
+      },
+      {
+        "name": "Pearlescent",
+        "min_level": 500,
+        "max_level": 500
+      }
+    ],
+    "Exodus": [
+      {
+        "name": "Legendary",
+        "min_level": 7,
+        "max_level": 13
+      },
+      {
+        "name": "Seraph",
+        "min_level": 14,
+        "max_level": 16
+      },
+      {
+        "name": "Pearlescent",
+        "min_level": 490,
+        "max_level": 500
+      }
+    ]
+  },
+  "TPS": {
+    "Exodus": [
+      {
+        "name": "Legendary",
+        "min_level": 5,
+        "max_level": 5
+      },
+      {
+        "name": "Legendary",
+        "min_level": 7,
+        "max_level": 10
+      },
+      {
+        "name": "Pearlescent",
+        "min_level": 500,
+        "max_level": 500
+      }
+    ],
+    "Vanilla/UCP": [
+      {
+        "name": "Legendary",
+        "min_level": 5,
+        "max_level": 5
+      },
+      {
+        "name": "Legendary",
+        "min_level": 7,
+        "max_level": 10
+      }
+    ]
+  }
+}

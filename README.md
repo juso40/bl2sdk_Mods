@@ -81,6 +81,9 @@ You are free to use any of my mods as resource for your mods.
 - 100% compatible with constructed items (eg. Exodus).  
 - Requires [blimgui](blimgui/)
 
+### [LootMarker](LootMarker)
+- Places a marker on the mini-/map for legendary or better loot.
+
 ### [LootNotificator](LootNotificator/)
 - Plays special Particles and sounds depending on the loot rarity.
 - [YouTube](https://www.youtube.com/watch?v=lUML6lXfW14)

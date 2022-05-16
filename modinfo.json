@@ -304,6 +304,26 @@
         "blimgui": ">=0.1.0"
       }
     },
+        {
+      "name": "LootMarker",
+      "description": [
+        "Places a marker on the map and minimap for every legendary or better.\n",
+        "Currently supports Exodus and UPC/Vanilla for both, TPS and BL2."
+      ],
+      "tagline": "Map markers for legendary loot.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/LootMarker/LootMarker.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2",
+        "TPS"
+      ]
+    },
     {
       "name": "LootNotificator",
       "description": [
