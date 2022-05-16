@@ -47,6 +47,9 @@ class MapLoader(SDKMod):
 
     def Enable(self) -> None:
         def end_load(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
+            if not caller.IsLocalPlayerController():
+                return True
+
             unrealsdk.RegisterHook("WillowGame.WillowGameViewportClient.Tick", __file__, thread_tick)
 
             level_name: str = bl2tools.get_world_info().GetStreamingPersistentMapName().lower()
@@ -62,7 +65,7 @@ class MapLoader(SDKMod):
             return True
 
         def start_load(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
-            if params.MovieName is None:
+            if params.MovieName is None and not caller.IsLocalPlayerController():
                 return True
             if self.loader_threads:
                 for t in self.loader_threads:

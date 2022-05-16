@@ -17,7 +17,7 @@ class ModMerger(SDKMod):
     Description = "Small mod that Merges any .blcm mod file in its subfolders. Will also guarantee that the mods " \
                   "hotfixes will work, both online and offline."
     Author = "Juso"
-    Version = "2.1"
+    Version = "2.2"
     Types = ModTypes.Utility
     SaveEnabledState = EnabledSaveType.LoadOnMainMenu
 
@@ -51,8 +51,7 @@ class ModMerger(SDKMod):
         exec_path = str(file).split("Binaries\\", 1)[1]
         if CommandExtensions is not None:
             CommandExtensions.try_handle_command("exec", f"\"{exec_path}\"")
-        else:
-            unrealsdk.GetEngine().GamePlayers[0].Actor.ConsoleCommand("exec " + exec_path, False)
+        unrealsdk.GetEngine().GamePlayers[0].Actor.ConsoleCommand("exec " + exec_path, False)
         # Clean up the file
         os.remove(file)
 
