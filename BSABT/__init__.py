@@ -20,7 +20,7 @@ class Main(SDKMod):
                        " To open the FT menu press the (by " \
                        "default) F1 key."
     Author: str = "Juso"
-    Version = "1.1.0"
+    Version = "1.2.0"
 
     Types: ModTypes = ModTypes.Utility
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadWithSettings

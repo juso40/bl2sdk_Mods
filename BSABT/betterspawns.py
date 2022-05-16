@@ -5,6 +5,8 @@ from . import bl2tools
 import json
 import os
 
+def _get_map_name() -> str:
+    return unrealsdk.GetEngine().GetCurrentWorldInfo().GetStreamingPersistentMapName().lower()
 
 class Spawns:
 
@@ -54,13 +56,13 @@ class Spawns:
                 function: unrealsdk.UFunction,
                 params: unrealsdk.FStruct
         ) -> bool:
-            map_name: str = unrealsdk.GetEngine().GetCurrentWorldInfo().GetStreamingPersistentMapName().lower()
+            map_name: str = _get_map_name()
             if map_name in ("loader", "fakeentry"):
                 return True
             # This only happens when the player used a normal travels station, not a FTStation
             if self.b_load_travel:
                 self.b_load_travel = False
-                self.set_spawn_location(bl2tools.get_player_controller().Pawn)
+                self.set_spawn_location(bl2tools.get_player_controller())
                 return False
             return True
 
@@ -69,13 +71,13 @@ class Spawns:
                 function: unrealsdk.UFunction,
                 params: unrealsdk.FStruct
         ) -> bool:
-            map_name: str = unrealsdk.GetEngine().GetCurrentWorldInfo().GetStreamingPersistentMapName().lower()
+            map_name: str = _get_map_name()
             if map_name in ("loader", "fakeentry"):
                 return True
             # This only happens when the player used a normal travels station, not a FTStation
             if self.b_load_tp:
                 self.b_load_tp = False
-                self.set_spawn_location(bl2tools.get_player_controller().Pawn)
+                self.set_spawn_location(bl2tools.get_player_controller())
             return True
 
         unrealsdk.RegisterHook(
@@ -118,22 +120,32 @@ class Spawns:
         # Add the new spawnpoint
         with open(self.spawnpoints_path, "w") as file:
             exit_pos = station.ExitPoints[0].Location
+            exit_rot = station.ExitPoints[0].Rotation
             my_spawn_dict[self.filename] = {
+                "MapName": _get_map_name(),
                 "SaveStation": bl2tools.get_obj_path_name(station),
-                "Position": (exit_pos.X, exit_pos.Y, exit_pos.Z)
+                "Position": (exit_pos.X, exit_pos.Y, exit_pos.Z),
+                "Rotation": (exit_rot.Pitch, exit_rot.Yaw, 0)
             }
             json.dump(my_spawn_dict, file, indent=4)
 
-    def set_spawn_location(self, pawn: unrealsdk.UObject):
+    def set_spawn_location(self, pc: unrealsdk.UObject):
         # Only if the spawnpoint file exists we can set the spawn location
         if os.path.exists(self.spawnpoints_path):
             with open(self.spawnpoints_path, "r") as file:
                 try:
                     my_spawn_dict = json.load(file)
+
+                    # Check if the current map has is the same as the saved map
+                    if _get_map_name() != my_spawn_dict[self.filename]["MapName"]:
+                        return
+
                     last_save_station = unrealsdk.FindObject("Object", my_spawn_dict[self.filename]["SaveStation"])
                     gri = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI
                     gri.ActiveRespawnCheckpointTeleportActor = last_save_station
-                    pawn.Location = tuple(my_spawn_dict[self.filename]["Position"])
+
+                    pc.Pawn.Location = tuple(my_spawn_dict[self.filename]["Position"])
+                    pc.Rotation = tuple(my_spawn_dict[self.filename]["Rotation"])
                 except Exception:
                     unrealsdk.Log("Could not load the spawnpoint.json")
         else:
