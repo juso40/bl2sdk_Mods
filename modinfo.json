@@ -23,9 +23,9 @@
       "types": [
         "Gameplay"
       ],
-      "latest": "1.1.0",
+      "latest": "1.2.0",
       "versions": {
-        "1.1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/BSABT/BSABT.zip"
+        "1.2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/BSABT/BSABT.zip"
       },
       "requirements": {}
     },
