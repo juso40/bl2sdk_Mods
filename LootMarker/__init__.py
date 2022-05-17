@@ -59,7 +59,7 @@ class LootMarker(SDKMod):
     Name = "Loot Marker"
     Description = "Places markers on the map for specific loot."
     Author = "Juso"
-    Version = "1.0"
+    Version = "1.1"
     SaveEnabledState = EnabledSaveType.LoadWithSettings
     SupportedGames = Game.TPS | Game.BL2 | Game.AoDK
 
@@ -68,6 +68,7 @@ class LootMarker(SDKMod):
         self.name_to_io_def = {}
         self.path_name_to_willow_io = {}
         self.enable_spawn_sound = True
+        self.marker_type = 7
 
         with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "rarities.json"), "r") as f:
             self.rarity_configs = json.load(f)
@@ -83,7 +84,16 @@ class LootMarker(SDKMod):
                 "Enable Spawn Sound",
                 "Play a sound when a unique item is spawned.",
                 StartingValue=True
+            ),
+            OptionManager.Options.Slider(
+                "Marker Type",
+                "Change the marker on the map for the Loot.",
+                StartingValue=7,
+                MinValue=0,
+                MaxValue=16,
+                Increment=1
             )
+
         ]
         self.selected_config = self.rarity_configs[game_to_str[Game.GetCurrent()]]["Exodus"]
 
@@ -102,16 +112,20 @@ class LootMarker(SDKMod):
             self.path_name_to_willow_io.clear()
         elif option.Caption == "Enable Spawn Sound":
             self.enable_spawn_sound = new_value
+        elif option.Caption == "Marker Type":
+            self.marker_type = new_value
+            for m in self.path_name_to_willow_io.values():
+                m.SetCompassIcon(self.marker_type)
 
-    @Hook("WillowGame.WillowPickup.SetInteractParticles")
+    @Hook("Engine.WillowInventory.DropFrom")
     def willow_pickup_spawned(
             self,
             caller: unrealsdk.UObject,
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
-        if not self.enable_spawn_sound or not any(
-                caller.InventoryRarityLevel in range(c["min_level"], c["max_level"] + 1) for c in self.selected_config
+        if not self.enable_spawn_sound or caller.Owner is get_pc().Pawn or not any(
+                caller.RarityLevel in range(c["min_level"], c["max_level"] + 1) for c in self.selected_config
         ):
             return True
         caller.PlayAkEvent(unrealsdk.FindObject("AkEvent", "Ake_UI.UI_Mission.Ak_Play_UI_Mission_Reward"))
@@ -124,8 +138,6 @@ class LootMarker(SDKMod):
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
-        if unrealsdk.GetEngine().GetCurrentWorldInfo().GetStreamingPersistentMapName().lower() == "menumap":
-            return True
         if not any(
                 caller.InventoryRarityLevel in range(c["min_level"], c["max_level"] + 1) for c in self.selected_config
         ):
@@ -143,21 +155,24 @@ class LootMarker(SDKMod):
                 description = f"Level {item_level}"
             else:
                 description = "Loot baby baby!"
-            header = re.sub(r"INVALID \d+", "", name)
-            description = f"{description}\n{header}"
+            header = re.sub(r" INVALID \d+", "", name)
+            description = fr"{description}\n{header}"
 
-            new_io = unrealsdk.ConstructObject(Class="InteractiveObjectDefinition", Name=name)
+            new_io = unrealsdk.ConstructObject(Class="InteractiveObjectDefinition", Name=name.replace(" ", "_"))
             unrealsdk.KeepAlive(new_io)
             new_io.ObjectFlags.B |= 4
+            pc = get_pc()
+
+            pc.ConsoleCommand(fr"set {pc.PathName(new_io)} StatusMenuMapInfoBoxHeader {rarity_name}")
+            pc.ConsoleCommand(fr"set {pc.PathName(new_io)} StatusMenuMapInfoBoxDescription {description}")
+
             self.name_to_io_def[name] = new_io
-            new_io.StatusMenuMapInfoBoxHeader = rarity_name
-            new_io.StatusMenuMapInfoBoxDescription = description
 
         path_name = caller.PathName(caller)
         if path_name not in self.path_name_to_willow_io:
             dummy = spawn_dummy_object(self.name_to_io_def[name],
                                        (caller.Location.X, caller.Location.Y, caller.Location.Z))
-            dummy.SetCompassIcon(int(ERadarIconType.RadarIconType_Shop))
+            dummy.SetCompassIcon(self.marker_type)
             self.path_name_to_willow_io[path_name] = dummy
         return True
 
@@ -181,7 +196,10 @@ class LootMarker(SDKMod):
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
+        for w_io in self.path_name_to_willow_io.values():
+            w_io.Destroyed()
         self.path_name_to_willow_io.clear()
+
         return True
 
 
