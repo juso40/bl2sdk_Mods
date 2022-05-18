@@ -30,6 +30,39 @@ class ERadarIconType(IntEnum):
     RadarIconType_LevelTransition = 16
 
 
+working_icons = {
+    "Shop": ERadarIconType.RadarIconType_Shop,
+    "Health": ERadarIconType.RadarIconType_Health,
+    "Catch a Ride": ERadarIconType.RadarIconType_CatchARide,
+    "Travel Station": ERadarIconType.RadarIconType_TravelStation,
+    "Customization Station": ERadarIconType.RadarIconType_CustomizationStation,
+    "Level Transition": ERadarIconType.RadarIconType_LevelTransition,
+}
+
+name_to_event = {
+    Game.TPS: {
+        "Coop-Ding": "Ake_UI.UI_HUD_Audio.Ak_Play_UI_Alert_CoOp_Ding",
+        "Coop-Buddy Down": "Ake_UI.UI_HUD_Audio.Ak_Play_UI_Alert_CoOp_Buddy_Down",
+        "Challenge Completed": "Ake_UI.UI_HUD_Audio.Ak_Play_UI_HUD_Challenge_Completed",
+        "New Skin Unlocked": "Ake_UI.UI_HUD_Audio.Ak_Play_UI_HUD_New_Skin_Unlocked",
+        "Token Unlocked": "Ake_UI.UI_HUD_Audio.Ak_Play_UI_HUD_Token_Unlocked",
+        "PVP Duel End": "Ake_UI.UI_HUD_Audio.Ak_Play_UI_PVP_Duel_End",
+        "PVP Duel Start": "Ake_UI.UI_HUD_Audio.Ak_Play_UI_PVP_Duel_Start",
+        "Mission Reward": "Ake_UI.UI_Mission.Ak_Play_UI_Mission_Reward",
+    },
+    Game.BL2: {
+        "Coop-Ding": "Ake_UI.UI_HUD.Ak_Play_UI_Alert_CoOp_Ding",
+        "Coop-Buddy Down": "Ake_UI.UI_HUD.Ak_Play_UI_Alert_CoOp_Buddy_Down",
+        "Challenge Completed": "Ake_UI.UI_HUD.Ak_Play_UI_HUD_Challenge_Completed",
+        "New Skin Unlocked": "Ake_UI.UI_HUD.Ak_Play_UI_HUD_New_Skin_Unlocked",
+        "Token Unlocked": "Ake_UI.UI_HUD.Ak_Play_UI_HUD_Token_Unlocked",
+        "PVP Duel End": "Ake_UI.UI_HUD.Ak_Play_UI_PVP_Duel_End",
+        "PVP Duel Start": "Ake_UI.UI_HUD.Ak_Play_UI_PVP_Duel_Start",
+        "Mission Reward": "Ake_UI.UI_Mission.Ak_Play_UI_Mission_Reward",
+    }
+}
+
+
 def get_pc():
     return unrealsdk.GetEngine().GamePlayers[0].Actor
 
@@ -59,16 +92,18 @@ class LootMarker(SDKMod):
     Name = "Loot Marker"
     Description = "Places markers on the map for specific loot."
     Author = "Juso"
-    Version = "1.1"
+    Version = "1.2"
     SaveEnabledState = EnabledSaveType.LoadWithSettings
-    SupportedGames = Game.TPS | Game.BL2 | Game.AoDK
+    SupportedGames = Game.TPS | Game.BL2
 
     def __init__(self):
         super(LootMarker, self).__init__()
         self.name_to_io_def = {}
         self.path_name_to_willow_io = {}
         self.enable_spawn_sound = True
-        self.marker_type = 7
+        self.player_drop_sound = False
+        self.ak_event = None
+        self.marker_type: int = int(ERadarIconType.RadarIconType_CustomizationStation)
 
         with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "rarities.json"), "r") as f:
             self.rarity_configs = json.load(f)
@@ -85,19 +120,29 @@ class LootMarker(SDKMod):
                 "Play a sound when a unique item is spawned.",
                 StartingValue=True
             ),
-            OptionManager.Options.Slider(
+            OptionManager.Options.Boolean(
+                "Enable Player Dropped Sound",
+                "Play a sound when a legendary was dropped by the player.",
+                StartingValue=False
+            ),
+            OptionManager.Options.Spinner(
+                "Sound Event",
+                "Change the sound that should play when a legendary spawns.",
+                StartingValue="Coop-Ding",
+                Choices=list(name_to_event[Game.GetCurrent()].keys()),
+            ),
+            OptionManager.Options.Spinner(
                 "Marker Type",
                 "Change the marker on the map for the Loot.",
-                StartingValue=7,
-                MinValue=0,
-                MaxValue=16,
-                Increment=1
+                StartingValue="Customization Station",
+                Choices=list(working_icons.keys()),
             )
 
         ]
         self.selected_config = self.rarity_configs[game_to_str[Game.GetCurrent()]]["Exodus"]
 
     def Enable(self):
+        self.ak_event = unrealsdk.FindObject("AkEvent", name_to_event[Game.GetCurrent()]["Coop-Ding"])
         super().Enable()
 
     def Disable(self):
@@ -112,8 +157,14 @@ class LootMarker(SDKMod):
             self.path_name_to_willow_io.clear()
         elif option.Caption == "Enable Spawn Sound":
             self.enable_spawn_sound = new_value
+        elif option.Caption == "Enable Player Dropped Sound":
+            self.player_drop_sound = new_value
+        elif option.Caption == "Sound Event":
+            self.ak_event = unrealsdk.FindObject("AkEvent", name_to_event[Game.GetCurrent()][new_value])
+            if unrealsdk.GetEngine().GetCurrentWorldInfo().GetStreamingPersistentMapName().lower() != "menumap":
+                unrealsdk.GetEngine().GamePlayers[0].Actor.PlayAkEvent(self.ak_event)
         elif option.Caption == "Marker Type":
-            self.marker_type = new_value
+            self.marker_type = int(working_icons[new_value])
             for m in self.path_name_to_willow_io.values():
                 m.SetCompassIcon(self.marker_type)
 
@@ -124,11 +175,13 @@ class LootMarker(SDKMod):
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
-        if not self.enable_spawn_sound or caller.Owner is get_pc().Pawn or not any(
-                caller.RarityLevel in range(c["min_level"], c["max_level"] + 1) for c in self.selected_config
-        ):
+        if not self.enable_spawn_sound or (caller.Owner is get_pc().Pawn and not self.player_drop_sound):
             return True
-        caller.PlayAkEvent(unrealsdk.FindObject("AkEvent", "Ake_UI.UI_Mission.Ak_Play_UI_Mission_Reward"))
+        if any(
+                caller.RarityLevel in range(c["min_level"], c["max_level"] + 1)
+                for c in self.selected_config
+        ):
+            caller.PlayAkEvent(self.ak_event)
         return True
 
     @Hook("WillowGame.WillowPickup.ConvertRigidBodyToFixed")

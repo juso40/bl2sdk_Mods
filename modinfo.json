@@ -308,15 +308,16 @@
       "name": "LootMarker",
       "description": [
         "Places a marker on the map and minimap for every legendary or better.\n",
-        "Currently supports Exodus and UPC/Vanilla for both, TPS and BL2."
+        "Currently supports Exodus and UPC/Vanilla for both, TPS and BL2.\n",
+        "You can change the marker type, optionally enable a sound (and choose out of a predefined list) to be played when a legendary got dropped."
       ],
       "tagline": "Map markers for legendary loot.",
       "types": [
         "Utility"
       ],
-      "latest": "1.1",
+      "latest": "1.2",
       "versions": {
-        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/LootMarker/LootMarker.zip"
+        "1.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/LootMarker/LootMarker.zip"
       },
       "requirements": {},
       "supports": [
