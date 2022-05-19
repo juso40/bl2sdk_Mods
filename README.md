@@ -108,6 +108,9 @@ You are free to use any of my mods as resource for your mods.
 ### [NoCrosshair](NoCrosshair/)
 - Disables your Crosshair
 
+### [NPCRevives](NPCRevives/)
+- Friendly NPCs revive you.
+
 ### [Photomode](Photomode/)
 - Adds a lightweight photomode to BL2
 - Access the photomode by default using the 'P' key.

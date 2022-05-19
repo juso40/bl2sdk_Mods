@@ -92,7 +92,7 @@ class LootMarker(SDKMod):
     Name = "Loot Marker"
     Description = "Places markers on the map for specific loot."
     Author = "Juso"
-    Version = "1.2"
+    Version = "1.3"
     SaveEnabledState = EnabledSaveType.LoadWithSettings
     SupportedGames = Game.TPS | Game.BL2
 
@@ -104,6 +104,7 @@ class LootMarker(SDKMod):
         self.player_drop_sound = False
         self.ak_event = None
         self.marker_type: int = int(ERadarIconType.RadarIconType_CustomizationStation)
+        self.dynamic_marker_objs = []
 
         with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "rarities.json"), "r") as f:
             self.rarity_configs = json.load(f)
@@ -130,6 +131,11 @@ class LootMarker(SDKMod):
                 "Change the sound that should play when a legendary spawns.",
                 StartingValue="Coop-Ding",
                 Choices=list(name_to_event[Game.GetCurrent()].keys()),
+            ),
+            OptionManager.Options.Boolean(
+                "Enable Dynamic Markers",
+                "This option will live update the location of the markers. This might decrease your performance.",
+                StartingValue=False,
             ),
             OptionManager.Options.Spinner(
                 "Marker Type",
@@ -168,39 +174,11 @@ class LootMarker(SDKMod):
             for m in self.path_name_to_willow_io.values():
                 m.SetCompassIcon(self.marker_type)
 
-    @Hook("Engine.WillowInventory.DropFrom")
-    def willow_pickup_spawned(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
-    ) -> bool:
-        if not self.enable_spawn_sound or (caller.Owner is get_pc().Pawn and not self.player_drop_sound):
-            return True
-        if any(
-                caller.RarityLevel in range(c["min_level"], c["max_level"] + 1)
-                for c in self.selected_config
-        ):
-            caller.PlayAkEvent(self.ak_event)
-        return True
+        elif option.Caption == "Enable Dynamic Markers":
+            self.set_dynamic_markers(new_value)
 
-    @Hook("WillowGame.WillowPickup.ConvertRigidBodyToFixed")
-    def willow_pickup_ground(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
-    ) -> bool:
-        if not any(
-                caller.InventoryRarityLevel in range(c["min_level"], c["max_level"] + 1) for c in self.selected_config
-        ):
-            return True
-        rarity_name = ""
-        for c in self.selected_config:
-            if caller.InventoryRarityLevel in range(c["min_level"], c["max_level"] + 1):
-                rarity_name = c["name"]
-                break
-        name = caller.Inventory.GenerateHumanReadableName() if caller.Inventory else "Loot"
+    def place_marker_for_pickup(self, pickup: unrealsdk.UObject) -> None:
+        name = pickup.Inventory.GenerateHumanReadableName() if pickup.Inventory else "Loot"
         if name not in self.name_to_io_def:
             item_level = re.search(r"\d+", name)
             if item_level:
@@ -216,17 +194,124 @@ class LootMarker(SDKMod):
             new_io.ObjectFlags.B |= 4
             pc = get_pc()
 
+            rarity_name = ""
+            for c in self.selected_config:
+                if pickup.InventoryRarityLevel in range(c["min_level"], c["max_level"] + 1):
+                    rarity_name = c["name"]
+                    break
+
             pc.ConsoleCommand(fr"set {pc.PathName(new_io)} StatusMenuMapInfoBoxHeader {rarity_name}")
             pc.ConsoleCommand(fr"set {pc.PathName(new_io)} StatusMenuMapInfoBoxDescription {description}")
 
             self.name_to_io_def[name] = new_io
 
-        path_name = caller.PathName(caller)
+        path_name = pickup.PathName(pickup)
         if path_name not in self.path_name_to_willow_io:
             dummy = spawn_dummy_object(self.name_to_io_def[name],
-                                       (caller.Location.X, caller.Location.Y, caller.Location.Z))
+                                       (pickup.Location.X, pickup.Location.Y, pickup.Location.Z))
             dummy.SetCompassIcon(self.marker_type)
             self.path_name_to_willow_io[path_name] = dummy
+
+    def play_sound(self, uobj: unrealsdk.UObject) -> None:
+        """Play the legendary spawn sound."""
+        uobj.PlayAkEvent(self.ak_event)
+
+    def is_valid_pickup(self, item: unrealsdk.UObject) -> bool:
+        """Check if the item is a valid item to be marked."""
+        if not item:
+            return False
+        if item.Class == unrealsdk.FindClass("WillowMissionItem"):
+            return False
+        if any(
+                item.RarityLevel in range(c["min_level"], c["max_level"] + 1)
+                for c in self.selected_config
+        ):
+            return True
+        return False
+
+    @Hook("Engine.WillowInventory.DropFrom")
+    def willow_pickup_spawned(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        if not self.enable_spawn_sound or (caller.Owner is get_pc().Pawn and not self.player_drop_sound):
+            return True
+        if self.is_valid_pickup(caller):
+            self.play_sound(caller)
+        return True
+
+    @Hook("WillowGame.WillowPickup.AdjustPickupPhysicsAndCollisionForBeingAttached")
+    def willow_pickup_attached(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        """Creates a marker for the pickup when it is attached to a chest."""
+        if self.is_valid_pickup(caller.Inventory):
+            self.place_marker_for_pickup(caller)
+            self.play_sound(caller)
+        return True
+
+    @Hook("WillowGame.WillowPickup.ConvertRigidBodyToFixed")
+    def willow_pickup_ground(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        """Creates a marker for the pickup when it is on the ground."""
+        if self.is_valid_pickup(caller.Inventory):
+            path_name = caller.PathName(caller)
+            willow_io = self.path_name_to_willow_io.get(path_name)
+            if not willow_io:
+                self.place_marker_for_pickup(caller)
+                willow_io = self.path_name_to_willow_io.get(path_name)
+
+            willow_io.Location = (caller.Location.X, caller.Location.Y, caller.Location.Z)
+            try:
+                self.dynamic_marker_objs.remove(caller)
+            except ValueError:
+                pass
+        return True
+
+    def set_dynamic_markers(self, enabled: bool) -> bool:
+        """Creates a marker and updates its position while it's not on the ground."""
+
+        def update_marker(
+                caller: unrealsdk.UObject,
+                function: unrealsdk.UFunction,
+                params: unrealsdk.FStruct
+        ) -> bool:
+            for dyn_marker in self.dynamic_marker_objs:
+                path_name = dyn_marker.PathName(dyn_marker)
+                willow_io = self.path_name_to_willow_io.get(path_name)
+                if not willow_io:
+                    self.place_marker_for_pickup(dyn_marker)
+                    willow_io = self.path_name_to_willow_io.get(path_name)
+
+                willow_io.Location = (dyn_marker.Location.X, dyn_marker.Location.Y, dyn_marker.Location.Z)
+            return True
+
+        def needs_dynamic_marker(
+                caller: unrealsdk.UObject,
+                function: unrealsdk.UFunction,
+                params: unrealsdk.FStruct
+        ) -> bool:
+            if self.is_valid_pickup(caller.Inventory):
+                self.dynamic_marker_objs.append(caller)
+            return True
+
+        if enabled:
+            unrealsdk.RegisterHook("WillowGame.WillowPickup.EnableRagdollCollision", "NewDrop", needs_dynamic_marker)
+            unrealsdk.RegisterHook("WillowGame.WillowGameViewportClient.Tick", "UpdateMarker", update_marker)
+        else:
+            self.dynamic_marker_objs = []
+            unrealsdk.RemoveHook("WillowGame.WillowPickup.EnableRagdollCollision", "NewDrop")
+            unrealsdk.RemoveHook("WillowGame.WillowGameViewportClient.Tick", "UpdateMarker")
+
         return True
 
     @Hook("WillowGame.WillowPickup.PickedUpBy")
@@ -236,6 +321,7 @@ class LootMarker(SDKMod):
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
+        """Remove the marker for the pickup when it is picked up."""
         path_name = caller.PathName(caller)
         if path_name in self.path_name_to_willow_io:
             self.path_name_to_willow_io[path_name].Destroyed()
@@ -249,9 +335,11 @@ class LootMarker(SDKMod):
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
+        """Cleanup the markers when the level is unloaded."""
         for w_io in self.path_name_to_willow_io.values():
             w_io.Destroyed()
         self.path_name_to_willow_io.clear()
+        self.dynamic_marker_objs.clear()
 
         return True
 
