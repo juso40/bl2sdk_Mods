@@ -92,7 +92,7 @@ class LootMarker(SDKMod):
     Name = "Loot Marker"
     Description = "Places markers on the map for specific loot."
     Author = "Juso"
-    Version = "1.3"
+    Version = "1.4"
     SaveEnabledState = EnabledSaveType.LoadWithSettings
     SupportedGames = Game.TPS | Game.BL2
 
@@ -292,7 +292,9 @@ class LootMarker(SDKMod):
                     self.place_marker_for_pickup(dyn_marker)
                     willow_io = self.path_name_to_willow_io.get(path_name)
 
-                willow_io.Location = (dyn_marker.Location.X, dyn_marker.Location.Y, dyn_marker.Location.Z)
+                willow_io.Location.X = dyn_marker.Location.X
+                willow_io.Location.Y = dyn_marker.Location.Y
+                willow_io.Location.Z = dyn_marker.Location.Z
             return True
 
         def needs_dynamic_marker(
@@ -326,6 +328,10 @@ class LootMarker(SDKMod):
         if path_name in self.path_name_to_willow_io:
             self.path_name_to_willow_io[path_name].Destroyed()
             del self.path_name_to_willow_io[path_name]
+            try:
+                self.dynamic_marker_objs.remove(caller)
+            except ValueError:
+                pass
         return True
 
     @Hook("WillowGame.WillowPlayerController.WillowClientShowLoadingMovie")
