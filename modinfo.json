@@ -449,9 +449,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.0",
+      "latest": "1.1",
       "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/NPCRevives/NPCRevives.zip"
+        "1.1": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/NPCRevives/NPCRevives.zip"
       },
       "requirements": {}
     },
