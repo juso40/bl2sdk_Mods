@@ -128,6 +128,16 @@ You are free to use any of my mods as resource for your mods.
 - Imgui python bindings as a mod for bl2/tps.
 - The source of the ``pyd_imgui.pyd`` is available [here](https://github.com/juso40/pydImgui)
 
+### [RogueLands](RogueLands)
+- Turns BL2 into a Rogue-Light game.
+- All missions will be reset on player death.
+- All items will be lost on player death.
+- Similar to One Life challenge.
+- When you die you keep your XP and Level.
+- Goal is to complete the story and kill all raid bosses.
+- Recommended to use a new save.
+- All progress is only in UVHM. Everything will always scale with you.
+
 ### [Scaled TVHM (AoDK Standalone)](ScaledTVHM)
 - Scales the TVHM to your level
 - Only works for "Tiny Tina's Assault on Dragon Keep: A Wonderlands One-shot Adventure"

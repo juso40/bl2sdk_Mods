@@ -40,9 +40,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.2",
+      "latest": "2.0",
       "versions": {
-        "1.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/BeGoneOutOfBoundsLoot/BeGoneOutOfBoundsLoot.zip"
+        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/BeGoneOutOfBoundsLoot/BeGoneOutOfBoundsLoot.zip"
       },
       "requirements": {}
     },
@@ -304,7 +304,7 @@
         "blimgui": ">=0.1.0"
       }
     },
-        {
+    {
       "name": "LootMarker",
       "description": [
         "Places a marker on the map and minimap for every legendary or better.\n",
@@ -372,7 +372,7 @@
         "TPS"
       ]
     },
-        {
+    {
       "name": "mateditor",
       "description": [
         "This SDK mod is a Tool for modders. It allows the user to easily change any `MaterialInstanceConstant` in realtime.\n",
@@ -394,7 +394,7 @@
         "TPS"
       ]
     },
-     {
+    {
       "name": "MissionQuickswitcher",
       "description": [
         "Adds two keybinds to the game that allow you to quickly switch between missions without having to open the mission menu."
@@ -559,6 +559,29 @@
       ]
     },
     {
+      "name": "RogueLands",
+      "description": [
+        "RogueLands is a mod that turns Borderlands into a Rogue-Lite game. \n",
+        "This mod works similar to the 1life challenge, but with the twist, ",
+        "that when you die, you respawn at the start of the game with all your Exp. \n",
+        "You will loose all your items, but you will keep your stats and skills. \n",
+        "All progress with this mod will count towards the UVHM. You do not need to have it unlocked to play. \n",
+        "Overpower Levels will also be ignored, it is recommended to create a new character for this mod!\n"
+      ],
+      "tagline": "Turns BL2 into Rogue-Light game.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/RogueLands/RogueLands.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2"
+      ]
+    },
+    {
       "name": "ScaledTVHM",
       "description": [
         "Fixes the TVHM scaling for TTAoDK One Shot Adventure.\n",
@@ -577,7 +600,7 @@
         "AoDK"
       ]
     },
-     {
+    {
       "name": "SimpleZoom",
       "description": [
         "Adds a keybind that allows you to zoom.\n"
