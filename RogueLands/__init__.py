@@ -50,12 +50,12 @@ class RogueLands(SDKMod):
 RogueLands is a mod that turns Borderlands into a Rogue-Lite game. \
 This mod works similar to the 1life challenge, but with the twist, \
 that when you die, you respawn at the start of the game with all your Exp. \
-You will loose all your items, but you will keep your stats and skills. \
+You will lose all your items, but you will keep your stats and skills. \
 All progress with this mod will count towards the UVHM. You do not need to have it unlocked to play. \
 Overpower Levels will also be ignored, it is recommended to create a new character for this mod!\
     """
     Author = "Juso"
-    Version = "1.0"
+    Version = "1.1"
     Types = ModTypes.Gameplay
     SaveEnabledState = EnabledSaveType.LoadOnMainMenu
     SupportedGames = Game.BL2
@@ -73,8 +73,14 @@ Overpower Levels will also be ignored, it is recommended to create a new charact
 
     def Enable(self):
         super().Enable()
+        pc = _get_pc()
+        save_game = pc.GetCachedSaveGame()
+        if save_game:
+            f = pc.GetSaveGameNameFromid(save_game.SaveGameId)
+            if f:
+                self.save_file_name = f.split(".")[0] + "_stats.json"
         _show_training_message("RogueLands", "RogueLands is currently enabled!\n"
-                                             "This means, if you die you will loose all your progress"
+                                             "This means, if you die you will lose all your progress"
                                              " in UVHM and all your items.\n"
                                              "If you want to play without losing progress, disable RogueLands.",
                                blocking_duration=1
@@ -91,6 +97,10 @@ Overpower Levels will also be ignored, it is recommended to create a new charact
             params: unrealsdk.FStruct,
     ) -> bool:
         """Populate the PT Choices."""
+
+        if not self.player_stats:
+            self.load_stats()
+
         if params.ButtonTag == "Dif2":
             return False
         if params.ButtonTag == "Dif1":
@@ -102,7 +112,7 @@ Overpower Levels will also be ignored, it is recommended to create a new charact
             "Dif3",
             "RogueLands Mode",
             "Rogue-Lite Game Mode. When you die, you respawn at the start of the game with all your Exp. You will "
-            "loose all your items, but you will keep your stats and skills.",
+            "lose all your items, but you will keep your stats and skills.",
             params.OnClicked
         )
         caller.SetDefaultButton("Dif3", False)
@@ -204,9 +214,13 @@ Overpower Levels will also be ignored, it is recommended to create a new charact
             params: unrealsdk.FStruct
     ) -> bool:
         """Every map load."""
+        if not self.player_stats:
+            self.load_stats()
 
         pc = _get_pc()
-        self.save_file_name = pc.GetSaveGameNameFromid(pc.GetCachedSaveGame().SaveGameId).split('.')[0] + "_stats.json"
+        save_id = pc.GetSaveGameNameFromid(pc.GetCachedSaveGame().SaveGameId)
+        if save_id:
+            self.save_file_name = save_id.split('.')[0] + "_stats.json"
 
         # Make sure the player has all 4 slots unlocked
         inv_man = caller.GetPawnInventoryManager()
@@ -215,6 +229,20 @@ Overpower Levels will also be ignored, it is recommended to create a new charact
         self.save_stats()
         return True
 
+    @Hook("WillowGame.BehaviorVolume.InitializeAttributeStartingValues")
+    def behavior_volume_game_stage(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        pc = _get_pc()
+        if pc.PlayerReplicationInfo.ExpLevel < 50:
+            unrealsdk.DoInjectedCallNext()
+            caller.SetGameStage(pc.PlayerReplicationInfo.ExpLevel)
+        return True
+
+    @Hook("WillowGame.WillowInteractiveObject.SetGameStage")
     @Hook("WillowGame.WillowPawn.SetGameStage")
     def on_set_game_stage(
             self,
@@ -232,6 +260,79 @@ Overpower Levels will also be ignored, it is recommended to create a new charact
             caller.SetGameStage(pc.PlayerReplicationInfo.ExpLevel)
             return False
         return True
+
+    @Hook("WillowGame.WillowPlayerController.ReceiveWeaponReward")
+    def receive_weapon_reward(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        """Scale the mission reward."""
+
+        pc = caller
+        if pc.PlayerReplicationInfo.ExpLevel >= 50:
+            return True
+        unscaled_data = params.DefinitionData
+        scaled = (
+            unscaled_data.WeaponTypeDefinition,
+            unscaled_data.BalanceDefinition,
+            unscaled_data.ManufacturerDefinition,
+            pc.PlayerReplicationInfo.ExpLevel,
+            unscaled_data.BodyPartDefinition,
+            unscaled_data.GripPartDefinition,
+            unscaled_data.BarrelPartDefinition,
+            unscaled_data.SightPartDefinition,
+            unscaled_data.StockPartDefinition,
+            unscaled_data.ElementalPartDefinition,
+            unscaled_data.Accessory1PartDefinition,
+            unscaled_data.Accessory2PartDefinition,
+            unscaled_data.MaterialPartDefinition,
+            unscaled_data.PrefixPartDefinition,
+            unscaled_data.TitlePartDefinition,
+            pc.PlayerReplicationInfo.ExpLevel,
+            unscaled_data.UniqueId
+        )
+
+        unrealsdk.DoInjectedCallNext()
+        caller.ReceiveWeaponReward(params.Mission, scaled)
+        return False
+
+    @Hook("WillowGame.WillowPlayerController.ReceiveItemReward")
+    def receive_item_reward(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        """Scale the mission reward."""
+
+        pc = caller
+        if pc.PlayerReplicationInfo.ExpLevel >= 50:
+            return True
+        unscaled_data = params.DefinitionData
+        scaled = (
+            unscaled_data.ItemDefinition,
+            unscaled_data.BalanceDefinition,
+            unscaled_data.ManufacturerDefinition,
+            pc.PlayerReplicationInfo.ExpLevel,
+            unscaled_data.AlphaItemPartDefinition,
+            unscaled_data.BetaItemPartDefinition,
+            unscaled_data.GammaItemPartDefinition,
+            unscaled_data.DeltaItemPartDefinition,
+            unscaled_data.EpsilonItemPartDefinition,
+            unscaled_data.ZetaItemPartDefinition,
+            unscaled_data.EtaItemPartDefinition,
+            unscaled_data.ThetaItemPartDefinition,
+            unscaled_data.MaterialItemPartDefinition,
+            unscaled_data.PrefixItemNamePartDefinition,
+            unscaled_data.TitleItemNamePartDefinition,
+            pc.PlayerReplicationInfo.ExpLevel,
+            unscaled_data.UniqueId
+        )
+        unrealsdk.DoInjectedCallNext()
+        caller.ReceiveItemReward(params.Mission, scaled)
+        return False
 
     @Hook("Engine.WillowInventory.ClientInitializeInventoryFromDefinition")
     def on_item_init(
@@ -399,15 +500,17 @@ Overpower Levels will also be ignored, it is recommended to create a new charact
         pri = pc.PlayerReplicationInfo
         pri.GeneralSkillPoints += pc.ResetSkillTree(True)
 
-        # Might keep currency
-        # pri.AddCurrencyOnHand(0, -pri.GetCurrencyOnHand(0))
-        # pri.AddCurrencyOnHand(1, -pri.GetCurrencyOnHand(1))
-        # pri.AddCurrencyOnHand(2, -pri.GetCurrencyOnHand(2))
-
     def reset_mission_progress(self) -> None:
         """Reset the players mission progress."""
         pc = _get_pc()
-        pc.MissionPlaythroughs[2].MissionList = []
+
+        # Skip Claptrap talking in first mission
+        start_mission = unrealsdk.FindObject("MissionDefinition", "GD_Episode01.M_Ep1_Champion")
+        start_mission.bHeardKickoff = True
+        pc.MissionPlaythroughs[2].MissionList = [
+            (start_mission, 1, [0], None, [], 50, False, True)
+        ]
+
         file_name = pc.GetSaveGameNameFromid(pc.GetCachedSaveGame().SaveGameId)
         pc.GetWillowGlobals().GetWillowSaveGameManager().Save(pc, file_name, 0)
 
@@ -483,10 +586,19 @@ To continue please save quit and press 'CONTINUE' on the main menu.
 
     def load_stats(self) -> None:
         """Load the players stats."""
+        if self.save_file_name == "Placeholder":
+            try:
+                pc = _get_pc()
+                save_game = pc.GetCachedSaveGame()
+                self.save_file_name = f"{pc.GetSaveGameNameFromid(save_game.SaveGameId).split('.')[0]}_stats.json"
+            except Exception:
+                pass
+
         try:
             with open(os.path.join(self.PATH, self.save_file_name), "r") as file:
                 self.player_stats = PlayerStats(**json.load(file))
         except (FileNotFoundError, TypeError):
+
             self.player_stats = PlayerStats()
 
 

@@ -564,17 +564,18 @@
         "RogueLands is a mod that turns Borderlands into a Rogue-Lite game. \n",
         "This mod works similar to the 1life challenge, but with the twist, ",
         "that when you die, you respawn at the start of the game with all your Exp. \n",
-        "You will loose all your items, but you will keep your stats and skills. \n",
+        "You will lose all your items, but you will keep your stats and skills. \n",
         "All progress with this mod will count towards the UVHM. You do not need to have it unlocked to play. \n",
-        "Overpower Levels will also be ignored, it is recommended to create a new character for this mod!\n"
+        "Overpower Levels will also be ignored, it is recommended to create a new character for this mod!\n",
+        "To complete the mod you must complete a set of challenges. (Check modded keybinds)\n"
       ],
       "tagline": "Turns BL2 into Rogue-Light game.",
       "types": [
         "Gameplay"
       ],
-      "latest": "1.0",
+      "latest": "1.1",
       "versions": {
-        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/RogueLands/RogueLands.zip"
+        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/RogueLands/RogueLands.zip"
       },
       "requirements": {},
       "supports": [

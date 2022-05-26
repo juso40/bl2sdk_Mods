@@ -137,6 +137,7 @@ You are free to use any of my mods as resource for your mods.
 - Goal is to complete the story and kill all raid bosses.
 - Recommended to use a new save.
 - All progress is only in UVHM. Everything will always scale with you.
+- To complete the mod you must complete a set of challenges. (Check modded keybinds)
 
 ### [Scaled TVHM (AoDK Standalone)](ScaledTVHM)
 - Scales the TVHM to your level
