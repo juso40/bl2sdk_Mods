@@ -577,7 +577,9 @@
       "versions": {
         "1.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/RogueLands/RogueLands.zip"
       },
-      "requirements": {},
+      "requirements": {
+        "UserFeedback": ">=1.5"
+      },
       "supports": [
         "BL2"
       ]
