@@ -150,8 +150,7 @@ You are free to use any of my mods as resource for your mods.
 ### [TPS SkinFix](SkinFix)
 - Allows the editing of Materials for TPS.
 
-### [Sliding](Sliding/)
+### [Sliding](Sliding)
 - Allows you to slide in BL2.
-- sometimes a bit buggy, for some reason it disables all DOTs on you.
 - [YouTube](https://www.youtube.com/watch?v=u0Ao8SGIbVU&t)
 

@@ -627,16 +627,16 @@
       "name": "Sliding",
       "description": [
         "Slide!\n",
-        "Kinda buggy, for whatever reason it removes all status effects from you when sliding.\n",
+        "Sliding speed gets calculated from slope and slide duration. You slide faster and longer if you slide downhill.\n",
         "![yt](https://www.youtube.com/watch?v=u0Ao8SGIbVU&t)"
       ],
       "tagline": "Adds Sliding to BL2.",
       "types": [
         "Gameplay"
       ],
-      "latest": "2.0",
+      "latest": "2.1",
       "versions": {
-        "2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/Sliding/Sliding.zip"
+        "2.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/Sliding/Sliding.zip"
       },
       "requirements": {},
       "supports": [
