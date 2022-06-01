@@ -10,7 +10,7 @@ class BossKillStat(KillStat):
         self.name = "Boss Kills"
 
     def enemy_killed(self, target_pawn: unrealsdk.UObject) -> None:
-        if target_pawn.IsBoss():
+        if target_pawn and target_pawn.IsBoss():
             self.value += 1
             self.total_value += 1
 

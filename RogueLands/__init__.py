@@ -28,7 +28,7 @@ All progress with this mod will count towards the UVHM. You do not need to have 
 Overpower Levels will also be ignored, it is recommended to create a new character for this mod!\
     """
     Author = "Juso"
-    Version = "1.2"
+    Version = "1.3"
     Types = ModTypes.Gameplay
     SaveEnabledState = EnabledSaveType.LoadOnMainMenu
     SupportedGames = Game.BL2

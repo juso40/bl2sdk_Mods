@@ -17,9 +17,10 @@ class KillChallenge(Challenge):
                 params: unrealsdk.FStruct
         ) -> bool:
             # The killer has not to be the local player controller
-            target = params.aTargetPawn.AIClass
+            target = params.aTargetPawn
             if not target:
                 return True
+            target = target.AIClass
 
             name = caller.PathName(target)
             if name == self.required_ai_class:

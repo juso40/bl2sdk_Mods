@@ -10,7 +10,7 @@ class BadassKillStat(KillStat):
         self.name = "Badass Kills"
 
     def enemy_killed(self, target_pawn: unrealsdk.UObject) -> None:
-        if target_pawn.IsChampion():
+        if target_pawn and target_pawn.IsChampion():
             self.value += 1
             self.total_value += 1
 
