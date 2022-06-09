@@ -47,6 +47,24 @@
       "requirements": {}
     },
     {
+      "name": "Big Particle Party",
+      "description": [
+        "Have you ever felt like the games particles is lacking a bit of oomph?\n",
+        "Big PP allows you to increase the amount of various particles.\n",
+        "Check out the various particle types in the mod options.\n",
+        "Using Big PP might decrease your performance, depending on your GPU and your game settings."
+      ],
+      "tagline": "Particles with more oomph!",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/BigParticleParty/BigParticleParty.zip"
+      },
+      "requirements": {}
+    },
+    {
       "name": "blimgui",
       "description": [
         "A [PythonSDK](https://github.com/bl-sdk/PythonSDK) library that wraps boilerplate code for [pyimgui](https://github.com/pyimgui/pyimgui).\n",
