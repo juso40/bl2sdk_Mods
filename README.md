@@ -154,3 +154,9 @@ You are free to use any of my mods as resource for your mods.
 - Allows you to slide in BL2.
 - [YouTube](https://www.youtube.com/watch?v=u0Ao8SGIbVU&t)
 
+### [Uber Post Processing](UberPostProcessing)
+- Adds a new post processing effect to BL2.
+- Motion Blur, Bloom, Depth of Field and many other settings are now user configurable
+- Adds color grading options
+- Requires Depth of Field to be enabled in game settings.
+
