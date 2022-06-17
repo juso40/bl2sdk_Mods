@@ -1,0 +1,79 @@
+{
+    "Options": {
+        "Post Process Volume": false,
+        "Tonemapper": {
+            "TonemapperType": "Tonemapper_Off",
+            "TonemapperRange": 200,
+            "TonemapperToeFactor": 500,
+            "TonemapperScale": 200
+        },
+        "Scene": {
+            "Scene_ShadowsX": 5,
+            "Scene_ShadowsY": 5,
+            "Scene_ShadowsZ": 5,
+            "Scene_HighLightsX": 90,
+            "Scene_HighLightsY": 95,
+            "Scene_HighLightsZ": 95,
+            "Scene_MidTonesX": 105,
+            "Scene_MidTonesY": 105,
+            "Scene_MidTonesZ": 105,
+            "Scene_Desaturation": 15,
+            "SceneColorizeX": 105,
+            "SceneColorizeY": 105,
+            "SceneColorizeZ": 115,
+            "SceneMultiplier": 0
+        },
+        "Vignette": {
+            "VignetteEnabled": true,
+            "VignetteBrightness": 65,
+            "VignetteColorR": 0,
+            "VignetteColorG": 0,
+            "VignetteColorB": 0,
+            "VignetteColorA": 0
+        },
+        "MotionBlur": {
+            "bEnableMotionBlur": false,
+            "MaxVelocity": 140,
+            "MotionBlurAmount": 0,
+            "FullMotionBlur": true,
+            "CameraRotationThreshold": 19900,
+            "CameraTranslationThreshold": 0
+        },
+        "ImageGrain": {
+            "bEnableImageGrain": true,
+            "SceneImageGrainScale": 5
+        },
+        "Bloom": {
+            "bEnableBloom": true,
+            "BloomWeightSmall": 50,
+            "BloomWeightMedium": 0,
+            "BloomWeightLarge": 100,
+            "BloomSizeScaleSmall": 20,
+            "BloomSizeScaleMedium": 25,
+            "BloomSizeScaleLarge": 90,
+            "Bloom_Scale": 550,
+            "Bloom_Threshold": 405,
+            "Bloom_TintR": 80,
+            "Bloom_TintG": 165,
+            "Bloom_TintB": 255,
+            "Bloom_TintA": 255,
+            "Bloom_ScreenBlendThreshold": 20
+        },
+        "Depth of Field": {
+            "Dynamic DoF": true,
+            "bEnableDOF": true,
+            "bEnableReferenceDOF": true,
+            "DepthOfFieldType": "DOFType_ReferenceDOF",
+            "DepthOfFieldQuality": "DOFQuality_High",
+            "DOF_FalloffExponent": 150,
+            "DOF_BlurKernelSize": 800,
+            "DOF_MaxNearBlurAmount": 0,
+            "DOF_MinBlurAmount": 0,
+            "DOF_MaxFarBlurAmount": 95,
+            "DOF_FocusType": "FOCUS_Distance",
+            "DOF_FocusInnerRadius": 1000000,
+            "DOF_FocusDistance": 10000
+        }
+    },
+    "AutoEnable": true
+}

@@ -1,0 +1,82 @@
+{
+    "Options": {
+        "Post Process Volume": false,
+        "Presets": {
+            "Preset": "Custom"
+        },
+        "Tonemapper": {
+            "TonemapperType": "Tonemapper_Off",
+            "TonemapperRange": 0,
+            "TonemapperToeFactor": 0,
+            "TonemapperScale": 0
+        },
+        "Scene": {
+            "Scene_ShadowsX": -5,
+            "Scene_ShadowsY": 0,
+            "Scene_ShadowsZ": -5,
+            "Scene_HighLightsX": 105,
+            "Scene_HighLightsY": 105,
+            "Scene_HighLightsZ": 105,
+            "Scene_MidTonesX": 105,
+            "Scene_MidTonesY": 105,
+            "Scene_MidTonesZ": 105,
+            "Scene_Desaturation": 0,
+            "SceneColorizeX": 115,
+            "SceneColorizeY": 115,
+            "SceneColorizeZ": 115,
+            "SceneMultiplier": 0
+        },
+        "Vignette": {
+            "VignetteEnabled": true,
+            "VignetteBrightness": 45,
+            "VignetteColorR": 0,
+            "VignetteColorG": 0,
+            "VignetteColorB": 0,
+            "VignetteColorA": 0
+        },
+        "MotionBlur": {
+            "bEnableMotionBlur": false,
+            "MaxVelocity": -1000,
+            "MotionBlurAmount": 0,
+            "FullMotionBlur": false,
+            "CameraRotationThreshold": 0,
+            "CameraTranslationThreshold": 0
+        },
+        "ImageGrain": {
+            "bEnableImageGrain": true,
+            "SceneImageGrainScale": 10
+        },
+        "Bloom": {
+            "bEnableBloom": false,
+            "BloomWeightSmall": 310,
+            "BloomWeightMedium": 355,
+            "BloomWeightLarge": 340,
+            "BloomSizeScaleSmall": 25,
+            "BloomSizeScaleMedium": 45,
+            "BloomSizeScaleLarge": 50,
+            "Bloom_Scale": 510,
+            "Bloom_Threshold": 555,
+            "Bloom_TintR": 180,
+            "Bloom_TintG": 180,
+            "Bloom_TintB": 180,
+            "Bloom_TintA": 255,
+            "Bloom_ScreenBlendThreshold": 20
+        },
+        "Depth of Field": {
+            "Dynamic DoF": false,
+            "bEnableDOF": true,
+            "bEnableReferenceDOF": false,
+            "DepthOfFieldType": "DOFType_SimpleDOF",
+            "DepthOfFieldQuality": "DOFQuality_High",
+            "DOF_FalloffExponent": 10,
+            "DOF_BlurKernelSize": 3200,
+            "DOF_MaxNearBlurAmount": 50,
+            "DOF_MinBlurAmount": 0,
+            "DOF_MaxFarBlurAmount": 50,
+            "DOF_FocusType": "FOCUS_Distance",
+            "DOF_FocusInnerRadius": 0,
+            "DOF_FocusDistance": 0
+        }
+    },
+    "AutoEnable": true
+}

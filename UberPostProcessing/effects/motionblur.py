@@ -2,10 +2,11 @@ import unrealsdk
 
 from ...ModMenu import Options
 
-from . import callback_normal, callback_slider, callback_xyz, callback_rgb
+from . import callback_normal, callback_slider, callback_xyz, callback_rgb, rcon, callback_normal_worldInfo
 
 
 class MotionBlur:
+    Enable = Options.Boolean(Caption="bEnableMotionBlur", Description="Enable motion blur.", StartingValue=False)
     MaxVelocity = Options.Slider(
         Caption="MaxVelocity",
         Description="The velocity of the motion blur. Divide by 100 for the real value.",
@@ -47,11 +48,14 @@ class MotionBlur:
         Increment=100
     )
 
-    children = [MaxVelocity, BlurAmount, FullMotionBlur, CameraRotationThreshold, CameraTranslationThreshold]
+    children = [Enable, MaxVelocity, BlurAmount, FullMotionBlur, CameraRotationThreshold, CameraTranslationThreshold]
     Nested = Options.Nested(Caption="MotionBlur", Description="Motion blur options.", Children=children)
 
 
 def _attach_callback():
+    MotionBlur.Enable.Callback = lambda o, v: (
+        rcon("", "", cmd=f"SCALE set MotionBlur {v}"), callback_normal_worldInfo(o, v)
+    )
     MotionBlur.MaxVelocity.Callback = callback_slider
     MotionBlur.BlurAmount.Callback = callback_slider
     MotionBlur.FullMotionBlur.Callback = callback_normal

@@ -22,7 +22,7 @@ class Tonemapper:
     ToeFactor = Options.Slider(
         Caption="TonemapperToeFactor",
         Description="Tonemapper toe factor. Divide value by 100 to get the actual value.",
-        StartingValue=100,
+        StartingValue=0,
         MinValue=0,
         MaxValue=500,
         Increment=1
@@ -32,7 +32,7 @@ class Tonemapper:
         Description="Tonemapper scale. Divide value by 100 to get the actual value.",
         StartingValue=100,
         MinValue=0,
-        MaxValue=100,
+        MaxValue=200,
         Increment=1
     )
 

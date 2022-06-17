@@ -1,16 +1,6 @@
-import unrealsdk
-
 from ...ModMenu import Options
 
-from . import callback_normal, callback_slider, callback_xyz, callback_rgb, rcon
-
-def callback_xyz_worldInfo(option: Options.Value, new_value):
-    val_attr = option.Caption[-1]
-    attr = option.Caption[:-1]
-    rcon("DefaultPostProcessSettings", f"({attr}=({val_attr}={new_value / 100}))", obje="WorldInfo")
-
-def callback_slider_worldInfo(option: Options.Slider, new_value):
-    rcon("DefaultPostProcessSettings", f"({option.Caption}={new_value / 100})", obje="WorldInfo")
+from . import callback_slider, callback_xyz, callback_xyz_worldInfo, callback_slider_worldInfo
 
 
 class Scene:
@@ -163,7 +153,6 @@ def _attach_callback():
     Scene.MidTonesZ.Callback = callback_xyz_worldInfo
     Scene.Desaturation.Callback = callback_slider_worldInfo
     Scene.SceneMultiplier.Callback = callback_slider
-
 
 
 SceneOptions = Scene.Nested

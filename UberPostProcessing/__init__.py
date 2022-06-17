@@ -1,8 +1,9 @@
 from typing import Any
 
-from ..ModMenu import ModPriorities, ModTypes, RegisterMod, SDKMod, LoadModSettings, Options, EnabledSaveType, Hook
+from ..ModMenu import ModPriorities, ModTypes, RegisterMod, SDKMod, Options, EnabledSaveType, Hook
 
 from .effects import all_options, rcon
+from .presets import PresetsOptions
 
 import unrealsdk
 
@@ -14,7 +15,7 @@ class UberPostProcessing(SDKMod):
         "Exposes many different post processing effects to the user."
         "Requires Depth of Field Setting to be enabled."
     )
-    Version: str = "1.0"
+    Version: str = "1.1"
 
     Types: ModTypes = ModTypes.Utility
     Priority = ModPriorities.Standard
@@ -29,6 +30,7 @@ class UberPostProcessing(SDKMod):
 
     def __init__(self):
         super().__init__()
+        self.Options.append(PresetsOptions)
         self.Options.extend(all_options)
 
     def Enable(self) -> None:
