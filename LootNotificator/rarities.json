@@ -1,0 +1,127 @@
+{
+  "Vanilla/UCP": [
+    {
+      "name": "Legendary",
+      "min_level": 5,
+      "max_level": 5,
+      "particle": 2,
+      "sound": 1
+    },
+    {
+      "name": "Legendary",
+      "min_level": 7,
+      "max_level": 10,
+      "particle": 2,
+      "sound": 1
+    },
+    {
+      "name": "Seraph",
+      "min_level": 501,
+      "max_level": 501,
+      "particle": 3,
+      "sound": 1
+    },
+    {
+      "name": "Pearlescent",
+      "min_level": 500,
+      "max_level": 500,
+      "particle": 4,
+      "sound": 1
+    },
+    {
+      "name": "Effervescent",
+      "min_level": 506,
+      "max_level": 506,
+      "particle": 5,
+      "sound": 1
+    }
+  ],
+  "Exodus": [
+    {
+      "name": "Legendary",
+      "min_level": 7,
+      "max_level": 13,
+      "particle": 2,
+      "sound": 1
+    },
+    {
+      "name": "Seraph",
+      "min_level": 14,
+      "max_level": 16,
+      "particle": 3,
+      "sound": 1
+    },
+    {
+      "name": "Pearlescent",
+      "min_level": 490,
+      "max_level": 500,
+      "particle": 4,
+      "sound": 1
+    },
+    {
+      "name": "Effervescent",
+      "min_level": 506,
+      "max_level": 506,
+      "particle": 5,
+      "sound": 1
+    }
+  ],
+  "Reborn": [
+    {
+      "name": "Legendary",
+      "min_level": 5,
+      "max_level": 11,
+      "particle": 2,
+      "sound": 1
+    },
+    {
+      "name": "Unique Legendary",
+      "min_level": 61,
+      "max_level": 81,
+      "particle": 2,
+      "sound": 1
+    },
+    {
+      "name": "Unique Blue",
+      "min_level": 41,
+      "max_level": 51,
+      "particle": 1,
+      "sound": 0
+    },
+    {
+      "name": "Moxxi",
+      "min_level": 51,
+      "max_level": 61,
+      "particle": 0,
+      "sound": 0
+    },
+    {
+      "name": "Seraph",
+      "min_level": 81,
+      "max_level": 91,
+      "particle": 3,
+      "sound": 1
+    },
+    {
+      "name": "Pearlescent",
+      "min_level": 91,
+      "max_level": 170,
+      "particle": 4,
+      "sound": 1
+    },
+    {
+      "name": "Pearlescent",
+      "min_level": 500,
+      "max_level": 500,
+      "particle": 4,
+      "sound": 1
+    },
+    {
+      "name": "Effervescent",
+      "min_level": 506,
+      "max_level": 506,
+      "particle": 5,
+      "sound": 1
+    }
+  ]
+}
