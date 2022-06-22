@@ -65,6 +65,28 @@
       "requirements": {}
     },
     {
+      "name": "BL2 Eternal",
+      "description": [
+        "Doom Eternal, but it's BL2.\n",
+        "Adds the dash and glory kill mechanics from Doom Eternal to BL2.\n",
+        "Dash: Press sprint + direction while in air to dash.\n",
+        "Glory Kill: Meleeing injured enemies causes them to instantly die and drop additional loot and restore your health. ",
+        "Injured enemies are marked by shock + fire particles around their feet.\n"
+      ],
+      "tagline": "Glory Kills and Dashing in BL2.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/BL2Eternal/BL2Eternal.zip"
+      },
+      "supports": [
+        "BL2"
+      ],
+      "requirements": {}
+    },
+    {
       "name": "blimgui",
       "description": [
         "A [PythonSDK](https://github.com/bl-sdk/PythonSDK) library that wraps boilerplate code for [pyimgui](https://github.com/pyimgui/pyimgui).\n",
@@ -357,7 +379,7 @@
       ],
       "latest": "2.1",
       "versions": {
-        "2.1":  "https://github.com/juso40/bl2sdk_Mods/raw/master/LootNotificator/LootNotificator.zip"
+        "2.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/LootNotificator/LootNotificator.zip"
       },
       "requirements": {},
       "supports": [
@@ -661,7 +683,7 @@
         "BL2"
       ]
     },
-     {
+    {
       "name": "Uber Post Processing",
       "description": [
         "Exposes many post processing effects to the user. It allows you to easily change the color of any scene.\n",

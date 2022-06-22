@@ -17,6 +17,14 @@ You are free to use any of my mods as resource for your mods.
 - Spawn at the last triggered spawn station.
 - [YouTube](https://www.youtube.com/watch?v=pY17YkKkTqg)
 
+### [BL2 Eternal](BL2Eternal)
+- Adds the Dash and Glory Kill mechanics from Doom Eternal to BL2.
+- Pressing Sprint while in air will let you dash.
+- Injured Enemies will be one hit killed by your melee attacks (Glory Kills).
+- Glory Kills will restore your health to full and drop additional loot.
+- Injured enemies are marked by shock and fire particles around their feet.
+
+
 ### [blimgui](blimgui/)
 - A pyimgui library for PythonSDK.
 - Allows Modders to create a new window on the fly for easy gui creation.
