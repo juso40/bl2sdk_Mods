@@ -137,27 +137,6 @@
       "requirements": {}
     },
     {
-      "name": "Combocounter",
-      "description": [
-        "This mod keeps track of combos when killing enemies.\n",
-        "If no enemy has been killed in the last 6 seconds, the combo will vanish.\n",
-        "- 15 different combo names\n",
-        "- adds an announcer, will randomly get triggered on kill\n",
-        "- the higher your combo the more xp you will gain\n",
-        "![yt](https://www.youtube.com/watch?v=l_nP-QVjaJA)"
-      ],
-      "tagline": "Adds a combocounter to the game.",
-      "types": [
-        "Content",
-        "Gameplay"
-      ],
-      "latest": "1.0",
-      "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ComboCounter/__init__.py"
-      },
-      "requirements": {}
-    },
-    {
       "name": "ConfigurableViewModel (CVM)",
       "description": [
         "A mod that allows you to change the viewmodel of any WeaponType.\n",
@@ -171,24 +150,6 @@
       "latest": "2.1",
       "versions": {
         "2.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/ConfigurableViewmodel/ConfigurableViewmodel.zip"
-      },
-      "requirements": {}
-    },
-    {
-      "name": "ConsoleGames",
-      "description": [
-        "Adds a simple framework for modders to use the console as an ASCII canvas.\n",
-        "This mod only includes snake, other games may be added later.",
-        "![yt](https://www.youtube.com/watch?v=4prs9ELj0z8)"
-      ],
-      "tagline": "Play ASCII games in the ingame-console!",
-      "types": [
-        "Content",
-        "Library"
-      ],
-      "latest": "1.0",
-      "versions": {
-        "1.0": "https://github.com/juso40/bl2sdk_Mods/tree/master/ConsoleGames"
       },
       "requirements": {}
     },
@@ -209,22 +170,6 @@
       "requirements": {}
     },
     {
-      "name": "Crits-Only GameMode",
-      "description": [
-        "If an enemy has a crit spot, you'll have to hit it to deal damage.\n",
-        "Enemies without crit spots take normal damage."
-      ],
-      "tagline": "Only crits count!",
-      "types": [
-        "Gameplay"
-      ],
-      "latest": "1.0",
-      "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/CritsOnlyGameMode/__init__.py"
-      },
-      "requirements": {}
-    },
-    {
       "name": "Dialog Randomizer",
       "description": [
         "If it talks, it gets randomized.\n",
@@ -237,21 +182,6 @@
       "latest": "2.1",
       "versions": {
         "2.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/dialograndomizer/dialograndomizer.zip"
-      },
-      "requirements": {}
-    },
-    {
-      "name": "DPS and TTK",
-      "description": [
-        "After killing an enemy, this mod will display your DPS and the TTK."
-      ],
-      "tagline": "Show your DPS and your TTK after killing an enemy.",
-      "types": [
-        "Utility"
-      ],
-      "latest": "1.0",
-      "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/DPS%20and%20TTK/__init__.py"
       },
       "requirements": {}
     },
@@ -450,22 +380,6 @@
       "requirements": {}
     },
     {
-      "name": "ModMerger",
-      "description": [
-        "Merges any ``.blcm`` file in the ModMergers folder.\n",
-        "Automatically chooses the right hotfix method depending on whether you are offline or connected to SHIFT."
-      ],
-      "tagline": "Merges any .blcm file in the ModMergers folder.",
-      "types": [
-        "Utility"
-      ],
-      "latest": "2.2",
-      "versions": {
-        "2.2": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/ModMerger/ModMerger.zip"
-      },
-      "requirements": {}
-    },
-    {
       "name": "NoCrosshair",
       "description": [
         "Disables your Crosshair."
@@ -557,27 +471,6 @@
       "requirements": {},
       "supports": [
         "BL2"
-      ]
-    },
-    {
-      "name": "PyImgui",
-      "description": [
-        "A simple ``pyd_imgui`` wrapper mod/library for use in Borderlands 2/TPS.\n",
-        "By itself this mod won't do anything, it's only a dependency for some other mods.\n",
-        "If you do not know what this is, you probably wont need it."
-      ],
-      "tagline": "Imgui python bindings library.",
-      "types": [
-        "Library"
-      ],
-      "latest": "1.3",
-      "versions": {
-        "1.3": "https://github.com/juso40/bl2sdk_Mods/raw/master/PyImgui/PyImgui.zip"
-      },
-      "requirements": {},
-      "supports": [
-        "BL2",
-        "TPS"
       ]
     },
     {

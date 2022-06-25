@@ -35,36 +35,19 @@ You are free to use any of my mods as resource for your mods.
 - Slows down time while scoping.
 - [YouTube](https://www.youtube.com/watch?v=lS_Dl43om0s)
 
-### [ComboCounter](ComboCounter/)
-- Adds a combocounter to the game.
-- Features 15 different killstreak names.
-- Adds an announcer, will randomly get triggered on kill.
-- The higher your combo the more xp you will gain.
-- [YouTube](https://www.youtube.com/watch?v=l_nP-QVjaJA)
 
 ### [ConfigurableViewModel(CVM)](ConfigurableViewModel/) 
 - Allows you to easily change the ViewModel for each WeaponType with ingame sliders.
 - Updates in real time.
 - [YouTube](https://www.youtube.com/watch?v=nABmVIYpuXg)
 
-### [ConsoleGames](ConsoleGames/)
-- Adds a small framework for people to use the ingame console as an ASCII canvas.
-- Includes Snake, playable in the console.
-- [YouTube](https://www.youtube.com/watch?v=4prs9ELj0z8)
 
 ### [Constructor](Constructor/)
 - Mod/Ressource that allows the easy creation and use of new non replacing Objects.
 - Used by [BL2: Exodus](https://www.nexusmods.com/borderlands2/mods/257)
 
-### [CritsOnlyGameMode](CritsOnlyGameMode/)
-- Challenge game mode, only crits count.
-- Enemies without a crit spot can take direct damage.
-
 ### [dialograndomizer](dialograndomizer/)
 - Randomizes the dialogs in the game.
-
-### [DPS and TTK](DPS%20and%20TTK/)
-- Show your DPS and your TTK after killing an enemy.
 
 ### [DropChanceMultiplier](DropChanceMultiplier/)
 - Increases the amount all enemies drop.
@@ -108,11 +91,6 @@ You are free to use any of my mods as resource for your mods.
 ### [MissionQuickswitcher](MissionQuickswitcher)
 - Quickly switch between missions using keybinds.
 
-
-### [ModMerger](ModMerger/)
-- Merges any .blcm file in the ModMergers folder.
-- Automatically chooses the right hotfix method depending on whether you are offline or connected to SHIFT.
-
 ### [NoCrosshair](NoCrosshair/)
 - Disables your Crosshair
 
@@ -131,10 +109,6 @@ You are free to use any of my mods as resource for your mods.
 
 ### [Pokelands](Pokelands/)
 - [YouTube](https://www.youtube.com/watch?v=r1H_Z9LRDUU&t)
-
-### [PyImgui](PyImgui/)
-- Imgui python bindings as a mod for bl2/tps.
-- The source of the ``pyd_imgui.pyd`` is available [here](https://github.com/juso40/pydImgui)
 
 ### [RogueLands](RogueLands)
 - Turns BL2 into a Rogue-Light game.
