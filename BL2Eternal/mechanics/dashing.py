@@ -4,13 +4,18 @@ import unrealsdk
 
 
 class Dash:
-    DASH_COOLDOWN: float = 0
-    DASH_DURATION: float = 0
-    DASH_DIR: tuple = (0, 0, 0)
-    B_NEEDS_STOP_DASH: bool = False
-
     DASH_SOUND1: str = "Ake_Wep_SMGs.SMG_Tediore.Ak_Play_Wep_SMG_Tediore_Shot_Release"
     DASH_SOUND2: str = "Ake_Wep_Sniper_Rifle.Sniper_Hyperion.Ak_Play_Wep_Sniper_Hyperion_Reload_Back"
+
+    SCREEN_PARTICLE: str = "FX_INT_Screen.Particles.Char_Assassin.Part_Assassin_Screen_Dash"
+
+    def __init__(self):
+        self.first_dash = False
+        self.second_dash = False
+        self.dash_cooldown = 0
+        self.dash_duration = 0
+        self.dash_dir = (0, 0, 0)
+        self.b_needs_stop_dash = False
 
     def wants_to_dash(
             self,
@@ -38,13 +43,21 @@ class Dash:
         if mag == 0:
             return
 
-        if self.DASH_COOLDOWN <= 0:
+        def impl():
+            self.add_screen_particles(pc)
             pawn.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.DASH_SOUND1))
             pawn.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.DASH_SOUND2))
-            self.B_NEEDS_STOP_DASH = True
-            self.DASH_COOLDOWN = 1.5
-            self.DASH_DURATION = 0.15
-            self.DASH_DIR = ((_x / mag) * 6500, (_y / mag) * 6500, 0)
+            self.b_needs_stop_dash = True
+            self.dash_duration = 0.15
+            self.dash_dir = ((_x / mag) * 6500, (_y / mag) * 6500, 0)
+
+        if not self.first_dash:  # Dash once
+            self.first_dash = True
+            self.dash_cooldown = 1.5  # Dash cooldown starts after initial dash
+            impl()
+        elif not self.second_dash and self.dash_duration <= 0:  # Dash the second time after first dash is done
+            self.second_dash = True
+            impl()
 
     def tick_dash(
             self,
@@ -55,21 +68,48 @@ class Dash:
         pawn = caller.Pawn
         if pawn is None:
             return True
-        self.DASH_COOLDOWN -= params.DeltaTime
-        self.DASH_DURATION -= params.DeltaTime
-        if self.DASH_COOLDOWN <= 0:
-            self.DASH_COOLDOWN = 0
-        if self.DASH_DURATION <= 0:
-            self.DASH_DURATION = 0
-            if self.B_NEEDS_STOP_DASH:
-                self.B_NEEDS_STOP_DASH = False
+        self.dash_cooldown -= params.DeltaTime
+        self.dash_duration -= params.DeltaTime
+
+        # Check for dash cooldown
+        if self.dash_cooldown <= 0:
+            self.dash_cooldown = 0
+            if pawn.IsOnGroundOrShortFall():  # Reset dash on ground only
+                self.first_dash = False
+                self.second_dash = False
+
+        if self.dash_duration <= 0:
+            self.dash_duration = 0
+            if self.b_needs_stop_dash:
+                self.b_needs_stop_dash = False
+                self.remove_screen_particles(caller)
                 _x, _y = pawn.Velocity.X, pawn.Velocity.Y
                 mag = sqrt(_x ** 2 + _y ** 2)
+                unrealsdk.CallPostEdit(False)
                 pawn.Velocity = ((_x / mag) * 200, (_y / mag) * 200, 0)
             return True
-
-        pawn.Velocity = self.DASH_DIR
+        unrealsdk.CallPostEdit(False)
+        pawn.Velocity = self.dash_dir
         return True
+
+    def add_screen_particles(self, pc: unrealsdk.UObject) -> None:
+        particle_params = (
+            unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE),  # Template
+            [],  # ScreenParticleModifiers
+            None,  # TemplateScreenParticleMaterial
+            "",  # MatParamName
+            True,  # bHideWhenFinished
+            "",  # ParticleTag
+            (16, 9),  # ContentDims
+            20,  # ParticleDepth
+            4,  # ScalingMode
+            (),  # StopParamsOT
+            True  # bOnlyOwnerSee
+        )
+        pc.ShowScreenParticle(particle_params)
+
+    def remove_screen_particles(self, pc: unrealsdk.UObject) -> None:
+        pc.HideScreenParticle(unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE), "", False)
 
     def enable(
             self
@@ -84,6 +124,9 @@ class Dash:
             "EternalDashInput",
             lambda c, f, p: self.wants_to_dash(c, f, p)
         )
+
+        unrealsdk.LoadPackage("GD_Assassin_Streaming_SF")
+        unrealsdk.KeepAlive(unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE))
 
     def disable(
             self
