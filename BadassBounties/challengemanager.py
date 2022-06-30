@@ -83,8 +83,7 @@ class ChallengeManager:
                 ),
                 OptionBoxButton(
                     Name="Re-roll Current Bounties",
-                    Tip="Replace current bounties with new ones. This will reset the progress in your current "
-                        "bounties."
+                    Tip=""
                 ),
                 OptionBoxButton(
                     Name="Cancel",
@@ -95,7 +94,7 @@ class ChallengeManager:
         menu.OnPress = lambda button: {
             "Show Current Bounties": self.show_current_challenges,
             "Claim Bounty Rewards": self.claim_challenge_rewards,
-            "Re-roll Current Bounties": lambda: self.confirm_reroll(),
+            "Re-roll Current Bounties": self.confirm_reroll,
             "Cancel": lambda: None
         }.get(button.Name, lambda: None)()
         menu.Show()
