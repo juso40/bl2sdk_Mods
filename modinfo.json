@@ -10,6 +10,31 @@
     "license": "MIT"
   },
   "mods": [
+     {
+      "name": "Badass Bounties",
+      "description": [
+        "Adds many randomly generated bounties to the game.\n",
+        "Each bounty will reward you with XP, Money and a random item upon completion.\n",
+        "The rarity of the reward items scale with your level.\n",
+        "To open the bounty board menu check your modded keybinds menu.\n",
+        "\nYou can reroll your active bounties at any time for the cheap price of 2 Eridium per bounty that is not completed."
+
+      ],
+      "tagline": "Adds Bounties to the game.",
+      "types": [
+        "Content"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/BadassBounties/BadassBounties.zip"
+      },
+      "supports": [
+        "BL2"
+      ],
+      "requirements": {
+        "UserFeedback": ">=1.5"
+      }
+    },
     {
       "name": "Better Spawns and Better Travel (BSABT)",
       "description": [

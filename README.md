@@ -5,6 +5,12 @@ You are free to use any of my mods as resource for your mods.
 
 ## Content
 
+### [Badass Bounties](BadassBounties)
+- Adds many randomly generated bounties to the game.
+- Each bounty rewards you with XP, Money and a random item upon completion.
+- You can check the bounty board menu using a new keybind. (Check the modded keybind Menu)
+- The chance for high rarity loot scales with your level.
+
 ### [BeGoneOutOfBoundsLoot](BeGoneOutOfBoundsLoot/)  
 - Allows you to spawn every loot on the ground in a nice pile right in front of you.
 

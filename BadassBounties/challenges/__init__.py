@@ -1,0 +1,1 @@
+from .challenge import Challenge
