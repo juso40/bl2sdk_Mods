@@ -10,6 +10,7 @@ You are free to use any of my mods as resource for your mods.
 - Each bounty rewards you with XP, Money and a random item upon completion.
 - You can check the bounty board menu using a new keybind. (Check the modded keybind Menu)
 - The chance for high rarity loot scales with your level.
+- Requires [UserFeedback](https://bl-sdk.github.io/mods/UserFeedback/)
 
 ### [BeGoneOutOfBoundsLoot](BeGoneOutOfBoundsLoot/)  
 - Allows you to spawn every loot on the ground in a nice pile right in front of you.
