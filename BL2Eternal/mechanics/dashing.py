@@ -68,13 +68,15 @@ class Dash:
         pawn = caller.Pawn
         if pawn is None:
             return True
+        unrealsdk.CallPostEdit(False)
+
         self.dash_cooldown -= params.DeltaTime
         self.dash_duration -= params.DeltaTime
 
         # Check for dash cooldown
         if self.dash_cooldown <= 0:
             self.dash_cooldown = 0
-            if pawn.IsOnGroundOrShortFall():  # Reset dash on ground only
+            if pawn.IsOnGroundOrShortFall and pawn.IsOnGroundOrShortFall():  # Reset dash on ground only
                 self.first_dash = False
                 self.second_dash = False
 
@@ -85,11 +87,10 @@ class Dash:
                 self.remove_screen_particles(caller)
                 _x, _y = pawn.Velocity.X, pawn.Velocity.Y
                 mag = sqrt(_x ** 2 + _y ** 2)
-                unrealsdk.CallPostEdit(False)
                 pawn.Velocity = ((_x / mag) * 200, (_y / mag) * 200, 0)
             return True
-        unrealsdk.CallPostEdit(False)
         pawn.Velocity = self.dash_dir
+        unrealsdk.CallPostEdit(True)
         return True
 
     def add_screen_particles(self, pc: unrealsdk.UObject) -> None:

@@ -2,13 +2,29 @@ import unrealsdk
 
 
 class GloryKill:
-    glory_killed = []
-
+    HEALTH_THRESHOLD = 0.15  # less than 15% health and injured required to be in glory kill state
     GLORY_KILL_AK_EVENT1 = "Ake_UI.UI_Shields.Ak_Play_UI_Shield_Roid_Buff_Hit"
     GLORY_KILL_AK_EVENT2 = "Ake_UI.UI_HUD.Ak_Play_UI_PVP_Duel_End"
     GLORY_KILL_MARKER1 = "FX_GOR_Particles.Particles.DeathFX.Part_FireDeath_Small"
     GLORY_KILL_MARKER2 = "FX_GOR_Particles.Particles.DeathFX.Part_ShockDeath_Large"
     GLORY_KILL_KILLED_PARTICLE = "FX_WEP_Explosions.Particles.Default.Part_ExplosiveExplosion_Small"
+
+    def __init__(self):
+        self.glory_killed = set()
+        self.glory_kill_state = dict()
+
+    @property
+    def emitter_pool(self) -> unrealsdk.UObject:
+        return unrealsdk.GetEngine().GetCurrentWorldInfo().MyEmitterPool
+
+    def check_glory_kill_state(
+            self,
+            pawn: unrealsdk.UObject
+    ) -> bool:
+        if pawn.IsInjured() and (pawn.GetHealth()/pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
+            self.glory_kill_state.setdefault(pawn.PathName(pawn), 5)  # Stay 5 seconds in glory kill state
+            return True
+        return False
 
     def on_take_damage(
             self,
@@ -16,27 +32,35 @@ class GloryKill:
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
-        if not caller.IsInjured():
+        if not self.check_glory_kill_state(caller):
             return True
+
+        # We only allow Melee damage to kill Pawns in glory kill state
         if not params.Pipeline or "Melee" not in caller.PathName(params.Pipeline.ImpactDefinition):
             return True
 
-        emitter_pool = unrealsdk.GetEngine().GetCurrentWorldInfo().MyEmitterPool
-
+        # Store the location the Pawn was hit
         hit_loc = params.HitLocation
         hit_loc = (hit_loc.X, hit_loc.Y, hit_loc.Z)
 
-        emitter_pool.SpawnEmitter(
+        # Spawn the glory killed particle to the hit location
+        self.emitter_pool.SpawnEmitter(
             unrealsdk.FindObject("ParticleSystem", self.GLORY_KILL_KILLED_PARTICLE),
             hit_loc,
         )
 
+        # Add the sound effects
         instigator = params.InstigatedBy
         instigator.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.GLORY_KILL_AK_EVENT1))
         instigator.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.GLORY_KILL_AK_EVENT2))
+
+        # The instigator gains all it's health back for this glory kill.
         if instigator.Pawn:
             instigator.Pawn.SetHealth(instigator.Pawn.GetMaxHealth())
-        self.glory_killed.append(caller.PathName(caller))
+
+        # Add the killed Pawn to the set of killed Pawns to later increase the dropped loot.
+        self.glory_killed.add(caller.PathName(caller))
+        # Set health of Pawn to 1 to kill him with melee damage and not cause soft locks.
         caller.SetHealth(1)
         return True
 
@@ -46,16 +70,15 @@ class GloryKill:
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
-        if not caller.MyWillowPawn.IsInjured():
+        if not self.check_glory_kill_state(caller.MyWillowPawn):
             return True
 
-        emitter_pool = unrealsdk.GetEngine().GetCurrentWorldInfo().MyEmitterPool
-        emitter_pool.SpawnEmitterMeshAttachment(
+        self.emitter_pool.SpawnEmitterMeshAttachment(
             unrealsdk.FindObject("ParticleSystem", self.GLORY_KILL_MARKER1),
             caller.MyWillowPawn.Mesh,
             "root"
         )
-        emitter_pool.SpawnEmitterMeshAttachment(
+        self.emitter_pool.SpawnEmitterMeshAttachment(
             unrealsdk.FindObject("ParticleSystem", self.GLORY_KILL_MARKER2),
             caller.MyWillowPawn.Mesh,
             "root"
@@ -71,11 +94,26 @@ class GloryKill:
     ) -> bool:
         try:
             self.glory_killed.remove(caller.PathName(caller))
-            unrealsdk.Log("Dop some loot")
-            for _ in range(9):
+            # Only drop additional loot if the Pawn got glory killed
+            for _ in range(4):
                 caller.DropLootOnDeath(params.Killer, params.DamageType, params.DamageTypeDefinition)
-        except ValueError:
+        except KeyError:
             pass
+        return True
+
+    def tick_glory_states(
+            self,
+            caller: unrealsdk.UObject,
+            function: unrealsdk.UFunction,
+            params: unrealsdk.FStruct
+    ) -> bool:
+        for p, t in list(self.glory_kill_state.items()):
+            if t > 0:
+                self.glory_kill_state[p] = t - params.DeltaTime  # Decrease the glory kill state timer
+                unrealsdk.FindObject("WillowAIPawn", p).Stagger()
+            elif t < 10:  # Remove after 10 seconds to prevent adding it back again
+                del self.glory_kill_state[p]  # Remove if time is up
+
         return True
 
     def enable(
@@ -96,6 +134,11 @@ class GloryKill:
             "GloryKillLoot",
             lambda c, f, p: self.drop_loot_on_death(c, f, p)
         )
+        unrealsdk.RegisterHook(
+            "WillowGame.WillowPlayerController.PlayerTick",
+            "GloryKillStateTick",
+            lambda c, f, p: self.tick_glory_states(c, f, p)
+        )
 
     def disable(
             self
@@ -103,6 +146,8 @@ class GloryKill:
         unrealsdk.RemoveHook("WillowGame.WillowAIPawn.TakeDamage", "GloryKillTakeDamage")
         unrealsdk.RemoveHook("WillowGame.WillowMind.NotifyAttackedBy", "GloryKillState")
         unrealsdk.RemoveHook("WillowGame.WillowPawn.DropLootOnDeath", "GloryKillLoot")
+        unrealsdk.RemoveHook("WillowGame.WillowPlayerController.PlayerTick", "GloryKillStateTick")
+
 
 
 glory_kill = GloryKill()
