@@ -22,10 +22,13 @@ presets_path = __path__[0]
 def _preset_changed(option: Options.Value, new_value):
     unrealsdk.Log(f"{option.Caption} changed to {new_value}")
     if option.CurrentValue == "Custom":  # Save the users Custom preset
-        with open(settings_json_path, "r") as f:
-            settings = json.load(f)  # Get the old settings
-            with open(os.path.join(presets_path,  "Custom.json"), "w") as out:
-                json.dump(settings, out, indent=4)  # write them to the preset Custom.json file
+        try:
+            with open(settings_json_path, "r") as f:
+                settings = json.load(f)  # Get the old settings
+                with open(os.path.join(presets_path,  "Custom.json"), "w") as out:
+                    json.dump(settings, out, indent=4)  # write them to the preset Custom.json file
+        except FileNotFoundError:
+            pass  # If the settings.json file doesn't exist, don't do anything
     with open(os.path.join(presets_path, f"{new_value}.json"), "r") as f:
         settings = json.load(f)
         with open(settings_json_path, "w") as out:

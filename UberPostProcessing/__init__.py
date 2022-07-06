@@ -15,7 +15,7 @@ class UberPostProcessing(SDKMod):
         "Exposes many different post processing effects to the user."
         "Requires Depth of Field Setting to be enabled."
     )
-    Version: str = "1.1"
+    Version: str = "1.2"
 
     Types: ModTypes = ModTypes.Utility
     Priority = ModPriorities.Standard
