@@ -117,7 +117,8 @@
       "name": "blimgui",
       "description": [
         "A [PythonSDK](https://github.com/bl-sdk/PythonSDK) library that wraps boilerplate code for [pyimgui](https://github.com/pyimgui/pyimgui).\n",
-        "This library allows modders to easily create and interact with a new opengl window with an existing imgui context."
+        "This library allows modders to easily create and interact with a new opengl window with an existing imgui context.\n",
+        "Linux users need to add `PYOPENGL_PLATFORM=nt` to the launch options for this mod to work."
       ],
       "tagline": "Adds imgui support to PythonSDK Mods.",
       "types": [

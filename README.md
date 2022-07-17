@@ -35,6 +35,7 @@ You are free to use any of my mods as resource for your mods.
 ### [blimgui](blimgui/)
 - A pyimgui library for PythonSDK.
 - Allows Modders to create a new window on the fly for easy gui creation.
+- Linux users need to add `PYOPENGL_PLATFORM=nt` to the launch options for this mod to work.
 
 ### [Chronos](Chronos/)
 - Replaces the Skullmasher Sniper Rifle.
