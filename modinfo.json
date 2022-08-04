@@ -381,9 +381,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.0.0",
+      "latest": "1.1",
       "versions": {
-        "1.0.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/mateditor/mateditor.zip"
+        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/mateditor/mateditor.zip"
       },
       "requirements": {},
       "supports": [
