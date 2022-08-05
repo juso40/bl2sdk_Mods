@@ -385,7 +385,7 @@
       "versions": {
         "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/mateditor/mateditor.zip"
       },
-      "requirements": {},
+      "requirements": {"blimgui": ">=0.1.0"}
       "supports": [
         "BL2",
         "TPS"
@@ -439,15 +439,19 @@
     {
       "name": "Photomode",
       "description": [
-        "Adds a keybind to toggle ``Photomode``, by default ``P``."
+        "Adds a keybind to toggle ``Photomode``, by default ``P``.\n",
+        "'Mousewheel Up/Down' to change the active modifier.\n",
+        "Hold 'Shift' while scrolling to change the camera movement speed.\n",
+        "Hold 'R' while scrolling to change the camera rotation.\n",
+        "Hold 'F' while scrolling to change the camera FOV."
       ],
       "tagline": "A lightweight photomode for BL2/TPS.",
       "types": [
         "Utility"
       ],
-      "latest": "1.0",
+      "latest": "1.1",
       "versions": {
-        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/Photomode/Photomode.zip"
+        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/Photomode/Photomode.zip"
       },
       "requirements": {}
     },
