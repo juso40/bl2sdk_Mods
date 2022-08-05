@@ -385,10 +385,11 @@
       "versions": {
         "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/mateditor/mateditor.zip"
       },
-      "requirements": {"blimgui": ">=0.1.0"}
+      "requirements": {"blimgui": ">=0.1.0"},
       "supports": [
         "BL2",
-        "TPS"
+        "TPS",
+        "AoDK"
       ]
     },
     {
