@@ -21,9 +21,10 @@ class GloryKill:
             self,
             pawn: unrealsdk.UObject
     ) -> bool:
-        if pawn.IsInjured() and (pawn.GetHealth()/pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
-            self.glory_kill_state.setdefault(pawn.PathName(pawn), 5)  # Stay 5 seconds in glory kill state
-            return True
+        if pawn.IsInjured() and (pawn.GetHealth() / pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
+            pawn_path_name = pawn.PathName(pawn)
+            self.glory_kill_state.setdefault(pawn_path_name, 5)  # Stay 5 seconds in glory kill state
+            return self.glory_kill_state[pawn_path_name] > 0  # Only first 5 seconds in glory kill state
         return False
 
     def on_take_damage(
@@ -62,6 +63,7 @@ class GloryKill:
         self.glory_killed.add(caller.PathName(caller))
         # Set health of Pawn to 1 to kill him with melee damage and not cause soft locks.
         caller.SetHealth(1)
+        caller.SetShieldStrength(0)
         return True
 
     def enter_glory_kill_state(
@@ -107,11 +109,16 @@ class GloryKill:
             function: unrealsdk.UFunction,
             params: unrealsdk.FStruct
     ) -> bool:
+        # Enemies will stay 5 seconds in glory kill state and then are immune to glory kills for 10 seconds
         for p, t in list(self.glory_kill_state.items()):
+            self.glory_kill_state[p] = t - params.DeltaTime  # Decrease the glory kill state timer
+            pawn = unrealsdk.FindObject("WillowAIPawn", p)
             if t > 0:
-                self.glory_kill_state[p] = t - params.DeltaTime  # Decrease the glory kill state timer
-                unrealsdk.FindObject("WillowAIPawn", p).Stagger()
-            elif t < 10:  # Remove after 10 seconds to prevent adding it back again
+                # Remove any target while in glory kill state
+                pawn.MyWillowMind.bScriptedHoldPosition = True
+            elif 0 >= t > -10 and pawn.MyWillowMind.bScriptedHoldPosition is True:
+                pawn.MyWillowMind.bScriptedHoldPosition = False
+            elif t < -10:  # Remove after 10 seconds to prevent adding it back again
                 del self.glory_kill_state[p]  # Remove if time is up
 
         return True
@@ -147,7 +154,6 @@ class GloryKill:
         unrealsdk.RemoveHook("WillowGame.WillowMind.NotifyAttackedBy", "GloryKillState")
         unrealsdk.RemoveHook("WillowGame.WillowPawn.DropLootOnDeath", "GloryKillLoot")
         unrealsdk.RemoveHook("WillowGame.WillowPlayerController.PlayerTick", "GloryKillStateTick")
-
 
 
 glory_kill = GloryKill()

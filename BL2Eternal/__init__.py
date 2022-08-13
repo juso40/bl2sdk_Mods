@@ -9,7 +9,7 @@ class Eternal(SDKMod):
     Name: str = "BL2 Eternal"
     Description: str = "Doom Eternal, but it's BL2."
     Author: str = "Juso"
-    Version: str = "1.2"
+    Version: str = "1.3"
     SupportedGames = Game.BL2
     Types: ModTypes = ModTypes.Gameplay
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadWithSettings
