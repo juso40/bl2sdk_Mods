@@ -266,6 +266,21 @@
       "requirements": {}
     },
     {
+      "name": "FPS Slider",
+      "description": [
+        "Adds custom sliders to the game that allows you to easily change the games target min and max FPS values."
+      ],
+      "tagline": "Custom FPS targets using two sliders.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/fpsslider/fpsslider.zip"
+      },
+      "requirements": {}
+    },
+    {
       "name": "HitSounds",
       "description": [
         "- Plays a sound on hit.\n",

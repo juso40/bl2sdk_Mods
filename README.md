@@ -70,6 +70,12 @@ You are free to use any of my mods as resource for your mods.
 - Switch between first and third person using '5'.
 - Supports all vehicles.
 
+### [FPS Slider](fpsslider)
+- Allows you to change the FPS limit ingame.
+- Adds two sliders to the mod settings menu.
+  - min fps
+  - max fps
+
 ### [HitSounds](HitSounds/)
 - Plays a sound on hit.
 - Spawns confetti on crits.
