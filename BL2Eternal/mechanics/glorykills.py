@@ -112,15 +112,8 @@ class GloryKill:
         # Enemies will stay 5 seconds in glory kill state and then are immune to glory kills for 10 seconds
         for p, t in list(self.glory_kill_state.items()):
             self.glory_kill_state[p] = t - params.DeltaTime  # Decrease the glory kill state timer
-            pawn = unrealsdk.FindObject("WillowAIPawn", p)
-            if t > 0:
-                # Remove any target while in glory kill state
-                pawn.MyWillowMind.bScriptedHoldPosition = True
-            elif 0 >= t > -10 and pawn.MyWillowMind.bScriptedHoldPosition is True:
-                pawn.MyWillowMind.bScriptedHoldPosition = False
-            elif t < -10:  # Remove after 10 seconds to prevent adding it back again
+            if t < -10:  # 10 seconds immunity to glory kill state
                 del self.glory_kill_state[p]  # Remove if time is up
-
         return True
 
     def enable(
