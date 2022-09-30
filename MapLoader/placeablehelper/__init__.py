@@ -38,7 +38,7 @@ def load_map(map_data: dict) -> None:
     #######################
     # StaticMeshComponent #
     #######################
-    for obj, attrs in edit_data.get("StaticMeshComponent", {}):  # edit
+    for obj, attrs in edit_data.get("StaticMeshComponent", {}).items():  # edit
         _set_smc_attrs(
             smc=unrealsdk.FindObject("StaticMeshComponent", obj),
             attrs=attrs
