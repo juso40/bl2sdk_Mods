@@ -37,7 +37,7 @@ class BGOOBL(SDKMod):
     Version: str = "2.0"
     Types = unrealsdk.ModTypes.Utility
     Description: str = "Adds a keybind option to the game that allows you to teleport all" \
-                       " loot on the ground to your current location. By default the key is binded to ENTER."
+                       " loot on the ground to your current location. By default the key is bound to ENTER."
     Author: str = "Juso"
 
     Keybinds: List[KeybindManager.Keybind] = [KeybindManager.Keybind("Teleport Loot To Me", Key="Enter")]
