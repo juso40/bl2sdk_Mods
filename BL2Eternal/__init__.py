@@ -10,14 +10,17 @@ DASH_OPTION = OptionManager.Options.Boolean(Caption="Dash", Description="Enable 
 GLORY_KILL_OPTION = OptionManager.Options.Boolean(
     Caption="Glory Kill", Description="Enable glory kill.", StartingValue=True
 )
-
+DASH_SCREEN_PARTICLE = OptionManager.Options.Boolean(
+    Caption="Dash Screen Particle", StartingValue=Game.GetCurrent() != Game.TPS,  # TPS doesn't have this
+    Description="Enable the screen particle effect when dashing.", IsHidden=Game.GetCurrent() == Game.TPS
+)
 
 class Eternal(SDKMod):
     Name: str = "BL2 Eternal"
     Description: str = "Doom Eternal, but it's BL2."
     Author: str = "Juso"
-    Version: str = "1.4"
-    SupportedGames = Game.BL2
+    Version: str = "1.4.1"
+    SupportedGames = Game.BL2 | Game.TPS | Game.AoDK
     Types: ModTypes = ModTypes.Gameplay
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadWithSettings
     Options: List[OptionManager.Options.Base] = [
@@ -47,6 +50,7 @@ class Eternal(SDKMod):
                 glory_kill.enable()
             else:
                 glory_kill.disable()
-
+        elif option is DASH_SCREEN_PARTICLE:
+            dash.enable_screen_particle(new_value)
 
 unrealsdk.RegisterMod(Eternal())

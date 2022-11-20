@@ -16,6 +16,7 @@ class Dash:
         self.dash_duration = 0
         self.dash_dir = (0, 0, 0)
         self.b_needs_stop_dash = False
+        self.b_dash_particles = True
 
     def wants_to_dash(
             self,
@@ -44,7 +45,8 @@ class Dash:
             return
 
         def impl():
-            self.add_screen_particles(pc)
+            if self.b_dash_particles:
+                self.add_screen_particles(pc)
             pawn.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.DASH_SOUND1))
             pawn.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.DASH_SOUND2))
             self.b_needs_stop_dash = True
@@ -87,7 +89,7 @@ class Dash:
                 self.remove_screen_particles(caller)
                 _x, _y = pawn.Velocity.X, pawn.Velocity.Y
                 mag = sqrt(_x ** 2 + _y ** 2)
-                pawn.Velocity = ((_x / mag) * 200, (_y / mag) * 200, 0)
+                pawn.Velocity = ((_x / mag) * 200, (_y / mag) * 200, -10)  # Slight Downward velocity becuase of TPS
             return True
         pawn.Velocity = self.dash_dir
         unrealsdk.CallPostEdit(True)
@@ -126,14 +128,21 @@ class Dash:
             lambda c, f, p: self.wants_to_dash(c, f, p)
         )
 
-        unrealsdk.LoadPackage("GD_Assassin_Streaming_SF")
-        unrealsdk.KeepAlive(unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE))
+        if self.b_dash_particles:
+            unrealsdk.LoadPackage("GD_Assassin_Streaming_SF")
+            unrealsdk.KeepAlive(unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE))
 
     def disable(
             self
     ) -> None:
         unrealsdk.RemoveHook("WillowGame.WillowPlayerController.PlayerTick", "EternalDash")
         unrealsdk.RemoveHook("WillowGame.WillowPlayerInput.SprintPressed", "EternalDashInput")
+
+    def enable_dash_particle(self, val: bool) -> None:
+        self.b_dash_particles = val
+        if val:
+            unrealsdk.LoadPackage("GD_Assassin_Streaming_SF")
+            unrealsdk.KeepAlive(unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE))
 
 
 dash = Dash()
