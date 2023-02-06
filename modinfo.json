@@ -707,6 +707,26 @@
         "TPS",
         "AoDK"
       ]
+    },
+    {
+      "name": "UEMath Library",
+      "description": [
+        "Math library with wrapper functions for UE Rotator and Vector operations."
+      ],
+      "tagline": "Math library with wrapper functions for UE Rotator and Vector operations.",
+      "types": [
+        "Library"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/uemath/uemath.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2",
+        "TPS",
+        "AoDK"
+      ]
     }
   ]
 }
