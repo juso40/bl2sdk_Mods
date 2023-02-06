@@ -4,15 +4,18 @@ from typing import List, Tuple, Union
 import unrealsdk
 
 from .constants import *
+from .structs import Rotator, Vector
 
-Vec3 = Union[Tuple[float, float, float], List[float]]
-Rotator = Union[Tuple[int, int, int], List[int]]
+Vec3 = Union[Tuple[float, float, float], List[float], Vector]
+Rot = Union[Tuple[int, int, int], List[int], Rotator]
 
 
-def rotator_to_vector(rot: Union[unrealsdk.UObject, Rotator]) -> Vec3:
+def rotator_to_vector(rot: Union[Rot, unrealsdk.UObject]) -> Vec3:
     """Convert a Rotator to a Vector."""
     if isinstance(rot, (tuple, list)):
         pitch, yaw, roll = rot
+    elif isinstance(rot, Rotator):
+        pitch, yaw, roll = rot.pitch, rot.yaw, rot.roll
     else:
         pitch, yaw, roll = rot.Pitch, rot.Yaw, rot.Roll
 
@@ -25,7 +28,7 @@ def rotator_to_vector(rot: Union[unrealsdk.UObject, Rotator]) -> Vec3:
     return x, y, z
 
 
-def vector_to_rotator(vector: Vec3) -> Rotator:
+def vector_to_rotator(vector: Vec3) -> Rot:
     """Convert a normalized Vector to a Rotator."""
     x, y, z = vector
     pitch = m.atan2(z, m.sqrt(x * x + y * y)) * RADIANS_TO_URU
@@ -66,7 +69,7 @@ def look_at(actor: unrealsdk.UObject, target: Vec3) -> None:
     actor.Rotation = vector_to_rotator(look_vector)
 
 
-def get_axes(rotation: Rotator) -> Tuple[Vec3, Vec3, Vec3]:
+def get_axes(rotation: Rot) -> Tuple[Vector, Vector, Vector]:
     """Get the axes of a Rotator."""
 
     pitch, yaw, roll = rotation
@@ -77,10 +80,16 @@ def get_axes(rotation: Rotator) -> Tuple[Vec3, Vec3, Vec3]:
 
     z = normalize(rotator_to_vector((pitch + URU_90, yaw - URU_90, roll)))
 
-    return x, y, z
+    return Vector(*x), Vector(*y), Vector(*z)
 
 
-def world_to_screen(canvas: unrealsdk.UObject, target: Vec3, player_rot: Rotator, player_loc: Vec3, player_fov: float):
+def world_to_screen(
+        canvas: unrealsdk.UObject,
+        target: Vec3,
+        player_rot: Rot,
+        player_loc: Vec3,
+        player_fov: float
+) -> Tuple[float, float]:
     axis_x, axis_y, axis_z = get_axes(player_rot)
 
     delta = [a - b for a, b in zip(target, player_loc)]
@@ -117,9 +126,11 @@ def euler_rotate_vector_2d(x: float, y: float, angle: float) -> Tuple[float, flo
     return x_r, y_r
 
 
-def dot_product(vec_a: Vec3,
-                vec_b: Vec3,
-                ignore_z: bool = True) -> Tuple[float, float, float]:
+def dot_product(
+        vec_a: Vec3,
+        vec_b: Vec3,
+        ignore_z: bool = True
+) -> Tuple[float, float, float]:
     """Get the dot product of 2 normalized vectors."""
 
     xa, ya, za = vec_a
