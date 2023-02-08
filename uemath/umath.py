@@ -1,22 +1,27 @@
 import math as m
-from typing import List, Tuple, Union
+from typing import List, TYPE_CHECKING, Tuple, Union, cast
 
 import unrealsdk
 
 from .constants import *
-from .structs import Rotator, Vector
 
-Vec3 = Union[Tuple[float, float, float], List[float], Vector]
-Rot = Union[Tuple[int, int, int], List[int], Rotator]
+if TYPE_CHECKING:
+    from .structs import Rotator, Vector
+
+import Mods.uemath.structs as structs
+
+Vec3 = Union[Tuple[float, float, float], List[float], "Vector"]
+Rot = Union[Tuple[int, int, int], List[int], "Rotator"]
 
 
 def rotator_to_vector(rot: Union[Rot, unrealsdk.UObject]) -> Vec3:
     """Convert a Rotator to a Vector."""
     if isinstance(rot, (tuple, list)):
         pitch, yaw, roll = rot
-    elif isinstance(rot, Rotator):
+    elif isinstance(rot, structs.Rotator):
         pitch, yaw, roll = rot.pitch, rot.yaw, rot.roll
     else:
+        rot = cast(unrealsdk.UObject, rot)
         pitch, yaw, roll = rot.Pitch, rot.Yaw, rot.Roll
 
     yaw_conv = yaw * URU_TO_RADIANS
@@ -69,7 +74,7 @@ def look_at(actor: unrealsdk.UObject, target: Vec3) -> None:
     actor.Rotation = vector_to_rotator(look_vector)
 
 
-def get_axes(rotation: Rot) -> Tuple[Vector, Vector, Vector]:
+def get_axes(rotation: Rot) -> Tuple["Vector", "Vector", "Vector"]:
     """Get the axes of a Rotator."""
 
     pitch, yaw, roll = rotation
@@ -78,9 +83,9 @@ def get_axes(rotation: Rot) -> Tuple[Vector, Vector, Vector]:
     y = normalize(rotator_to_vector((0, yaw + URU_90, roll)))
     y = (y[0], y[1], 0)
 
-    z = normalize(rotator_to_vector((pitch + URU_90, yaw - URU_90, roll)))
+    z = normalize(rotator_to_vector((pitch + URU_90, yaw, roll)))
 
-    return Vector(*x), Vector(*y), Vector(*z)
+    return structs.Vector(x), structs.Vector(y), structs.Vector(z)
 
 
 def world_to_screen(

@@ -31,7 +31,7 @@ __all__ = [
 
 class UEMath(SDKMod):
     Name = "UEMath Library"
-    Version = "1.0"
+    Version = "1.1"
     Types = ModTypes.Library
     Description = "Math library with wrapper functions for UE Rotator and Vector operations."
     Author = "Juso"
