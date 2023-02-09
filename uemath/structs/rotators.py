@@ -115,12 +115,12 @@ class Rotator:
 
         Rotation will be converted to forward vector.
         """
-        yaw_conv = self.yaw * URU_TO_RADIANS
-        pitch_conv = self.pitch * URU_TO_RADIANS
-        cos_pitch = m.cos(pitch_conv)
-        x = m.cos(yaw_conv) * cos_pitch
-        y = m.sin(yaw_conv) * cos_pitch
-        z = m.sin(pitch_conv)
+        yaw_rads = self.yaw * URU_TO_RADIANS
+        pitch_rads = self.pitch * URU_TO_RADIANS
+        cos_pitch = m.cos(pitch_rads)
+        x = m.cos(yaw_rads) * cos_pitch
+        y = m.sin(yaw_rads) * cos_pitch
+        z = m.sin(pitch_rads)
 
         tup = (x, y, z)
         return tup if to_tuple else Vector(tup)
@@ -133,12 +133,12 @@ class Rotator:
         """Get the axes of a Rotator.
 
         The axes describe the forward, right and up vectors of this Rotator.
+        :return: X, Y, Z (forward, right, up) basis vectors
         """
-
         x = cast(Vector, self.to_vector()).normalize()
-        y = Vector(Rotator((0, self.yaw + URU_90, self.roll))).normalize()
-        y.z = 0
-        z = Vector(Rotator((self.pitch + URU_90, self.yaw, self.roll))).normalize()
+        y = Rotator(yaw=self.yaw + URU_90).to_vector().normalize()
+        y = y.rotate(x, -self.roll*URU_TO_RADIANS)  # Roll around x axis
+        z = x.cross(y).normalize()
         return x, y, z
 
     @staticmethod

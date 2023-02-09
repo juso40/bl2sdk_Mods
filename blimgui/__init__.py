@@ -1,13 +1,14 @@
 import site
-from typing import Callable
+from typing import Any, Callable, Union
 
 import unrealsdk
 
-from ..ModMenu import EnabledSaveType, ModPriorities, ModTypes, RegisterMod, SDKMod
+from ..ModMenu import EnabledSaveType, LoadModSettings, ModPriorities, ModTypes, Options, RegisterMod, SDKMod, \
+    SaveAllModSettings
 
 site.addsitedir("Mods/blimgui/dist")
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 import pyglet
 from pyglet import gl
@@ -19,11 +20,18 @@ DRAW_FUN = Callable[[], None]
 WINDOW = None
 IMPL = None
 
+SizeX = Options.Hidden("WindowX", StartingValue=1280)
+SizeY = Options.Hidden("WindowY", StartingValue=720)
+ImguiStyle = Options.Spinner(
+    "ImguiStyle", Description="Change the look of the Imgui window",
+    Choices=["Classic", "Dark", "Light", "Modern Dark"], StartingChoice="Modern Dark"
+)
+
 
 def create_window(
         caption: str,
-        width: int = 1280,
-        height: int = 720,
+        width: Union[int, Options.Hidden] = SizeX,
+        height: Union[int, Options.Hidden] = SizeY,
         resizable: bool = True
 ) -> None:
     """
@@ -40,10 +48,25 @@ def create_window(
     if not WINDOW and not IMPL:
         gl.glClearColor(1, 1, 1, 1)
         imgui.create_context()
-        WINDOW = pyglet.window.Window(width=width, height=height, resizable=resizable, caption=caption)
+        WINDOW = pyglet.window.Window(
+            width=width if isinstance(width, int) else width.CurrentValue,
+            height=height if isinstance(height, int) else height.CurrentValue,
+            resizable=resizable,
+            caption=caption
+        )
         IMPL = create_renderer(WINDOW)
+
+        def on_resize(w: int, h: int) -> None:
+            SizeX.CurrentValue = w
+            SizeY.CurrentValue = h
+            SaveAllModSettings()
+
+        WINDOW.push_handlers(on_resize)
+        style_ui(ImguiStyle.CurrentValue)
+
     elif WINDOW:
         WINDOW.set_caption(caption=caption)
+        style_ui(ImguiStyle.CurrentValue)
 
 
 def close_window() -> bool:
@@ -130,17 +153,82 @@ def _OnTick(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: un
 unrealsdk.RunHook("WillowGame.WillowGameViewportClient.Tick", "WindowTick", _OnTick)
 
 
+def style_ui(new_style: str) -> None:
+    if new_style == "Classic":
+        return imgui.style_colors_classic()
+    elif new_style == "Dark":
+        return imgui.style_colors_dark()
+    elif new_style == "Light":
+        return imgui.style_colors_light()
+    imgui.style_colors_dark()
+
+    s = imgui.get_style()
+    s.frame_rounding = 4
+    s.popup_rounding = 2
+    s.frame_padding = (8, 3)
+    s.item_spacing = (4, 2)
+    s.item_inner_spacing = (2, 4)
+    s.indent_spacing = 16
+    s.scrollbar_size = 12
+    s.grab_min_size = 6
+    s.window_rounding = 0
+    s.scrollbar_rounding = 12
+    s.grab_rounding = 12
+
+    colors = s.colors
+
+    colors[imgui.COLOR_TEXT] = (0.90, 0.90, 0.90, 1.00)
+    colors[imgui.COLOR_WINDOW_BACKGROUND] = (0.10, 0.10, 0.10, 0.94)
+    colors[imgui.COLOR_POPUP_BACKGROUND] = (0.10, 0.10, 0.10, 0.94)
+    colors[imgui.COLOR_BORDER] = (0.22, 0.22, 0.22, 1.00)
+    colors[imgui.COLOR_FRAME_BACKGROUND] = (0.16, 0.16, 0.16, 1.00)
+    colors[imgui.COLOR_FRAME_BACKGROUND_HOVERED] = (0.20, 0.20, 0.20, 1.00)
+    colors[imgui.COLOR_FRAME_BACKGROUND_ACTIVE] = (0.13, 0.26, 0.45, 1.00)
+    colors[imgui.COLOR_TITLE_BACKGROUND] = (0.16, 0.16, 0.16, 1.00)
+    colors[imgui.COLOR_TITLE_BACKGROUND_ACTIVE] = (0.13, 0.26, 0.45, 1.00)
+    colors[imgui.COLOR_TITLE_BACKGROUND_COLLAPSED] = (0.16, 0.16, 0.16, 1.00)
+    colors[imgui.COLOR_MENUBAR_BACKGROUND] = (0.16, 0.16, 0.16, 1.00)
+    colors[imgui.COLOR_SCROLLBAR_BACKGROUND] = (0.10, 0.10, 0.10, 1.00)
+    colors[imgui.COLOR_SCROLLBAR_GRAB] = (0.27, 0.27, 0.27, 1.00)
+    colors[imgui.COLOR_SCROLLBAR_GRAB_HOVERED] = (0.45, 0.45, 0.45, 1.00)
+    colors[imgui.COLOR_SCROLLBAR_GRAB_ACTIVE] = (0.45, 0.45, 0.45, 1.00)
+    colors[imgui.COLOR_CHECK_MARK] = (0.93, 0.79, 0.00, 1.00)
+    colors[imgui.COLOR_SLIDER_GRAB] = (0.13, 0.26, 0.45, 1.00)
+    colors[imgui.COLOR_SLIDER_GRAB_ACTIVE] = (0.22, 0.53, 0.94, 1.00)
+    colors[imgui.COLOR_BUTTON] = (0.92, 0.52, 0.14, 1.00)
+    colors[imgui.COLOR_BUTTON_HOVERED] = (0.93, 0.82, 0.21, 1.00)
+    colors[imgui.COLOR_BUTTON_ACTIVE] = (0.93, 0.75, 0.03, 1.00)
+    colors[imgui.COLOR_BUTTON_HOVERED] = (0.83, 0.61, 0.13, 1.00)
+    colors[imgui.COLOR_BUTTON_ACTIVE] = (0.98, 0.79, 0.15, 1.00)
+    colors[imgui.COLOR_HEADER] = (0.22, 0.53, 0.94, 1.00)
+    colors[imgui.COLOR_HEADER_HOVERED] = (0.50, 0.50, 0.50, 1.00)
+    colors[imgui.COLOR_HEADER_ACTIVE] = (0.22, 0.53, 0.94, 1.00)
+    colors[imgui.COLOR_RESIZE_GRIP] = (0.13, 0.26, 0.45, 1.00)
+    colors[imgui.COLOR_RESIZE_GRIP_HOVERED] = (0.22, 0.53, 0.94, 1.00)
+    colors[imgui.COLOR_RESIZE_GRIP_ACTIVE] = (0.22, 0.53, 0.94, 1.00)
+    colors[imgui.COLOR_TEXT_SELECTED_BACKGROUND] = (0.09, 0.22, 0.39, 1.00)
+    colors[imgui.COLOR_MODAL_WINDOW_DIM_BACKGROUND] = (0.00, 0.00, 0.00, 0.61)
+
+
 class BLImgui(SDKMod):
     Name = "BLImgui"
     Author = "Juso"
     Description = "A library that allows the creation of a separate window with imgui support."
     Version = __version__
 
+    Options = [SizeX, SizeY, ImguiStyle]
     Types = ModTypes.Library
     SaveEnabledState = EnabledSaveType.LoadWithSettings
     Priority = ModPriorities.Library
     Status = "Enabled"
 
+    def ModOptionChanged(self, option, new_value: Any) -> None:
+        if option == ImguiStyle:
+            if not WINDOW:
+                return
+            style_ui(new_value)
+
 
 instance = BLImgui()
 RegisterMod(instance)
+LoadModSettings(instance)

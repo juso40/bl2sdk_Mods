@@ -155,9 +155,9 @@
       "types": [
         "Library"
       ],
-      "latest": "0.1.0",
+      "latest": "0.2.0",
       "versions": {
-        "0.1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/blimgui/blimgui.zip"
+        "0.2.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/blimgui/blimgui.zip"
       },
       "requirements": {}
     },
@@ -711,15 +711,17 @@
     {
       "name": "UEMath Library",
       "description": [
-        "Math library with wrapper functions for UE Rotator and Vector operations."
+        "This library is meant to be used by other mods, it provides no functionality on its own.\n",
+        "Library with focus on UEVector and UERotator operations.\n",
+        "This library also contains game loop functions, which can be used to execute code every frame or on given condition.\n"
       ],
       "tagline": "Math library with wrapper functions for UE Rotator and Vector operations.",
       "types": [
         "Library"
       ],
-      "latest": "1.1",
+      "latest": "1.2",
       "versions": {
-        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/uemath/uemath.zip"
+        "1.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/uemath/uemath.zip"
       },
       "requirements": {},
       "supports": [

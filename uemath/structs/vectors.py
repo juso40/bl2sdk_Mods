@@ -255,14 +255,15 @@ class Vector:
         return self.rotate(self.cross(target).normalized, min(angle, max_rotation_delta))
 
     def rotate(self, axis: Vector, angle: float) -> Vector:
-        """Rotate this vector around an axis by an angle.
+        """Rotate this vector around an axis by an angle in radians.
 
+        See https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
         :param axis: The axis to rotate around.
-        :param angle: The angle to rotate by.
+        :param angle: The angle to rotate by. In radians.
         """
         axis.normalize()
-        sin = m.sin(angle * URU_TO_RADIANS)
-        cos = m.cos(angle * URU_TO_RADIANS)
+        sin = m.sin(angle)
+        cos = m.cos(angle)
         return self * cos + axis.cross(self) * sin + axis * axis.dot(self) * (1 - cos)
 
     def lerp(self, other: Vector, alpha: float) -> Vector:

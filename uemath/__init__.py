@@ -4,6 +4,8 @@ from unrealsdk import *
 from .structs import Rotator, Vector
 from .umath import (clamp, distance, dot_product, euler_rotate_vector_2d, get_axes, look_at, magnitude, normalize,
                     rotator_to_vector, round_to_multiple, square_distance, vector_to_rotator, world_to_screen)
+from .loop import (Time, TickFunction, PostRenderFunction, WaitCondition, WaitWhile, WaitForSeconds, tick, post_render,
+                   register_tick, remove_tick, register_post_render, remove_post_render)
 from ..ModMenu import ModTypes, SDKMod, Game
 
 __all__ = [
@@ -22,6 +24,18 @@ __all__ = [
     "dot_product",
     "square_distance",
     "get_axes",
+    "Time",
+    "TickFunction",
+    "PostRenderFunction",
+    "WaitCondition",
+    "WaitWhile",
+    "WaitForSeconds",
+    "tick",
+    "post_render",
+    "register_tick",
+    "remove_tick",
+    "register_post_render",
+    "remove_post_render",
 ]
 
 
@@ -31,9 +45,9 @@ __all__ = [
 
 class UEMath(SDKMod):
     Name = "UEMath Library"
-    Version = "1.1"
+    Version = "1.2"
     Types = ModTypes.Library
-    Description = "Math library with wrapper functions for UE Rotator and Vector operations."
+    Description = "Library with focus on UEVector and UERotator math and game loop functions."
     Author = "Juso"
     Status = "Enabled"
     SettingsInputs = {}
