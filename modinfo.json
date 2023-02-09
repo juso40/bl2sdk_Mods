@@ -496,9 +496,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.1",
+      "latest": "1.2",
       "versions": {
-        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/Photomode/Photomode.zip"
+        "1.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/Photomode/Photomode.zip"
       },
       "requirements": {}
     },

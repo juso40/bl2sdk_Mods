@@ -7,7 +7,7 @@ from ..ModMenu import EnabledSaveType, SDKMod, RegisterMod, ModTypes, KeybindMan
 
 class Photo(SDKMod):
     Name = "Photomode"
-    Version = "1.1"
+    Version = "1.2"
     Types = ModTypes.Utility
     Description = """Simple Photo Mode for BL2.
 'Mousewheel Up/Down' to change the active modifier.
@@ -22,7 +22,7 @@ Hold 'F' while scrolling to change the camera FOV.
         KeybindManager.Keybind("Photomode", "P", IsRebindable=True),
         KeybindManager.Keybind("Modifier +", "MouseScrollUp", IsRebindable=False),
         KeybindManager.Keybind("Modifier -", "MouseScrollDown", IsRebindable=False),
-        KeybindManager.Keybind("Camera Speed", "Shift", IsRebindable=False),
+        KeybindManager.Keybind("Camera Speed", "LeftShift", IsRebindable=False),
         KeybindManager.Keybind("Roll (Camera Rotation)", "R", IsRebindable=False),
         KeybindManager.Keybind("FOV", "F", IsRebindable=False),
     ]
@@ -89,11 +89,11 @@ Hold 'F' while scrolling to change the camera FOV.
         self.pc.Rotation.Roll += x * 128
 
     def camera_speed_modifier(self, x: int) -> None:
-        speed: float = self.pc.CameraManager.MovementSpeed
+        speed: float = self.pc.SpectatorCameraSpeed
         # clamp between 50 and 10000
         speed = max(min(speed + x * 50, 10000), 50)
 
-        self.pc.CameraManager.MovementSpeed = speed
+        self.pc.SpectatorCameraSpeed = speed
 
     def camera_fov_modifier(self, x: int) -> None:
         fov: int = self.pc.FOVAngle
