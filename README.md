@@ -30,6 +30,7 @@ You are free to use any of my mods as resource for your mods.
 - Injured Enemies will be one hit killed by your melee attacks (Glory Kills).
 - Glory Kills will restore your health to full and drop additional loot.
 - Injured enemies are marked by shock and fire particles around their feet.
+- Requires: [coroutines](coroutines/)
 
 
 ### [blimgui](blimgui/)

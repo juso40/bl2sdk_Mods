@@ -2,6 +2,14 @@ from math import sqrt
 
 import unrealsdk
 
+from Mods.coroutines import TickCoroutine, Time, WaitForSeconds, WaitWhile, start_coroutine_tick
+
+
+def _wait_for_pawn_on_ground() -> bool:
+    pc = unrealsdk.GetEngine().GamePlayers[0].Actor
+    pawn = pc.Pawn
+    return pc.IsPaused() or not pawn.IsOnGroundOrShortFall()
+
 
 class Dash:
     DASH_SOUND1: str = "Ake_Wep_SMGs.SMG_Tediore.Ak_Play_Wep_SMG_Tediore_Shot_Release"
@@ -15,8 +23,8 @@ class Dash:
         self.dash_cooldown = 0
         self.dash_duration = 0
         self.dash_dir = (0, 0, 0)
-        self.b_needs_stop_dash = False
         self.b_dash_particles = True
+        self.enabled = False
 
     def wants_to_dash(
             self,
@@ -30,18 +38,15 @@ class Dash:
 
         # Only allow dash while in air
         if not pc.Pawn.IsOnGroundOrShortFall():
-            self.dash()
+            self.dash(pc)
         return True
 
-    def dash(self) -> None:
-        pc = unrealsdk.GetEngine().GamePlayers[0].Actor
+    def dash(self, pc: unrealsdk.UObject) -> None:
         pawn = pc.Pawn
-        if pawn is None:
-            return
 
-        _x, _y = pawn.Acceleration.X, pawn.Acceleration.Y
-        mag = sqrt(_x ** 2 + _y ** 2)
-        if mag == 0:
+        x, y = pawn.Acceleration.X, pawn.Acceleration.Y
+        mag = sqrt(x ** 2 + y ** 2)
+        if mag == 0:  # No directional input, so don't dash
             return
 
         def impl():
@@ -49,51 +54,47 @@ class Dash:
                 self.add_screen_particles(pc)
             pawn.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.DASH_SOUND1))
             pawn.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.DASH_SOUND2))
-            self.b_needs_stop_dash = True
             self.dash_duration = 0.15
-            self.dash_dir = ((_x / mag) * 6500, (_y / mag) * 6500, 0)
+            self.dash_dir = ((x / mag) * 6500, (y / mag) * 6500, 0)
+            start_coroutine_tick(self.coroutine_tick_dash())
 
         if not self.first_dash:  # Dash once
             self.first_dash = True
             self.dash_cooldown = 1.5  # Dash cooldown starts after initial dash
             impl()
+            start_coroutine_tick(self.coroutine_tick_cooldown())
         elif not self.second_dash and self.dash_duration <= 0:  # Dash the second time after first dash is done
             self.second_dash = True
             impl()
 
-    def tick_dash(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
-    ) -> bool:
-        pawn = caller.Pawn
-        if pawn is None:
-            return True
-        unrealsdk.CallPostEdit(False)
+    def coroutine_tick_cooldown(self) -> TickCoroutine:
+        yield WaitForSeconds(self.dash_cooldown)  # Wait for dash cooldown
+        yield WaitWhile(_wait_for_pawn_on_ground)  # Reset once the player is on ground
+        self.dash_cooldown = 0
+        self.first_dash = False
+        self.second_dash = False
+        return None
 
-        self.dash_cooldown -= params.DeltaTime
-        self.dash_duration -= params.DeltaTime
+    def coroutine_tick_dash(self) -> TickCoroutine:
+        while True:
+            # Wait for pause menu to close
+            yield WaitWhile(lambda: unrealsdk.GetEngine().GamePlayers[0].Actor.IsPaused())
+            self.dash_duration -= Time.delta_time
+            pc = unrealsdk.GetEngine().GamePlayers[0].Actor
+            pawn = pc.Pawn
+            unrealsdk.CallPostEdit(False)
+            pawn.Velocity = self.dash_dir
 
-        # Check for dash cooldown
-        if self.dash_cooldown <= 0:
-            self.dash_cooldown = 0
-            if pawn.IsOnGroundOrShortFall and pawn.IsOnGroundOrShortFall():  # Reset dash on ground only
-                self.first_dash = False
-                self.second_dash = False
-
-        if self.dash_duration <= 0:
-            self.dash_duration = 0
-            if self.b_needs_stop_dash:
-                self.b_needs_stop_dash = False
-                self.remove_screen_particles(caller)
+            # Break this coroutine if our dash duration is over
+            if self.dash_duration <= 0:
+                self.dash_duration = 0
+                self.remove_screen_particles(pc)
                 _x, _y = pawn.Velocity.X, pawn.Velocity.Y
                 mag = sqrt(_x ** 2 + _y ** 2)
-                pawn.Velocity = ((_x / mag) * 200, (_y / mag) * 200, -10)  # Slight Downward velocity becuase of TPS
-            return True
-        pawn.Velocity = self.dash_dir
-        unrealsdk.CallPostEdit(True)
-        return True
+                pawn.Velocity = ((_x / mag) * 200, (_y / mag) * 200, -10)  # Slight Downward velocity because of TPS
+                unrealsdk.CallPostEdit(True)
+                return None
+            unrealsdk.CallPostEdit(True)
 
     def add_screen_particles(self, pc: unrealsdk.UObject) -> None:
         particle_params = (
@@ -118,11 +119,6 @@ class Dash:
             self
     ) -> None:
         unrealsdk.RegisterHook(
-            "WillowGame.WillowPlayerController.PlayerTick",
-            "EternalDash",
-            lambda c, f, p: self.tick_dash(c, f, p)
-        )
-        unrealsdk.RegisterHook(
             "WillowGame.WillowPlayerInput.SprintPressed",
             "EternalDashInput",
             lambda c, f, p: self.wants_to_dash(c, f, p)
@@ -135,7 +131,6 @@ class Dash:
     def disable(
             self
     ) -> None:
-        unrealsdk.RemoveHook("WillowGame.WillowPlayerController.PlayerTick", "EternalDash")
         unrealsdk.RemoveHook("WillowGame.WillowPlayerInput.SprintPressed", "EternalDashInput")
 
     def enable_dash_particle(self, val: bool) -> None:

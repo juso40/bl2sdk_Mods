@@ -2,7 +2,7 @@ import unrealsdk
 
 
 class GloryKill:
-    HEALTH_THRESHOLD = 0.15  # less than 15% health and injured required to be in glory kill state
+    HEALTH_THRESHOLD = 0.15  # less than 15% health required to be in glory kill state
     GLORY_KILL_AK_EVENT1 = "Ake_UI.UI_Shields.Ak_Play_UI_Shield_Roid_Buff_Hit"
     GLORY_KILL_AK_EVENT2 = "Ake_UI.UI_HUD.Ak_Play_UI_PVP_Duel_End"
     GLORY_KILL_MARKER1 = "FX_GOR_Particles.Particles.DeathFX.Part_FireDeath_Small"
@@ -21,7 +21,7 @@ class GloryKill:
             self,
             pawn: unrealsdk.UObject
     ) -> bool:
-        if pawn.IsInjured() and (pawn.GetHealth() / pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
+        if (pawn.GetHealth() / pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
             pawn_path_name = pawn.PathName(pawn)
             self.glory_kill_state.setdefault(pawn_path_name, 5)  # Stay 5 seconds in glory kill state
             return self.glory_kill_state[pawn_path_name] > 0  # Only first 5 seconds in glory kill state
@@ -36,9 +36,12 @@ class GloryKill:
         if not self.check_glory_kill_state(caller):
             return True
 
+        pc = unrealsdk.GetEngine().GamePlayers[0].Actor
+        instigator = params.InstigatedBy
         # We only allow Melee damage to kill Pawns in glory kill state
-        if not params.Pipeline or "Melee" not in caller.PathName(params.Pipeline.ImpactDefinition):
+        if params.DamageType.Name != "WillowDmgSource_Melee" or instigator != pc:
             return True
+        unrealsdk.Log(f"GloryKill: {caller.PathName(caller.AIClass)}")
 
         # Store the location the Pawn was hit
         hit_loc = params.HitLocation
@@ -73,6 +76,9 @@ class GloryKill:
             params: unrealsdk.FStruct
     ) -> bool:
         if not self.check_glory_kill_state(caller.MyWillowPawn):
+            return True
+
+        if "bugmorph" in caller.PathName(caller.MyWillowPawn.AIClass).lower():
             return True
 
         self.emitter_pool.SpawnEmitterMeshAttachment(
