@@ -15,6 +15,7 @@ DASH_SCREEN_PARTICLE = OptionManager.Options.Boolean(
     Description="Enable the screen particle effect when dashing.", IsHidden=Game.GetCurrent() == Game.TPS
 )
 
+
 class Eternal(SDKMod):
     Name: str = "BL2 Eternal"
     Description: str = "Doom Eternal, but it's BL2."
@@ -52,5 +53,6 @@ class Eternal(SDKMod):
                 glory_kill.disable()
         elif option is DASH_SCREEN_PARTICLE:
             dash.enable_screen_particle(new_value)
+
 
 unrealsdk.RegisterMod(Eternal())
