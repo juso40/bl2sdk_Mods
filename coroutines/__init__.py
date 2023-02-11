@@ -29,7 +29,7 @@ __all__ = [
 
 class Coroutines(SDKMod):
     Name = "Coroutines"
-    Version = "1.0"
+    Version = "1.1"
     Types = ModTypes.Library
     Description = "Library that adds simple coroutine support."
     Author = "juso"

@@ -139,22 +139,29 @@ def _tick(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unre
 
 
 def _post_render(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
-    canvas: unrealsdk.UObject = params.Canvas
+    # We want to make sure that the canvas object is not garbage collected while waiting
+    # That is why we need to yield the wait condition before receiving the canvas
+    # So the order of operation should be:
+    #   1. Yield the wait condition
+    #   2. Receive the canvas
+    #   3. Run your code that relies on the canvas
+    #   4. Repeat
 
+    # Before the first call of next or send our coroutines are already primed
+    # So they are on the yield Wait Condition state
+    canvas: unrealsdk.UObject = params.Canvas
     for t in _POST_RENDER.copy():
-        # Simply call the coroutine if we have no wait condition
-        if t.wait is None:
-            try:
-                t.wait = next(t.coroutine)  # At first comes the wait condition or a yield None
-            except StopIteration:
-                _POST_RENDER.remove(t)
-        # If we have a wait condition we need to check if it is still true
+        # First check for any wait conditions
         if t.wait is not None and t.wait():
             continue
+
+        # If we have no wait condition or the wait condition returned false
+        # We can continue the coroutine
         try:
-            t.coroutine.send(canvas)  # After awaiting the condition we can safely send the newest canvas reference
-            t.wait = None  # Reset the wait condition
-        except StopIteration:
+            # Get the next wait condition
+            t.wait = next(t.coroutine)
+            t.wait = t.coroutine.send(canvas)
+        except StopIteration:  # The coroutine has finished
             _POST_RENDER.remove(t)
 
     return True
