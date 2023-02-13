@@ -39,9 +39,8 @@ class GloryKill:
         pc = unrealsdk.GetEngine().GamePlayers[0].Actor
         instigator = params.InstigatedBy
         # We only allow Melee damage to kill Pawns in glory kill state
-        if params.DamageType.Name != "WillowDmgSource_Melee" or instigator != pc:
+        if not (instigator == pc and "melee" in params.DamageType.Name.lower()):
             return True
-        unrealsdk.Log(f"GloryKill: {caller.PathName(caller.AIClass)}")
 
         # Store the location the Pawn was hit
         hit_loc = params.HitLocation
