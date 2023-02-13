@@ -714,6 +714,30 @@
       ]
     },
     {
+      "name": "speedometer",
+      "description": [
+        "Gotta go fast!\n",
+        "Shows your current speed in km/h or mph.\n"
+      ],
+      "tagline": "See how fast you go.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/speedometer/speedometer.zip"
+      },
+      "requirements": {
+        "Coroutines": ">=1.1",
+        "UEMath Library": ">=1.3"
+      },
+      "supports": [
+        "BL2",
+        "TPS",
+        "AoDK"
+      ]
+    },
+    {
       "name": "Uber Post Processing",
       "description": [
         "Exposes many post processing effects to the user. It allows you to easily change the color of any scene.\n",
