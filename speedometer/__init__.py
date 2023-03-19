@@ -1,6 +1,7 @@
 import unrealsdk
 
 from Mods.ModMenu import EnabledSaveType, Game, ModTypes, OptionManager, RegisterMod, SDKMod
+from Mods.canvaslib import Canvas, DepthFieldGlowInfo, FontRenderInfo, Fonts, HorizontalAlign, VerticalAlign
 from Mods.coroutines import PostRenderCoroutine, WaitWhile, start_coroutine_post_render
 from Mods.uemath import Vector
 
@@ -25,23 +26,32 @@ RawVector = OptionManager.Options.Boolean(
     False
 )
 
+FRI: FontRenderInfo = FontRenderInfo(
+    clip_text=False,
+    enable_shadow=True,
+    shadow_info=DepthFieldGlowInfo(
+        enable_glow=True,
+        glow_color=(100, 100, 100, 255),
+        glow_outer_radius=(202, 202),
+        glow_inner_radius=(55, 55)
+    )
+)
+
 
 def wait_condition() -> bool:
     pc = unrealsdk.GetEngine().GamePlayers[0].Actor
     return pc.Pawn is None or pc.IsPauseMenuOpen() or pc.bStatusMenuOpen
 
 
-Font_18pt_JPN = unrealsdk.FindObject("Font", "UI_Fonts.Font_Willowbody_18pt_JPN")
-Font_Tiny = unrealsdk.FindObject("Font", "EngineFonts.TinyFont")
-FontRenderInfo = (False, True, ())
+_green = (0, 255, 0, 255)
+_gray = (150, 150, 150, 255)
 
 
 def draw_speedometer() -> PostRenderCoroutine:
     while True:
         yield WaitWhile(wait_condition)
         canvas = yield
-        width = canvas.SizeX
-        height = canvas.SizeY
+
         pc = unrealsdk.GetEngine().GamePlayers[0].Actor
         velocity = Vector(pc.Pawn.Velocity)
         speed = velocity.magnitude
@@ -52,30 +62,43 @@ def draw_speedometer() -> PostRenderCoroutine:
             speed_kmh *= 0.621371
         speed_txt = f"{speed_kmh:.2f}"
 
-        font_backup = canvas.Font
-        canvas.Font = Font_18pt_JPN
-        speed_txt_x, speed_txt_y = canvas.TextSize(speed_txt)
-        x_pos = int(width * (PosX.CurrentValue / 100))
-        y_pos = int(height * (PosY.CurrentValue / 100))
-        canvas.SetPos(x_pos - speed_txt_x, y_pos)  # - speed_txt_x to align the text to the right
-        canvas.SetDrawColorStruct((0, 255, 0, 255))
-        canvas.DrawText(speed_txt, False, 1, 1, FontRenderInfo)
+        with Canvas(canvas, ufont=Fonts.Font_Willowbody_18pt_KOR) as c:
+            _, bottom = c.draw_text(
+                text=speed_txt,
+                x=PosX.CurrentValue / 100,
+                y=PosY.CurrentValue / 100,
+                horizontal_align=HorizontalAlign.RIGHT,
+                vertical_align=VerticalAlign.TOP,
+                scale_x=1.5,
+                scale_y=1.5,
+                color=_green,
+                font_render_info=FRI
+            )
 
-        canvas.Font = Font_Tiny
-        metric = "mph" if FreedomUnits.CurrentValue else "km/h"
-        metric_x, metric_y = canvas.TextSize(metric)
-        canvas.SetPos(x_pos - metric_x, y_pos + speed_txt_y)
-        canvas.SetDrawColorStruct((150, 150, 150, 255))
-        canvas.DrawText(metric, False, 1, 1, FontRenderInfo)
+        with Canvas(canvas, ufont=Fonts.TinyFont) as c:
+            metric = "mph" if FreedomUnits.CurrentValue else "km/h"
+            _, bottom = c.draw_text(
+                text=metric,
+                x=PosX.CurrentValue / 100,
+                y=bottom,
+                horizontal_align=HorizontalAlign.RIGHT,
+                vertical_align=VerticalAlign.TOP,
+                color=_gray,
+                font_render_info=FRI
+            )
 
         if RawVector.CurrentValue:
             velocity_txt = f"Velocity: {velocity.x:.0f} {velocity.y:.0f} {velocity.z:.0f}"
-            velocity_txt_x, velocity_txt_y = canvas.TextSize(velocity_txt)
-            canvas.SetPos(x_pos - velocity_txt_x, y_pos + speed_txt_y + metric_y)
-            canvas.SetDrawColorStruct((180, 180, 180, 255))
-            canvas.DrawText(velocity_txt, False, 1, 1, FontRenderInfo)
+            with Canvas(canvas, ufont=Fonts.TinyFont) as c:
+                c.draw_text(
+                    text=velocity_txt,
+                    x=PosX.CurrentValue / 100,
+                    y=bottom,
+                    horizontal_align=HorizontalAlign.RIGHT,
+                    vertical_align=VerticalAlign.TOP,
+                    color=_gray,
+                )
 
-        canvas.Font = font_backup
         if not mod_instance.IsEnabled:
             break
 
@@ -85,7 +108,7 @@ class Speedometer(SDKMod):
     Description: str = "Show the current speed of the player."
     Author: str = "juso"
     Types: ModTypes = ModTypes.Utility
-    Version: str = "1.0"
+    Version: str = "1.1"
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadOnMainMenu
     SupportedGames: Game = Game.BL2 | Game.TPS | Game.AoDK
     Options = [PosX, PosY, FreedomUnits, RawVector]
