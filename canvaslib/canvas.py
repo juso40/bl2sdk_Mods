@@ -50,6 +50,19 @@ def get_aligned_pos(
     return x, y
 
 
+def relative_to_screen_coordinates(
+        canvas: unrealsdk.UObject, x: Union[int, float], y: Union[int, float]
+) -> Tuple[float, float]:
+    """Converts relative coordinates to screen coordinates.
+
+    Args:
+        canvas: The canvas to use for the conversion.
+        x: The relative x coordinate. Between 0 and 1.
+        y: The relative y coordinate. Between 0 and 1.
+    """
+    return x * canvas.ClipX, y * canvas.ClipY
+
+
 class Canvas:
     """
     Context manager for drawing text on the canvas.
@@ -154,3 +167,27 @@ class Canvas:
         canvas.SetPos(x, y)
         canvas.DrawRect(width, height, canvas.DefaultTexture)
         return x + width, y + height
+
+    def draw_line(
+            self,
+            x1: Union[int, float],
+            y1: Union[int, float],
+            x2: Union[int, float],
+            y2: Union[int, float],
+            width: Union[int, float] = 1,
+            color: Optional[BGRA] = None,
+    ) -> None:
+        canvas = self.canvas
+        if x1 <= 1:
+            x1 = canvas.SizeX * x1
+        if y1 <= 1:
+            y1 = canvas.SizeY * y1
+        if x2 <= 1:
+            x2 = canvas.SizeX * x2
+        if y2 <= 1:
+            y2 = canvas.SizeY * y2
+
+        canvas.DrawTextureLine(
+            StartPoint=(x1, y1, 0), EndPoint=(x2, y2, 0), Perc=1, Width=width, LineColor=color or self.draw_color,
+            LineTexture=canvas.DefaultTexture, U=0, V=0, UL=1, VL=1
+        )

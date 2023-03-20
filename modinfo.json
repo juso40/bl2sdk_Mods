@@ -188,16 +188,18 @@
       "types": [
         "Library"
       ],
-      "latest": "1.0",
+      "latest": "1.1",
       "versions": {
-        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/canvaslib/canvaslib.zip"
+        "1.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/canvaslib/canvaslib.zip"
       },
       "supports": [
         "BL2",
         "TPS",
         "AoDK"
       ],
-      "requirements": {"Coroutines": ">=1.1"}
+      "requirements": {
+        "Coroutines": ">=1.1"
+      }
     },
     {
       "name": "Chronos",
@@ -353,6 +355,26 @@
         "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/fpsslider/fpsslider.zip"
       },
       "requirements": {}
+    },
+    {
+      "name": "Hit Markers",
+      "description": [
+        "Adds customizable hitmarkers to the game.\n",
+        "There are custom markers for critical hits, normal hits and kills.\n",
+        "The markers can be either dynamic (fade out alpha and or grow over time) or be static."
+      ],
+      "tagline": "Adds customizable hitmarkers to the game.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/hitmarkers/hitmarkers.zip"
+      },
+      "requirements": {
+        "Coroutines": ">=1.1",
+        "CanvasLIB": ">=1.1"
+      }
     },
     {
       "name": "HitSounds",
