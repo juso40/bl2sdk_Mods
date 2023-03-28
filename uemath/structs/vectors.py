@@ -1,20 +1,19 @@
 from __future__ import annotations
 
 import math as m
-from typing import List, Optional, TYPE_CHECKING, Tuple, Union, cast
+from typing import Iterator, List, Optional, Tuple, Union, cast
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-if TYPE_CHECKING:
-    from .rotators import Rotator
-from Mods.uemath.constants import *
+import Mods.uemath.structs.rotators as r
+from Mods.uemath.constants import RADIANS_TO_URU
 from Mods.uemath.umath import clamp
 
 Scalar = Union[float, int]
 UERotator = unrealsdk.FStruct
 UEVector = unrealsdk.FStruct
 Sequence3 = Union[Tuple[Scalar, Scalar, Scalar], List[Scalar]]
-Rot = Union["Rotator", Tuple[int, int, int]]
+Rot = Union["r.Rotator", Tuple[int, int, int]]
 Vec3 = Union["Vector", Tuple[float, float, float]]
 
 
@@ -22,12 +21,12 @@ class Vector:
     """Wrapper Class for UE3 Vector Structs and their math operations."""
 
     def __init__(
-            self,
-            data: Optional[Union[UEVector, UERotator, Sequence3, "Rotator"]] = None,
-            *,
-            x: Optional[float] = None,
-            y: Optional[float] = None,
-            z: Optional[float] = None
+        self,
+        data: Optional[Union[UEVector, UERotator, Sequence3, r.Rotator]] = None,
+        *,
+        x: Optional[float] = None,
+        y: Optional[float] = None,
+        z: Optional[float] = None,
     ):
         """Initialize a Vector from a sequence of 3 scalars, or from a UE3 Vector or Rotator.
 
@@ -40,19 +39,23 @@ class Vector:
         if data is not None:
             if isinstance(data, (list, tuple)):
                 self.x, self.y, self.z = data
-            elif isinstance(data, Rotator):
+            elif isinstance(data, r.Rotator):
                 x, y, z = data.to_vector()
             elif isinstance(data, Vector):
                 self.x = data.x
                 self.y = data.y
                 self.z = data.z
-            elif cast(UEVector, data).X is not None:  # Try to get the values from a UE3 Vector
-                data = cast(UEVector, data)
-                self.x = data.X
-                self.y = data.Y
-                self.z = data.Z
-            elif cast(UERotator, data).Pitch is not None:  # Try to get the values from a UE3 Rotator
-                vec = Rotator(data).to_vector()
+            elif (
+                cast(UEVector, data).X is not None
+            ):  # Try to get the values from a UE3 Vector
+                _data: UEVector = cast(UEVector, data)
+                self.x = _data.X
+                self.y = _data.Y
+                self.z = _data.Z
+            elif (
+                cast(UERotator, data).Pitch is not None
+            ):  # Try to get the values from a UE3 Rotator
+                vec: "Vector" = cast("Vector", r.Rotator(data).to_vector())
                 self.x = vec.x
                 self.y = vec.y
                 self.z = vec.z
@@ -115,6 +118,25 @@ class Vector:
             return Vector(other).cross(self)
         else:
             raise TypeError(f"Cannot multiply Vector by {type(other)}.")
+        
+    def __matmul__(self, other: Vec3) -> float:
+        """Do a dot product with another vector."""
+        if isinstance(other, Vector):
+            return self.dot(other)
+        elif isinstance(other, (list, tuple)):
+            return self.dot(Vector(other))
+        else:
+            raise TypeError(f"Cannot dot Vector with {type(other)}.")
+        
+    def __rmatmul__(self, other: Vec3) -> float:
+        """Do a dot product with another vector."""
+        if isinstance(other, Vector):
+            return other.dot(self)
+        elif isinstance(other, (list, tuple)):
+            return Vector(other).dot(self)
+        else:
+            raise TypeError(f"Cannot dot Vector with {type(other)}.")
+    
 
     def __truediv__(self, other: Scalar) -> Vector:
         """Divide this vector by a scalar."""
@@ -155,7 +177,7 @@ class Vector:
         vals[key] = value
         self.x, self.y, self.z = vals
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[float]:
         """Return an iterator for this vector."""
         return iter((self.x, self.y, self.z))
 
@@ -181,12 +203,14 @@ class Vector:
         This can be used to convert a look direction to a rotation. Roll is always 0.
         """
         nvec = self.normalized
-        pitch = m.atan2(nvec.z, m.sqrt(nvec.x * nvec.x + nvec.y * nvec.y)) * RADIANS_TO_URU
+        pitch = (
+            m.atan2(nvec.z, m.sqrt(nvec.x * nvec.x + nvec.y * nvec.y)) * RADIANS_TO_URU
+        )
         yaw = m.atan2(nvec.y, nvec.x) * RADIANS_TO_URU
         roll = 0
 
         tup = (int(pitch), int(yaw), roll)
-        return tup if to_tuple else Rotator(tup)
+        return tup if to_tuple else r.Rotator(tup)
 
     def to_tuple(self) -> Tuple[float, float, float]:
         """Return a tuple representation of this vector."""
@@ -205,7 +229,9 @@ class Vector:
     @property
     def normalized(self) -> Vector:
         """Return a normalized copy of this vector."""
-        return Vector((self.x / self.magnitude, self.y / self.magnitude, self.z / self.magnitude))
+        return Vector(
+            (self.x / self.magnitude, self.y / self.magnitude, self.z / self.magnitude)
+        )
 
     def normalize(self) -> Vector:
         """Return this vector normalized."""
@@ -227,7 +253,7 @@ class Vector:
             (
                 self.y * other.z - self.z * other.y,
                 self.z * other.x - self.x * other.z,
-                self.x * other.y - self.y * other.x
+                self.x * other.y - self.y * other.x,
             )
         )
 
@@ -241,7 +267,9 @@ class Vector:
 
     def angle(self, other: Vector) -> float:
         """Return the angle between this vector and another."""
-        return m.acos(clamp(self.normalized.dot(other.normalized), -1, 1)) * RADIANS_TO_URU
+        return (
+            m.acos(clamp(self.normalized.dot(other.normalized), -1, 1)) * RADIANS_TO_URU
+        )
 
     def rotate_towards(self, target: Vector, max_rotation_delta: float = 360) -> Vector:
         """Rotate this vector towards another vector by a maximum amount per step.
@@ -252,7 +280,9 @@ class Vector:
         angle = self.angle(target)
         if angle == 0:
             return self
-        return self.rotate(self.cross(target).normalized, min(angle, max_rotation_delta))
+        return self.rotate(
+            self.cross(target).normalized, min(angle, max_rotation_delta)
+        )
 
     def rotate(self, axis: Vector, angle: float) -> Vector:
         """Rotate this vector around an axis by an angle in radians.
@@ -280,10 +310,7 @@ class Vector:
         :param origin: The origin to rotate around.
         :param rotation: The rotation to rotate by.
         """
-        rotation = Rotator(rotation)
+        rotation = r.Rotator(rotation)
         offset = self - origin
         x, y, z = rotation.get_axes()
         return offset.x * x + offset.y * y + offset.z * z + origin
-
-
-from .rotators import Rotator

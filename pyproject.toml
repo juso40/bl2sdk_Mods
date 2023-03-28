@@ -3,6 +3,7 @@ target-version = "py37"
 line-length = 120
 show-fixes = true
 extend-select = ["C4", "SIM", "TCH", "B", "BLE", "I", "PIE", "N", "ISC", "TID"]
+ignore = ["N999"]
 
 
 [tool.ruff.mccabe]

@@ -1,9 +1,9 @@
 import math as m
-from typing import List, TYPE_CHECKING, Tuple, Union, cast
+from typing import TYPE_CHECKING, List, Tuple, Union, cast
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from .constants import *
+from .constants import PI, RADIANS_TO_URU, URU_90, URU_TO_RADIANS
 
 if TYPE_CHECKING:
     from .structs import Rotator, Vector
@@ -17,12 +17,12 @@ Rot = Union[Tuple[int, int, int], List[int], "Rotator"]
 def rotator_to_vector(rot: Union[Rot, unrealsdk.UObject]) -> Vec3:
     """Convert a Rotator to a Vector."""
     if isinstance(rot, (tuple, list)):
-        pitch, yaw, roll = rot
+        pitch, yaw, _roll = rot
     elif isinstance(rot, structs.Rotator):
-        pitch, yaw, roll = rot.pitch, rot.yaw, rot.roll
+        pitch, yaw, _roll = rot.pitch, rot.yaw, rot.roll
     else:
         rot = cast(unrealsdk.UObject, rot)
-        pitch, yaw, roll = rot.Pitch, rot.Yaw, rot.Roll
+        pitch, yaw, _roll = rot.Pitch, rot.Yaw, rot.Roll  # type: ignore
 
     yaw_conv = yaw * URU_TO_RADIANS
     pitch_conv = pitch * URU_TO_RADIANS
@@ -52,7 +52,11 @@ def normalize(vector: Vec3) -> Vec3:
     mag = magnitude(vector)
     if mag == 0:
         return 0, 0, 0
-    x, y, z, = vector
+    (
+        x,
+        y,
+        z,
+    ) = vector
     return x / mag, y / mag, z / mag
 
 
@@ -89,27 +93,34 @@ def get_axes(rotation: Rot) -> Tuple["Vector", "Vector", "Vector"]:
 
 
 def world_to_screen(
-        canvas: unrealsdk.UObject,
-        target: Vec3,
-        player_rot: Rot,
-        player_loc: Vec3,
-        player_fov: float
+    canvas: unrealsdk.UObject,
+    target: Vec3,
+    player_rot: Rot,
+    player_loc: Vec3,
+    player_fov: float,
 ) -> Tuple[float, float]:
     axis_x, axis_y, axis_z = get_axes(player_rot)
 
     delta = [a - b for a, b in zip(target, player_loc)]
 
-    transformed = (sum(a * b for a, b in zip(delta, axis_y)),
-                   sum(a * b for a, b in zip(delta, axis_z)),
-                   max(1.0, sum(a * b for a, b in zip(delta, axis_x))),
-                   )
+    transformed = (
+        sum(a * b for a, b in zip(delta, axis_y)),
+        sum(a * b for a, b in zip(delta, axis_z)),
+        max(1.0, sum(a * b for a, b in zip(delta, axis_x))),
+    )
 
     fov = player_fov
 
     screen_center_x = canvas.ClipX / 2
     screen_center_y = canvas.ClipY / 2
-    vec_2d_x = screen_center_x + transformed[0] * (screen_center_x / m.tan(fov * PI / 360.0)) / transformed[2]
-    vec_2d_y = screen_center_y - transformed[1] * (screen_center_x / m.tan(fov * PI / 360.0)) / transformed[2]
+    vec_2d_x = (
+        screen_center_x
+        + transformed[0] * (screen_center_x / m.tan(fov * PI / 360.0)) / transformed[2]
+    )
+    vec_2d_y = (
+        screen_center_y
+        - transformed[1] * (screen_center_x / m.tan(fov * PI / 360.0)) / transformed[2]
+    )
     return vec_2d_x, vec_2d_y
 
 
@@ -131,11 +142,7 @@ def euler_rotate_vector_2d(x: float, y: float, angle: float) -> Tuple[float, flo
     return x_r, y_r
 
 
-def dot_product(
-        vec_a: Vec3,
-        vec_b: Vec3,
-        ignore_z: bool = True
-) -> Tuple[float, float, float]:
+def dot_product(vec_a: Vec3, vec_b: Vec3, ignore_z: bool = True) -> float:
     """Get the dot product of 2 normalized vectors."""
 
     xa, ya, za = vec_a

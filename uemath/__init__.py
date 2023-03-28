@@ -1,10 +1,23 @@
-import unrealsdk
-from unrealsdk import *
+import unrealsdk  # type: ignore
+
+from Mods.ModMenu import Game, ModTypes, SDKMod
 
 from .structs import Rotator, Vector
-from .umath import (clamp, distance, dot_product, euler_rotate_vector_2d, get_axes, look_at, magnitude, normalize,
-                    rotator_to_vector, round_to_multiple, square_distance, vector_to_rotator, world_to_screen)
-from ..ModMenu import Game, ModTypes, SDKMod
+from .umath import (
+    clamp,
+    distance,
+    dot_product,
+    euler_rotate_vector_2d,
+    get_axes,
+    look_at,
+    magnitude,
+    normalize,
+    rotator_to_vector,
+    round_to_multiple,
+    square_distance,
+    vector_to_rotator,
+    world_to_screen,
+)
 
 __all__ = [
     "Vector",
@@ -31,7 +44,7 @@ __all__ = [
 
 class UEMath(SDKMod):
     Name = "UEMath Library"
-    Version = "1.3"
+    Version = "1.4"
     Types = ModTypes.Library
     Description = "Library with focus on UEVector and UERotator math."
     Author = "juso"

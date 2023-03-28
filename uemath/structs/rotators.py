@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 import math as m
-from typing import List, Optional, TYPE_CHECKING, Tuple, Union, cast
+from typing import Iterator, List, Optional, Tuple, Union, cast
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-if TYPE_CHECKING:
-    from .vectors import Vector
-from Mods.uemath.constants import *
+import Mods.uemath.structs.vectors as v
+from Mods.uemath.constants import RADIANS_TO_URU, URU_90, URU_TO_RADIANS
 
 UERotator = unrealsdk.FStruct
 UEVector = unrealsdk.FStruct
 Sequence3Int = Union[Tuple[int, int, int], List[int]]
 Rot = Union["Rotator", Tuple[int, int, int]]
-Vec3 = Union["Vector", Tuple[float, float, float]]
+Vec3 = Union[v.Vector, Tuple[float, float, float]]
 
 
 # https://beyondunrealwiki.github.io/pages/rotator.html
@@ -21,12 +20,12 @@ class Rotator:
     """Wrapper Class for UE3 Rotator Structs and their math operations."""
 
     def __init__(
-            self,
-            data: Optional[Union[UERotator, UEVector, "Vector", Sequence3Int]] = None,
-            *,
-            pitch: Optional[int] = None,
-            yaw: Optional[int] = None,
-            roll: Optional[int] = None
+        self,
+        data: Optional[Union[UERotator, UEVector, v.Vector, Sequence3Int]] = None,
+        *,
+        pitch: Optional[int] = None,
+        yaw: Optional[int] = None,
+        roll: Optional[int] = None,
     ):
         """Initialize a Rotator from a sequence of 3 int, or from a UE3 Rotator or Vector.
 
@@ -44,8 +43,8 @@ class Rotator:
         if data is not None:
             if isinstance(data, (list, tuple)):
                 self.pitch, self.yaw, self.roll = data
-            elif isinstance(data, Vector):
-                rot = data.to_rotator()
+            elif isinstance(data, v.Vector):
+                rot: "Rotator" = cast("Rotator", data.to_rotator())
                 self.pitch = rot.pitch
                 self.yaw = rot.yaw
                 self.roll = rot.roll
@@ -54,12 +53,12 @@ class Rotator:
                 self.yaw = data.yaw
                 self.roll = data.roll
             elif cast(UERotator, data).Pitch is not None:
-                data = cast(UERotator, data)
+                _data: UERotator = cast(UERotator, data)
                 self.pitch = data.Pitch
                 self.yaw = data.Yaw
                 self.roll = data.Roll
             elif cast(UEVector, data).X is not None:
-                rot = Vector(data).to_rotator()
+                rot: "Rotator" = cast("Rotator", v.Vector(data).to_rotator())
                 self.pitch = rot.pitch
                 self.yaw = rot.yaw
                 self.roll = rot.roll
@@ -85,30 +84,50 @@ class Rotator:
     def __add__(self, other: Rot) -> Rotator:
         """Add another Rotator to this one."""
         if isinstance(other, Rotator):
-            return Rotator((self.pitch + other.pitch, self.yaw + other.yaw, self.roll + other.roll))
+            return Rotator(
+                (self.pitch + other.pitch, self.yaw + other.yaw, self.roll + other.roll)
+            )
         elif isinstance(other, (list, tuple)):
-            return Rotator((self.pitch + other[0], self.yaw + other[1], self.roll + other[2]))
+            return Rotator(
+                (self.pitch + other[0], self.yaw + other[1], self.roll + other[2])
+            )
         raise TypeError(f"Cannot add Rotator and {type(other)}")
 
     def __sub__(self, other: Rot) -> Rotator:
         """Subtract another Rotator from this one."""
         if isinstance(other, Rotator):
-            return Rotator((self.pitch - other.pitch, self.yaw - other.yaw, self.roll - other.roll))
+            return Rotator(
+                (self.pitch - other.pitch, self.yaw - other.yaw, self.roll - other.roll)
+            )
         elif isinstance(other, (list, tuple)):
-            return Rotator((self.pitch - other[0], self.yaw - other[1], self.roll - other[2]))
+            return Rotator(
+                (self.pitch - other[0], self.yaw - other[1], self.roll - other[2])
+            )
         raise TypeError(f"Cannot subtract Rotator and {type(other)}")
 
     def __eq__(self, other: Rot) -> bool:
         """Return True if this Rotator is equal to another."""
         if isinstance(other, Rotator):
-            return self.pitch == other.pitch and self.yaw == other.yaw and self.roll == other.roll
+            return (
+                self.pitch == other.pitch
+                and self.yaw == other.yaw
+                and self.roll == other.roll
+            )
         elif isinstance(other, (list, tuple)):
-            return self.pitch == other[0] and self.yaw == other[1] and self.roll == other[2]
+            return (
+                self.pitch == other[0]
+                and self.yaw == other[1]
+                and self.roll == other[2]
+            )
         return False
 
     def __ne__(self, other: Rot) -> bool:
         """Return True if this Rotator is not equal to another."""
         return not self.__eq__(other)
+
+    def __iter__(self) -> Iterator[int]:
+        """Return an iterator for this Rotator."""
+        return iter((int(self.pitch), int(self.yaw), int(self.roll)))
 
     def to_vector(self, to_tuple: bool = False) -> Vec3:
         """Convert this Rotator to a Vector.
@@ -123,21 +142,21 @@ class Rotator:
         z = m.sin(pitch_rads)
 
         tup = (x, y, z)
-        return tup if to_tuple else Vector(tup)
+        return tup if to_tuple else v.Vector(tup)
 
     def to_tuple(self) -> Tuple[int, int, int]:
         """Return this Rotator as a tuple."""
         return int(self.pitch), int(self.yaw), int(self.roll)
 
-    def get_axes(self) -> Tuple[Vec3, Vec3, Vec3]:
+    def get_axes(self) -> Tuple[v.Vector, v.Vector, v.Vector]:
         """Get the axes of a Rotator.
 
         The axes describe the forward, right and up vectors of this Rotator.
         :return: X, Y, Z (forward, right, up) basis vectors
         """
-        x = cast(Vector, self.to_vector()).normalize()
-        y = Rotator(yaw=self.yaw + URU_90).to_vector().normalize()
-        y = y.rotate(x, -self.roll*URU_TO_RADIANS)  # Roll around x axis
+        x = cast(v.Vector, self.to_vector()).normalize()
+        y = cast(v.Vector, Rotator(yaw=self.yaw + URU_90).to_vector()).normalize()
+        y = y.rotate(x, -self.roll * URU_TO_RADIANS)  # Roll around x axis
         z = x.cross(y).normalize()
         return x, y, z
 
@@ -154,9 +173,9 @@ class Rotator:
             z = (-1, 0, 0)
             -> Rotator((16384, 0, 0))
         """
-        x = Vector(x)
-        y = Vector(y)
-        z = Vector(z)
+        x = v.Vector(x)
+        y = v.Vector(y)
+        z = v.Vector(z)
         x.normalize()
         y.normalize()
         z.normalize()
@@ -165,10 +184,7 @@ class Rotator:
         yaw = -int(m.atan2(y.x, x.x) * RADIANS_TO_URU)
         return Rotator((pitch, yaw, roll))
 
-    def look_at(self, target: Vector) -> "Rotator":
+    def look_at(self, target: v.Vector) -> "Rotator":
         """Get the Rotator needed to look at a target Global Location."""
         target = target - self.to_vector()
-        return target.to_rotator()
-
-
-from .vectors import Vector  # Circular import
+        return cast("Rotator", target.to_rotator())
