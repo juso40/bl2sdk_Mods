@@ -1,7 +1,16 @@
 from typing import List
-import unrealsdk
 
-from ..ModMenu import EnabledSaveType, SDKMod, RegisterMod, ModTypes, KeybindManager, OptionManager, Game
+import unrealsdk  # type: ignore
+
+from Mods.ModMenu import (
+    EnabledSaveType,
+    Game,
+    KeybindManager,
+    ModTypes,
+    OptionManager,
+    RegisterMod,
+    SDKMod,
+)
 
 
 class SimpleZoom(SDKMod):
@@ -17,22 +26,24 @@ class SimpleZoom(SDKMod):
         KeybindManager.Keybind("Zoom", "C"),
     ]
 
-    Options: List[OptionManager.Options.Base] = [
+    Options: List[OptionManager.Options.Slider] = [
         OptionManager.Options.Slider("Zoom FOV", "The FOV to zoom to.", 15, 1, 60, 1),
     ]
 
-    def GameInputPressed(self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent) -> None:
+    def GameInputPressed(  # noqa: N802
+        self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent
+    ) -> None:
         if bind.Name == "Zoom" and event == KeybindManager.InputEvent.Pressed:
             self.Zoom()
         elif bind.Name == "Zoom" and event == KeybindManager.InputEvent.Released:
             self.Unzoom()
 
-    def Zoom(self) -> None:
+    def Zoom(self) -> None:  # noqa: N802
         pc = unrealsdk.GetEngine().GamePlayers[0].Actor
         pc.LowerFirstPersonHands()
         pc.SetFOV(self.Options[0].CurrentValue)
 
-    def Unzoom(self) -> None:
+    def Unzoom(self) -> None:  # noqa: N802
         pc = unrealsdk.GetEngine().GamePlayers[0].Actor
         pc.RaiseFirstPersonHands()
         pc.SetFOV(pc.DefaultFOV)
