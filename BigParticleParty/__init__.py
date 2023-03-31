@@ -1,9 +1,10 @@
-from typing import List
 import os
+from typing import List, cast
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from ..ModMenu import EnabledSaveType, SDKMod, Hook, Game, OptionManager, ModTypes
+from Mods.ModMenu import EnabledSaveType, Game, Hook, ModTypes, OptionManager, SDKMod
+from Mods.ModMenu import Options as ModOptions
 
 
 def _get_pc() -> unrealsdk.UObject:
@@ -24,9 +25,18 @@ class PP(SDKMod):
         super().__init__()
         self.PATH = os.path.dirname(os.path.realpath(__file__))
         self.Options: List[OptionManager.Options.Nested] = []
-        self.particle_filters = ["BulletImpacts", "WEP", "GOR", "Explosions", "MuzzleFlash", "Trails",
-                                 "Enemies", "CREA", "Shield", "ENV",
-                                 ]
+        self.particle_filters = [
+            "BulletImpacts",
+            "WEP",
+            "GOR",
+            "Explosions",
+            "MuzzleFlash",
+            "Trails",
+            "Enemies",
+            "CREA",
+            "Shield",
+            "ENV",
+        ]
         for f in self.particle_filters:
             nested = OptionManager.Options.Nested(
                 Caption=f,
@@ -38,7 +48,7 @@ class PP(SDKMod):
                         StartingValue=0,
                         MinValue=-1,
                         MaxValue=100,
-                        Increment=1
+                        Increment=1,
                     ),
                     OptionManager.Options.Slider(
                         Caption="Max Particles",
@@ -46,18 +56,18 @@ class PP(SDKMod):
                         StartingValue=0,
                         MinValue=-1,
                         MaxValue=100,
-                        Increment=1
-                    )
-                ]
+                        Increment=1,
+                    ),
+                ],
             )
             self.Options.append(nested)
 
     @Hook("WillowGame.WillowHUD.CreateWeaponScopeMovie")
     def apply_particles(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         return self.update_particles()
 
@@ -73,13 +83,17 @@ class PP(SDKMod):
         particles = [p for p in particles if "specs" not in p.EmitterName.lower()]
 
         particles = [lod for p in particles for lod in p.LODLevels]
-        filter_particles = {k: [p for p in particles if k in str(p)] for k in self.particle_filters}
+        filter_particles = {
+            k: [p for p in particles if k in str(p)] for k in self.particle_filters
+        }
         for filter_option in self.Options:
-            min_val = filter_option.Children[0].CurrentValue
-            max_val = filter_option.Children[1].CurrentValue
+            min_val = cast(ModOptions.Slider, filter_option.Children[0]).CurrentValue
+            max_val = cast(ModOptions.Slider, filter_option.Children[1]).CurrentValue
             for p in filter_particles[filter_option.Caption]:
                 p.PeakActiveParticles = 5000
-                p.RequiredModule.MaxDrawCount = 100000000  # Increase max draw count for particles
+                p.RequiredModule.MaxDrawCount = (
+                    100000000  # Increase max draw count for particles
+                )
 
                 p = p.SpawnModule
                 bl = p.BurstList
@@ -91,7 +105,7 @@ class PP(SDKMod):
                     pass
         return True
 
-    def Enable(self):
+    def Enable(self) -> None:  # noqa: N802
         super().Enable()
 
         def update_nested(nested_option):
@@ -103,9 +117,6 @@ class PP(SDKMod):
 
         for option in self.Options:
             update_nested(option)
-
-    def Disable(self):
-        super().Disable()
 
 
 unrealsdk.RegisterMod(PP())
