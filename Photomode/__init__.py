@@ -1,8 +1,8 @@
-from typing import Optional, Any
+from typing import Callable, Optional
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from ..ModMenu import EnabledSaveType, SDKMod, RegisterMod, ModTypes, KeybindManager
+from Mods.ModMenu import EnabledSaveType, KeybindManager, ModTypes, RegisterMod, SDKMod
 
 
 class Photo(SDKMod):
@@ -30,7 +30,7 @@ Hold 'F' while scrolling to change the camera FOV.
     def __init__(self):
         self.in_photomode: bool = False
         self.pawn_backup: Optional[unrealsdk.UObject] = None
-        self.active_camera_modifier: callable = lambda x: None
+        self.active_camera_modifier: Callable[[int], None] = lambda x: None
         self.last_modifier_name: str = ""
 
     @property
@@ -54,11 +54,14 @@ Hold 'F' while scrolling to change the camera FOV.
             self.pc.SetFOV(self.pc.DefaultFOV)
             self.in_photomode = False
 
-    def GameInputPressed(self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent) -> None:
+    def GameInputPressed(  # noqa: N802
+        self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent
+    ) -> None:
         if event == KeybindManager.InputEvent.Released:
-
             if bind.Name == "Photomode":
-                world_info: unrealsdk.UObject = unrealsdk.GetEngine().GetCurrentWorldInfo()
+                world_info: unrealsdk.UObject = (
+                    unrealsdk.GetEngine().GetCurrentWorldInfo()
+                )
                 if world_info.GetStreamingPersistentMapName() == "menumap":
                     return
                 self.toggle_photo_mode(
@@ -74,7 +77,6 @@ Hold 'F' while scrolling to change the camera FOV.
                 self.active_camera_modifier = lambda x: None
 
         elif event == KeybindManager.InputEvent.Pressed and self.in_photomode:
-
             if bind.Name == "Camera Speed":
                 self.active_camera_modifier = self.camera_speed_modifier
                 self.last_modifier_name = bind.Name
