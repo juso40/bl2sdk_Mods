@@ -1,10 +1,9 @@
 from dataclasses import dataclass
+from typing import Any, List, Optional
 
-from typing import Optional, List, Any
+import unrealsdk  # type: ignore
 
-import unrealsdk
-
-from ..ModMenu import EnabledSaveType, SDKMod, Hook, Game, OptionManager
+from Mods.ModMenu import EnabledSaveType, Game, Hook, OptionManager, RegisterMod, SDKMod
 
 
 def dist(a, b):
@@ -16,13 +15,13 @@ blacklist = [
     "GD_Scorpio.Character.CharClass_Scorpio",
     "GD_RolandDeployableTurret.Character.CharClass_RolandDeployableTurret",
     "GD_Anemone_Talon.Character.CharClass_Bloodwing",
-    "GD_Nasturtium_BugMorph_Bloodhound.Character.CharClass_Nasturtium_BugMorph_Bloodhound"
+    "GD_Nasturtium_BugMorph_Bloodhound.Character.CharClass_Nasturtium_BugMorph_Bloodhound",
 ]
 
 
 @dataclass
 class NPCHero:
-    mind: Optional[unrealsdk.UObject]
+    mind: unrealsdk.UObject
     scripted_stance: int
     stop_sequence: bool
 
@@ -52,7 +51,7 @@ class NPCRevives(SDKMod):
                 StartingValue=self.revive_max_dist,
                 MinValue=100,
                 MaxValue=500,
-                Increment=10
+                Increment=10,
             ),
             OptionManager.Options.Slider(
                 Caption="Revive Alert Distance",
@@ -60,7 +59,7 @@ class NPCRevives(SDKMod):
                 StartingValue=self.revive_alert_dist,
                 MinValue=500,
                 MaxValue=5000,
-                Increment=50
+                Increment=50,
             ),
             OptionManager.Options.Slider(
                 Caption="Max Reviving NPCs",
@@ -68,11 +67,13 @@ class NPCRevives(SDKMod):
                 StartingValue=self.max_reviving_npcs,
                 MinValue=1,
                 MaxValue=10,
-                Increment=1
-            )
+                Increment=1,
+            ),
         ]
 
-    def ModOptionChanged(self, option: OptionManager.Options.Base, new_value: Any) -> None:
+    def ModOptionChanged(  # noqa: N802
+        self, option: OptionManager.Options.Base, new_value: Any
+    ) -> None:
         if option.Caption == "Revive Distance":
             self.revive_max_dist = new_value
         elif option.Caption == "Revive Alert Distance":
@@ -80,17 +81,14 @@ class NPCRevives(SDKMod):
         elif option.Caption == "Max Reviving NPCs":
             self.max_reviving_npcs = new_value
 
-    def Enable(self):
-        super().Enable()
-
-    def Disable(self):
-        super().Disable()
-
     def in_revive_dist(self, reviver_pawn: unrealsdk.UObject) -> bool:
         if not self.injured_target:
             return False
 
-        return dist(reviver_pawn.Location, self.injured_target.Location) < self.revive_max_dist
+        return (
+            dist(reviver_pawn.Location, self.injured_target.Location)
+            < self.revive_max_dist
+        )
 
     def start_injured_self_revive(self) -> None:
         if not self.injured_target:
@@ -113,29 +111,36 @@ class NPCRevives(SDKMod):
 
     @Hook("WillowGame.WillowPlayerPawn.SetupPlayerInjuredState")
     def player_injured(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         """Player goes into FFYL state."""
 
         all_minds = unrealsdk.FindAll("WillowMind")[1:]
-        friendly_minds = [x for x in all_minds if x.MyWillowPawn and x.MyWillowPawn.IsFriendly(caller)]
-        friendly_minds = [x for x in friendly_minds if x.PathName(x.AIClass) not in blacklist]
+        friendly_minds = [
+            x for x in all_minds if x.MyWillowPawn and x.MyWillowPawn.IsFriendly(caller)
+        ]
+        friendly_minds = [
+            x for x in friendly_minds if x.PathName(x.AIClass) not in blacklist
+        ]
         if not friendly_minds:
             return True
-        closest = sorted(friendly_minds, key=lambda x: dist(x.MyWillowPawn.Location, caller.Location))
-        closest = [x for x in closest if dist(x.MyWillowPawn.Location, caller.Location) < self.revive_alert_dist]
+        closest = sorted(
+            friendly_minds, key=lambda x: dist(x.MyWillowPawn.Location, caller.Location)
+        )
+        closest = [
+            x
+            for x in closest
+            if dist(x.MyWillowPawn.Location, caller.Location) < self.revive_alert_dist
+        ]
         if not closest:
             return True
 
         self.reviving_npcs = [
-            NPCHero(
-                mind=x,
-                scripted_stance=x.ScriptedStance,
-                stop_sequence=True
-            ) for x in closest[:self.max_reviving_npcs]
+            NPCHero(mind=x, scripted_stance=x.ScriptedStance, stop_sequence=True)
+            for x in closest[: self.max_reviving_npcs]
         ]
 
         # Set the Injured WillowPlayerPawn as the new target
@@ -148,10 +153,10 @@ class NPCRevives(SDKMod):
 
     @Hook("WillowGame.WillowPlayerPawn.injured.Tick")
     def tick_dist_check(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         """Player is in FFYL state."""
 
@@ -160,16 +165,18 @@ class NPCRevives(SDKMod):
             self.force_move_npcs()
 
             # Check if any NPC is close enough to revive
-            if any(self.in_revive_dist(x.mind.MyWillowPawn) for x in self.reviving_npcs):
+            if any(
+                self.in_revive_dist(x.mind.MyWillowPawn) for x in self.reviving_npcs
+            ):
                 self.start_injured_self_revive()
         return True
 
     @Hook("WillowGame.WillowPlayerPawn.ClearPlayerInjuredState")
     def stop_injured(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         """Player leaves FFYL state."""
 
@@ -190,10 +197,10 @@ class NPCRevives(SDKMod):
 
     @Hook("WillowGame.Action_GoToScriptedDestination.SetMoveNode")
     def cancel_move_nodes(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         """Cancel move nodes for our reviving NPC."""
 
@@ -205,10 +212,10 @@ class NPCRevives(SDKMod):
 
     @Hook("GearboxFramework.ActionSequence.Update")
     def update_action_sequence(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         """Wake up idling NPCs."""
         if not self.reviving_npcs:
@@ -219,16 +226,15 @@ class NPCRevives(SDKMod):
 
         # Update all reviving NPCs
         for npc in self.reviving_npcs:
-            if caller.MyWillowMind is npc.mind:
-                if npc.stop_sequence:
-                    npc.stop_sequence = False
-                    caller.InterruptLatentAction()
-                    caller.StopSequence()
-                    caller.Stop()
-                    caller.Start()
+            if caller.MyWillowMind is npc.mind and npc.stop_sequence:
+                npc.stop_sequence = False
+                caller.InterruptLatentAction()
+                caller.StopSequence()
+                caller.Stop()
+                caller.Start()
 
         self.force_move_npcs()
         return True
 
 
-unrealsdk.RegisterMod(NPCRevives())
+RegisterMod(NPCRevives())
