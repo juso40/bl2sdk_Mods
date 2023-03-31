@@ -2,9 +2,6 @@ import unrealsdk  # type: ignore
 
 from Mods.ModMenu import Hook, RegisterMod, SDKMod
 
-crosshair_hook = "WillowWeapon.Active.BeginState"
-zoom_hook = "WillowGame.WillowWeapon.SetZoomState"
-
 
 class Crosshair(SDKMod):
     Name = "No Crosshair"
