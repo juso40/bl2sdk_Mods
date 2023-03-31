@@ -1,19 +1,27 @@
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from ...ModMenu import Options
+from Mods.ModMenu import Options
 
-from . import callback_normal, callback_slider, callback_xyz, callback_rgb, callback_normal_worldInfo, rcon, \
-    callback_slider_worldInfo, callback_xyz_worldInfo
+from . import (
+    callback_normal,
+    callback_normal_worldInfo,
+    callback_slider_worldInfo,
+    rcon,
+)
 
 
 class DOF:
     EnableDynamic = Options.Boolean(
-        Caption="Dynamic DoF", Description="Enable dynamic depth of field.", StartingValue=False
+        Caption="Dynamic DoF",
+        Description="Enable dynamic depth of field.",
+        StartingValue=False,
     )
 
-    Enable = Options.Boolean(Caption="bEnableDOF", Description="Enable depth of field.", StartingValue=False)
+    Enable = Options.Boolean(
+        Caption="bEnableDOF", Description="Enable depth of field.", StartingValue=False
+    )
 
-    bEnableReferenceDOF = Options.Boolean(
+    bEnableReferenceDOF = Options.Boolean(  # noqa: N815
         Caption="bEnableReferenceDOF",
         Description="Enable reference DOF.",
         StartingValue=False,
@@ -76,7 +84,7 @@ class DOF:
         Caption="DOF_FocusType",
         Description="The type of focus.",
         StartingValue="FOCUS_Distance",
-        Choices=["FOCUS_Distance", "FOCUS_Position"]
+        Choices=["FOCUS_Distance", "FOCUS_Position"],
     )
     FocusInnerRadius = Options.Slider(
         Caption="DOF_FocusInnerRadius",
@@ -109,10 +117,11 @@ class DOF:
         FocusType,
         FocusInnerRadius,
         FocusDistance,
-
     ]
 
-    Nested = Options.Nested(Caption="Depth of Field", Description="DOF options.", Children=children)
+    Nested = Options.Nested(
+        Caption="Depth of Field", Description="DOF options.", Children=children
+    )
 
 
 def callback_dof_dynamic(option: Options.Boolean, val: bool) -> None:
@@ -124,28 +133,26 @@ def callback_dof_dynamic(option: Options.Boolean, val: bool) -> None:
             return True
         dist = pawn.Weapon.GetTargetDistance()
         dist = dist if dist > 0 else 1000
-        DOF.FocusDistance.CurrentValue = int(dist*100)
-        DOF.FocusDistance.Callback(DOF.FocusDistance, int(dist*100))
+        DOF.FocusDistance.CurrentValue = int(dist * 100)
+        DOF.FocusDistance.Callback(DOF.FocusDistance, int(dist * 100))
         return True
+
     if val:
         unrealsdk.RegisterHook(
-            "WillowGame.WillowPlayerController.PlayerTick",
-            "DanymicDOF",
-            dynamic_dof
+            "WillowGame.WillowPlayerController.PlayerTick", "DanymicDOF", dynamic_dof
         )
     else:
         unrealsdk.RemoveHook(
-            "WillowGame.WillowPlayerController.PlayerTick",
-            "DanymicDOF"
+            "WillowGame.WillowPlayerController.PlayerTick", "DanymicDOF"
         )
-
 
 
 def _attach_callbacks():
     DOF.EnableDynamic.Callback = callback_dof_dynamic
 
     DOF.Enable.Callback = lambda o, v: (
-        rcon("", "", cmd=f"SCALE set DepthOfField True"), callback_normal_worldInfo(o, v)
+        rcon("", "", cmd="SCALE set DepthOfField True"),
+        callback_normal_worldInfo(o, v),
     )
     DOF.bEnableReferenceDOF.Callback = callback_normal
     DOF.DepthOfFieldType.Callback = callback_normal

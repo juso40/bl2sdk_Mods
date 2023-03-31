@@ -1,15 +1,14 @@
-import unrealsdk
+from Mods.ModMenu import Options
 
-from ...ModMenu import Options
+from . import callback_normal, callback_slider
 
-from . import rcon, callback_normal, callback_slider
 
 class Tonemapper:
     Type = Options.Spinner(
         Caption="TonemapperType",
         Description="Tonemapper type.",
         StartingValue="Tonemapper_Off",
-        Choices=["Tonemapper_Off", "Tonemapper_Filmic", "Tonemapper_Customizable"]
+        Choices=["Tonemapper_Off", "Tonemapper_Filmic", "Tonemapper_Customizable"],
     )
     Range = Options.Slider(
         Caption="TonemapperRange",
@@ -17,7 +16,7 @@ class Tonemapper:
         StartingValue=800,
         MinValue=0,
         MaxValue=200,
-        Increment=10
+        Increment=10,
     )
     ToeFactor = Options.Slider(
         Caption="TonemapperToeFactor",
@@ -25,7 +24,7 @@ class Tonemapper:
         StartingValue=0,
         MinValue=0,
         MaxValue=500,
-        Increment=1
+        Increment=1,
     )
     Scale = Options.Slider(
         Caption="TonemapperScale",
@@ -33,11 +32,13 @@ class Tonemapper:
         StartingValue=100,
         MinValue=0,
         MaxValue=200,
-        Increment=1
+        Increment=1,
     )
 
     children = [Type, Range, ToeFactor, Scale]
-    Nested = Options.Nested(Caption="Tonemapper", Description="Tonemapper settings.", Children=children)
+    Nested = Options.Nested(
+        Caption="Tonemapper", Description="Tonemapper settings.", Children=children
+    )
 
 
 def _attach_callback():

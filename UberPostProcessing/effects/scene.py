@@ -1,6 +1,11 @@
-from ...ModMenu import Options
+from Mods.ModMenu import Options
 
-from . import callback_slider, callback_xyz, callback_xyz_worldInfo, callback_slider_worldInfo
+from . import (
+    callback_slider,
+    callback_slider_worldInfo,
+    callback_xyz,
+    callback_xyz_worldInfo,
+)
 
 
 class Scene:
@@ -12,7 +17,7 @@ class Scene:
         StartingValue=0,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     ShadowsY = Options.Slider(
         Caption="Scene_ShadowsY",
@@ -20,7 +25,7 @@ class Scene:
         StartingValue=0,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     ShadowsZ = Options.Slider(
         Caption="Scene_ShadowsZ",
@@ -28,7 +33,7 @@ class Scene:
         StartingValue=0,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     HighLightsX = Options.Slider(
         Caption="Scene_HighLightsX",
@@ -36,7 +41,7 @@ class Scene:
         StartingValue=100,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     HighLightsY = Options.Slider(
         Caption="Scene_HighLightsY",
@@ -44,7 +49,7 @@ class Scene:
         StartingValue=100,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     HighLightsZ = Options.Slider(
         Caption="Scene_HighLightsZ",
@@ -52,7 +57,7 @@ class Scene:
         StartingValue=100,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     MidTonesX = Options.Slider(
         Caption="Scene_MidTonesX",
@@ -60,7 +65,7 @@ class Scene:
         StartingValue=100,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     MidTonesY = Options.Slider(
         Caption="Scene_MidTonesY",
@@ -68,7 +73,7 @@ class Scene:
         StartingValue=100,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
     MidTonesZ = Options.Slider(
         Caption="Scene_MidTonesZ",
@@ -76,7 +81,7 @@ class Scene:
         StartingValue=90,
         MinValue=_min_value,
         MaxValue=_max_value,
-        Increment=5
+        Increment=5,
     )
 
     Desaturation = Options.Slider(
@@ -85,7 +90,7 @@ class Scene:
         StartingValue=0,
         MinValue=0,
         MaxValue=100,
-        Increment=1
+        Increment=1,
     )
 
     ColorizeX = Options.Slider(
@@ -94,7 +99,7 @@ class Scene:
         StartingValue=100,
         MinValue=0,
         MaxValue=_max_value,
-        Increment=1
+        Increment=1,
     )
     ColorizeY = Options.Slider(
         Caption="SceneColorizeY",
@@ -102,7 +107,7 @@ class Scene:
         StartingValue=100,
         MinValue=0,
         MaxValue=_max_value,
-        Increment=1
+        Increment=1,
     )
     ColorizeZ = Options.Slider(
         Caption="SceneColorizeZ",
@@ -110,7 +115,7 @@ class Scene:
         StartingValue=100,
         MinValue=0,
         MaxValue=_max_value,
-        Increment=1
+        Increment=1,
     )
     SceneMultiplier = Options.Slider(
         Caption="SceneMultiplier",
@@ -121,21 +126,25 @@ class Scene:
         Increment=1,
     )
 
-    children = [ShadowsX,
-                ShadowsY,
-                ShadowsZ,
-                HighLightsX,
-                HighLightsY,
-                HighLightsZ,
-                MidTonesX,
-                MidTonesY,
-                MidTonesZ,
-                Desaturation,
-                ColorizeX,
-                ColorizeY,
-                ColorizeZ,
-                SceneMultiplier]
-    Nested = Options.Nested(Caption="Scene", Description="Scene settings.", Children=children)
+    children = [
+        ShadowsX,
+        ShadowsY,
+        ShadowsZ,
+        HighLightsX,
+        HighLightsY,
+        HighLightsZ,
+        MidTonesX,
+        MidTonesY,
+        MidTonesZ,
+        Desaturation,
+        ColorizeX,
+        ColorizeY,
+        ColorizeZ,
+        SceneMultiplier,
+    ]
+    Nested = Options.Nested(
+        Caption="Scene", Description="Scene settings.", Children=children
+    )
 
 
 def _attach_callback():

@@ -1,19 +1,26 @@
-import unrealsdk
+from Mods.ModMenu import Options
 
-from ...ModMenu import Options
-
-from . import callback_normal, callback_slider, callback_xyz, callback_rgb, rcon, callback_normal_worldInfo
+from . import (
+    callback_normal,
+    callback_normal_worldInfo,
+    callback_slider,
+    rcon,
+)
 
 
 class MotionBlur:
-    Enable = Options.Boolean(Caption="bEnableMotionBlur", Description="Enable motion blur.", StartingValue=False)
+    Enable = Options.Boolean(
+        Caption="bEnableMotionBlur",
+        Description="Enable motion blur.",
+        StartingValue=False,
+    )
     MaxVelocity = Options.Slider(
         Caption="MaxVelocity",
         Description="The velocity of the motion blur. Divide by 100 for the real value.",
         StartingValue=100,
         MinValue=-1000,
         MaxValue=1000,
-        Increment=10
+        Increment=10,
     )
 
     BlurAmount = Options.Slider(
@@ -22,7 +29,7 @@ class MotionBlur:
         StartingValue=50,
         MinValue=0,
         MaxValue=1000,
-        Increment=1
+        Increment=1,
     )
 
     FullMotionBlur = Options.Boolean(
@@ -45,16 +52,26 @@ class MotionBlur:
         StartingValue=1000000,
         MinValue=0,
         MaxValue=10000000,
-        Increment=100
+        Increment=100,
     )
 
-    children = [Enable, MaxVelocity, BlurAmount, FullMotionBlur, CameraRotationThreshold, CameraTranslationThreshold]
-    Nested = Options.Nested(Caption="MotionBlur", Description="Motion blur options.", Children=children)
+    children = [
+        Enable,
+        MaxVelocity,
+        BlurAmount,
+        FullMotionBlur,
+        CameraRotationThreshold,
+        CameraTranslationThreshold,
+    ]
+    Nested = Options.Nested(
+        Caption="MotionBlur", Description="Motion blur options.", Children=children
+    )
 
 
 def _attach_callback():
     MotionBlur.Enable.Callback = lambda o, v: (
-        rcon("", "", cmd=f"SCALE set MotionBlur {v}"), callback_normal_worldInfo(o, v)
+        rcon("", "", cmd=f"SCALE set MotionBlur {v}"),
+        callback_normal_worldInfo(o, v),
     )
     MotionBlur.MaxVelocity.Callback = callback_slider
     MotionBlur.BlurAmount.Callback = callback_slider

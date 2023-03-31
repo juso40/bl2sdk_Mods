@@ -1,11 +1,19 @@
-from typing import Any
+from typing import Any, List
 
-from ..ModMenu import ModPriorities, ModTypes, RegisterMod, SDKMod, Options, EnabledSaveType, Hook
+import unrealsdk  # type: ignore
+
+from Mods.ModMenu import (
+    EnabledSaveType,
+    Hook,
+    ModPriorities,
+    ModTypes,
+    RegisterMod,
+    SDKMod,
+)
+from Mods.ModMenu import Options as ModOptions
 
 from .effects import all_options, rcon
 from .presets import PresetsOptions
-
-import unrealsdk
 
 
 class UberPostProcessing(SDKMod):
@@ -21,39 +29,48 @@ class UberPostProcessing(SDKMod):
     Priority = ModPriorities.Standard
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadWithSettings
 
-    EnablePostProcessVolume = Options.Boolean(
+    EnablePostProcessVolume = ModOptions.Boolean(
         Caption="Post Process Volume",
         Description="Most Maps have their own custom Post Process Volume. Disable it to use your own settings.",
-        StartingValue=True
+        StartingValue=True,
     )
-    Options = [EnablePostProcessVolume]
+    Options: List[ModOptions.Base] = [EnablePostProcessVolume]
 
     def __init__(self):
         super().__init__()
         self.Options.append(PresetsOptions)
         self.Options.extend(all_options)
 
-    def Enable(self) -> None:
+    def Enable(self) -> None:  # noqa: N802
         super().Enable()
 
-        def update_nested(nested_option):
-            if isinstance(nested_option, Options.Value):
+        def update_nested(nested_option: ModOptions.Base) -> None:
+            if isinstance(nested_option, ModOptions.Value):
                 self.ModOptionChanged(nested_option, nested_option.CurrentValue)
-            elif isinstance(nested_option, Options.Nested):
+            elif isinstance(nested_option, ModOptions.Nested):
                 for child in nested_option.Children:
                     update_nested(child)
 
         for option in self.Options:
             update_nested(option)
 
-    def ModOptionChanged(self, option, new_value: Any) -> None:
+    def ModOptionChanged(self, option, new_value: Any) -> None:  # noqa: N802
         if option == self.EnablePostProcessVolume:
             return
-        option.Callback(option, new_value)
+        option.Callback(option, new_value)  # type: ignore
 
     @Hook("WillowGame.WillowHUD.CreateWeaponScopeMovie")
-    def _map_load(self, caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
-        rcon("bEnabled", str(self.EnablePostProcessVolume.CurrentValue), obje="PostProcessVolume")
+    def _map_load(
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
+    ) -> bool:
+        rcon(
+            "bEnabled",
+            str(self.EnablePostProcessVolume.CurrentValue),
+            obje="PostProcessVolume",
+        )
         return True
 
 

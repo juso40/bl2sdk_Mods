@@ -1,19 +1,21 @@
-import unrealsdk
+from Mods.ModMenu import Options
 
-from ...ModMenu import Options
-
-from . import callback_normal, callback_slider, callback_xyz, callback_rgb
+from . import callback_normal, callback_rgb, callback_slider
 
 
 class Vignette:
-    Enabled = Options.Boolean(Caption="VignetteEnabled", Description="Enable vignette effect.", StartingValue=False)
+    Enabled = Options.Boolean(
+        Caption="VignetteEnabled",
+        Description="Enable vignette effect.",
+        StartingValue=False,
+    )
     Brightness = Options.Slider(
         Caption="VignetteBrightness",
         Description="Brightness of the vignette. Divide value by 100 to get the actual value.",
         StartingValue=20,
         MinValue=-500,
         MaxValue=500,
-        Increment=1
+        Increment=1,
     )
     ColorR = Options.Slider(
         Caption="VignetteColorR",
@@ -21,7 +23,7 @@ class Vignette:
         StartingValue=255,
         MinValue=0,
         MaxValue=255,
-        Increment=1
+        Increment=1,
     )
     ColorG = Options.Slider(
         Caption="VignetteColorG",
@@ -29,7 +31,7 @@ class Vignette:
         StartingValue=255,
         MinValue=0,
         MaxValue=255,
-        Increment=1
+        Increment=1,
     )
     ColorB = Options.Slider(
         Caption="VignetteColorB",
@@ -37,7 +39,7 @@ class Vignette:
         StartingValue=255,
         MinValue=0,
         MaxValue=255,
-        Increment=1
+        Increment=1,
     )
     ColorA = Options.Slider(
         Caption="VignetteColorA",
@@ -45,11 +47,13 @@ class Vignette:
         StartingValue=1,
         MinValue=0,
         MaxValue=255,
-        Increment=1
+        Increment=1,
     )
 
     children = [Enabled, Brightness, ColorR, ColorG, ColorB, ColorA]
-    Nested = Options.Nested(Caption="Vignette", Description="Vignette settings.", Children=children)
+    Nested = Options.Nested(
+        Caption="Vignette", Description="Vignette settings.", Children=children
+    )
 
 
 def _attach_callback():

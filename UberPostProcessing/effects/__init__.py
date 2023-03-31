@@ -1,9 +1,29 @@
-from ...ModMenu import Options
+import unrealsdk  # type: ignore
 
-import unrealsdk
+from Mods.ModMenu import Options
+
+from .bloom import BloomOptions
+from .dof import DOFOptions
+from .grain import ImageGrainOptions
+from .motionblur import MotionBlurOptions
+from .scene import SceneOptions
+from .tonemapper import TonemapperOptions
+from .vignette import VignetteOptions
+
+all_options = [
+    TonemapperOptions,
+    SceneOptions,
+    VignetteOptions,
+    MotionBlurOptions,
+    ImageGrainOptions,
+    BloomOptions,
+    DOFOptions,
+]
 
 
-def rcon(atrr: str, value: str, *, obje: str = "UberPostProcessEffect", cmd: str = "") -> None:
+def rcon(
+    atrr: str, value: str, *, obje: str = "UberPostProcessEffect", cmd: str = ""
+) -> None:
     pc = unrealsdk.GetEngine().GamePlayers[0].Actor
 
     if cmd:
@@ -31,40 +51,37 @@ def callback_rgb(option: Options.Value, new_value):
     rcon(attr, f"({val_attr}={new_value})")
 
 
-def callback_rgb_worldInfo(option: Options.Value, new_value):
+def callback_rgb_worldInfo(option: Options.Value, new_value) -> None:  # noqa: N802
     val_attr = option.Caption[-1]
     attr = option.Caption[:-1]
-    rcon("DefaultPostProcessSettings", f"({attr}=({val_attr}={new_value}))", obje="WorldInfo")
+    rcon(
+        "DefaultPostProcessSettings",
+        f"({attr}=({val_attr}={new_value}))",
+        obje="WorldInfo",
+    )
 
 
-def callback_xyz_worldInfo(option: Options.Value, new_value):
+def callback_xyz_worldInfo(option: Options.Value, new_value):  # noqa: N802
     val_attr = option.Caption[-1]
     attr = option.Caption[:-1]
-    rcon("DefaultPostProcessSettings", f"({attr}=({val_attr}={new_value / 100}))", obje="WorldInfo")
+    rcon(
+        "DefaultPostProcessSettings",
+        f"({attr}=({val_attr}={new_value / 100}))",
+        obje="WorldInfo",
+    )
 
 
-def callback_slider_worldInfo(option: Options.Slider, new_value):
-    rcon("DefaultPostProcessSettings", f"({option.Caption}={new_value / 100})", obje="WorldInfo")
+def callback_slider_worldInfo(option: Options.Slider, new_value):  # noqa: N802
+    rcon(
+        "DefaultPostProcessSettings",
+        f"({option.Caption}={new_value / 100})",
+        obje="WorldInfo",
+    )
 
 
-def callback_normal_worldInfo(option: Options.Value, new_value):
-    rcon("DefaultPostProcessSettings", f"({option.Caption}={new_value})", obje="WorldInfo")
-
-
-from .tonemapper import TonemapperOptions
-from .motionblur import MotionBlurOptions
-from .grain import ImageGrainOptions
-from .vignette import VignetteOptions
-from .bloom import BloomOptions
-from .dof import DOFOptions
-from .scene import SceneOptions
-
-all_options = [
-    TonemapperOptions,
-    SceneOptions,
-    VignetteOptions,
-    MotionBlurOptions,
-    ImageGrainOptions,
-    BloomOptions,
-    DOFOptions,
-]
+def callback_normal_worldInfo(option: Options.Value, new_value):  # noqa: N802
+    rcon(
+        "DefaultPostProcessSettings",
+        f"({option.Caption}={new_value})",
+        obje="WorldInfo",
+    )
