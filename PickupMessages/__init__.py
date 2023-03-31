@@ -2,10 +2,15 @@ import re
 from dataclasses import dataclass
 from typing import List, Tuple
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
+from Mods.coroutines import (
+    PostRenderCoroutine,
+    Time,
+    WaitWhile,
+    start_coroutine_post_render,
+)
 from Mods.ModMenu import EnabledSaveType, Hook, ModTypes, Options, RegisterMod, SDKMod
-from Mods.coroutines import PostRenderCoroutine, Time, WaitWhile, start_coroutine_post_render
 
 MaxMessages = Options.Slider(
     Caption="Max Messages",
@@ -13,7 +18,7 @@ MaxMessages = Options.Slider(
     StartingValue=5,
     MinValue=1,
     MaxValue=20,
-    Increment=1
+    Increment=1,
 )
 
 YOffset = Options.Slider(
@@ -22,7 +27,7 @@ YOffset = Options.Slider(
     StartingValue=5,
     MinValue=0,
     MaxValue=30,
-    Increment=1
+    Increment=1,
 )
 
 MessageSpacing = Options.Slider(
@@ -31,7 +36,7 @@ MessageSpacing = Options.Slider(
     StartingValue=14,
     MinValue=9,
     MaxValue=30,
-    Increment=1
+    Increment=1,
 )
 
 MessageDuration = Options.Slider(
@@ -40,7 +45,7 @@ MessageDuration = Options.Slider(
     StartingValue=5,
     MinValue=1,
     MaxValue=30,
-    Increment=1
+    Increment=1,
 )
 
 
@@ -57,12 +62,14 @@ MESSAGES: List[Message] = []
 
 def hex_to_rgb(hex_color: str) -> tuple:
     hex_color = hex_color.lstrip("#")
-    return tuple(int(hex_color[i:i + 2], 16) for i in (0, 2, 4))
+    return tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
 
 
 def coroutine_post_render() -> PostRenderCoroutine:
     while True:
-        yield WaitWhile(lambda: unrealsdk.GetEngine().GamePlayers[0].Actor.IsPauseMenuOpen())
+        yield WaitWhile(
+            lambda: unrealsdk.GetEngine().GamePlayers[0].Actor.IsPauseMenuOpen()
+        )
         canvas = yield
         screen_width = canvas.SizeX
         screen_height = canvas.SizeY
@@ -102,18 +109,17 @@ class PickupMessage(SDKMod):
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadOnMainMenu
     Options = [MaxMessages, YOffset, MessageSpacing, MessageDuration]
 
-    def Enable(self) -> None:
+    def Enable(self) -> None:  # noqa: N802
         super().Enable()
         start_coroutine_post_render(coroutine_post_render())
 
     @Hook("WillowGame.WillowHUD.DisplayCustomMessage")
     def display_custom_hud_message(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
-
         message = params.MessageString
         # try to get the hex color from the optional <font> tag
         color = re.search(r"<font color = \"#(.*?)\">", message)
@@ -125,15 +131,10 @@ class PickupMessage(SDKMod):
 
         # Title is everything before the <font> tag
         # Message is everything between the <font> </font> tags
-        title = message[:message.find("<font")]
+        title = message[: message.find("<font")]
         message_match = re.search(r"<font color = \"#(.*?)\">(.*?)</font>", message)
-        if message_match:
-            message = message_match.group(2).replace("INVALID", "")
-        else:
-            message = ""
-        MESSAGES.append(
-            Message(title, message, color, MessageDuration.CurrentValue)
-        )
+        message = message_match.group(2).replace("INVALID", "") if message_match else ""
+        MESSAGES.append(Message(title, message, color, MessageDuration.CurrentValue))
         if len(MESSAGES) > MaxMessages.CurrentValue:
             MESSAGES.pop(0)
 
