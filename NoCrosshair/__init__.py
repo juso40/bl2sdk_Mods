@@ -1,51 +1,51 @@
-import bl2sdk
+import unrealsdk  # type: ignore
+
+from Mods.ModMenu import Hook, RegisterMod, SDKMod
+
+crosshair_hook = "WillowWeapon.Active.BeginState"
+zoom_hook = "WillowGame.WillowWeapon.SetZoomState"
 
 
-class Crosshair(bl2sdk.BL2MOD):
+class Crosshair(SDKMod):
     Name = "No Crosshair"
     Description = "Removes the crosshairs."
-    Author = "Juso"
+    Author = "juso"
+    Version = "1.0"
 
-    bZoomed = False
+    def __init__(self) -> None:
+        super().__init__()
+        self.zoomed: bool = False
 
-    def disable_crosshair(self, caller, function, params):
-        if not self.bZoomed:
+    @Hook("WillowWeapon.Active.BeginState")
+    def disable_crosshair(
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
+    ) -> bool:
+        if not self.zoomed:
             caller.bCrosshairEnabled = False
             caller.bSuppressCrosshair = True
         else:
             caller.bCrosshairEnabled = True
             caller.bSuppressCrosshair = False
+        return True
 
-    def handle_zooming(self, caller, function, params):
+    @Hook("WillowGame.WillowWeapon.SetZoomState")
+    def handle_zooming(
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
+    ) -> bool:
         if params.NewZoomState == 2:
-            self.bZoomed = True
+            self.zoomed = True
             caller.bCrosshairEnabled = True
         else:
-            self.bZoomed = False
+            self.zoomed = False
             caller.bCrosshairEnabled = False
-
-    crosshair_hook = "WillowWeapon.Active.BeginState"
-    zoom_hook = "WillowGame.WillowWeapon.SetZoomState"
-
-    def Enable(self):
-        bl2sdk.RegisterHook(self.crosshair_hook, "CrosshairHook", CrosshairHook)
-        bl2sdk.RegisterHook(self.zoom_hook, "ZoomHook", IsZoomingHook)
-
-    def Disable(self):
-        bl2sdk.RemoveHook(self.crosshair_hook, "CrosshairHook")
-        bl2sdk.RemoveHook(self.zoom_hook, "ZoomHook")
+        return True
 
 
 CrosshairInstance = Crosshair()
-
-
-def CrosshairHook(caller: bl2sdk.UObject, function: bl2sdk.UFunction, params: bl2sdk.FStruct) -> bool:
-    CrosshairInstance.disable_crosshair(caller, function, params)
-    return True
-
-
-def IsZoomingHook(caller: bl2sdk.UObject, function: bl2sdk.UFunction, params: bl2sdk.FStruct) -> bool:
-    CrosshairInstance.handle_zooming(caller, function, params)
-    return True
-
-bl2sdk.Mods.append(CrosshairInstance)
+RegisterMod(CrosshairInstance)
