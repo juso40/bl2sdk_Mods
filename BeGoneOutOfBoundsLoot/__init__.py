@@ -1,9 +1,9 @@
-from typing import List, Union, Tuple
-from math import sin, cos, sqrt
+from math import cos, sin, sqrt
+from typing import List, Tuple, Union
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from ..ModMenu import EnabledSaveType, KeybindManager, SDKMod
+from Mods.ModMenu import EnabledSaveType, KeybindManager, SDKMod
 
 
 def get_player_controller():
@@ -27,7 +27,9 @@ def rot_to_vec3d(rotation: List[int]) -> List[float]:
     return [x, y, z]
 
 
-def normalize_vec(vector: Union[List[float], Tuple[float, float, float]]) -> List[float]:
+def normalize_vec(
+    vector: Union[List[float], Tuple[float, float, float]]
+) -> List[float]:
     _len = sqrt(sum(x * x for x in vector))
     return [x / _len for x in vector]
 
@@ -36,14 +38,20 @@ class BGOOBL(SDKMod):
     Name: str = "Be Gone Out Of Bounds Loot"
     Version: str = "2.0"
     Types = unrealsdk.ModTypes.Utility
-    Description: str = "Adds a keybind option to the game that allows you to teleport all" \
-                       " loot on the ground to your current location. By default the key is bound to ENTER."
+    Description: str = (
+        "Adds a keybind option to the game that allows you to teleport all"
+        " loot on the ground to your current location. By default the key is bound to ENTER."
+    )
     Author: str = "Juso"
 
-    Keybinds: List[KeybindManager.Keybind] = [KeybindManager.Keybind("Teleport Loot To Me", Key="Enter")]
+    Keybinds: List[KeybindManager.Keybind] = [
+        KeybindManager.Keybind("Teleport Loot To Me", Key="Enter")
+    ]
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadWithSettings
 
-    def GameInputPressed(self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent) -> None:
+    def GameInputPressed(  # noqa: N802
+        self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent
+    ) -> None:
         if event != KeybindManager.InputEvent.Released:
             return
         if bind.Name == "Teleport Loot To Me":
@@ -55,13 +63,14 @@ class BGOOBL(SDKMod):
                 [
                     pc.CalcViewRotation.Pitch,
                     pc.CalcViewRotation.Yaw,
-                    pc.CalcViewRotation.Roll
+                    pc.CalcViewRotation.Roll,
                 ]
             )
             x, y, z = normalize_vec([x, y, 0])
 
             valid_loot = [
-                pickup for pickup in get_player_controller().GetWillowGlobals().PickupList
+                pickup
+                for pickup in get_player_controller().GetWillowGlobals().PickupList
                 if pickup.Inventory.Class != unrealsdk.FindClass("WillowMissionItem")
             ]
 
@@ -73,17 +82,11 @@ class BGOOBL(SDKMod):
 
             for i, loot in enumerate(loot_by_rarity.values()):
                 z = pz
-                for l in loot:
+                for loot_pickup in loot:
                     # l.ConvertRigidBodyToFixed()
-                    l.Location = (px + 50 * x * i, py + 50 * y * i, pz)
-                    l.AdjustPickupPhysicsAndCollisionForBeingDropped()
+                    loot_pickup.Location = (px + 50 * x * i, py + 50 * y * i, pz)
+                    loot_pickup.AdjustPickupPhysicsAndCollisionForBeingDropped()
                     z += 30
-
-    def Enable(self):
-        super().Enable()
-
-    def Disable(self):
-        super().Disable()
 
 
 unrealsdk.RegisterMod(BGOOBL())
