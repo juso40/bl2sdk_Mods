@@ -1,8 +1,29 @@
 from typing import List
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from ..ModMenu import EnabledSaveType, SDKMod, RegisterMod, ModTypes, KeybindManager, OptionManager, Game, Hook
+from Mods.ModMenu import (
+    EnabledSaveType,
+    Game,
+    KeybindManager,
+    ModTypes,
+    RegisterMod,
+    SDKMod,
+)
+
+
+def change_active_mission(change: int) -> None:
+    mission_tracker: unrealsdk.UObject = (
+        unrealsdk.GetEngine().GetCurrentWorldInfo().GRI.MissionTracker
+    )
+    if mission_tracker is None:
+        return
+    active_missions: List[unrealsdk.UObject] = [
+        q.MissionDef for q in mission_tracker.MissionList if q.Status in (1, 3, 5)
+    ]
+    active_index: int = active_missions.index(mission_tracker.ActiveMission)
+    active_index = (active_index + change) % len(active_missions)
+    mission_tracker.SetActiveMission(active_missions[active_index])
 
 
 class MissionQuickswitcher(SDKMod):
@@ -19,24 +40,15 @@ class MissionQuickswitcher(SDKMod):
         KeybindManager.Keybind("Previous Mission", "Down"),
     ]
 
-    def GameInputPressed(self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent) -> None:
+    def GameInputPressed(  # noqa: N802
+        self, bind: KeybindManager.Keybind, event: KeybindManager.InputEvent
+    ) -> None:
         if event != KeybindManager.InputEvent.Released:
             return
         if bind.Name == "Next Mission":
-            self.ChangeActiveMission(1)
+            change_active_mission(1)
         elif bind.Name == "Previous Mission":
-            self.ChangeActiveMission(-1)
-
-    @staticmethod
-    def ChangeActiveMission(change: int) -> None:
-        mission_tracker: unrealsdk.UObject = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI.MissionTracker
-        if mission_tracker is None:
-            return
-        active_missions: List[unrealsdk.UObject] = [q.MissionDef for q in mission_tracker.MissionList if
-                                                    q.Status in (1, 3, 5)]
-        active_index: int = active_missions.index(mission_tracker.ActiveMission)
-        active_index = (active_index + change) % len(active_missions)
-        mission_tracker.SetActiveMission(active_missions[active_index])
+            change_active_mission(-1)
 
 
 RegisterMod(MissionQuickswitcher())
