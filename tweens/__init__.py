@@ -74,9 +74,10 @@ __all__ = [
     "bounce_in_out",
 ]
 
+
 class Tweens(SDKMod):
     Name = "Tweens"
-    Version = "1.0"
+    Version = "1.1"
     Types = ModTypes.Library
     Description = "A tweening library with various easing functions."
     Author = "juso"

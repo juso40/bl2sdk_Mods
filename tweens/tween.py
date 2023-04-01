@@ -25,15 +25,40 @@ GameIsPaused: WaitWhile = WaitWhile(
 )
 
 
+def step_tuple(tup_start: tuple, tup_end: tuple, t: float) -> tuple:
+    """Step a tuple from start to end by the given t value"""
+    return tuple(start + (end - start) * t for start, end in zip(tup_start, tup_end))
+
+
+def step_float(start: float, end: float, t: float) -> float:
+    """Step a float from start to end by the given t value"""
+    return start + (end - start) * t
+
+
+def step_int(start: int, end: int, t: float) -> int:
+    """Step an int from start to end by the given t value"""
+    return int(start + (end - start) * t)
+
+
+CUSTOM_STEPS = {
+    tuple: step_tuple,
+    float: step_float,
+    int: step_int,
+}
+
+
 class Tweener:
     """Base class for all Tweener objects."""
 
     def __init__(self, final_value: Any, duration: float) -> None:
-        self._start_value: Any = None
+        self._start_value: Any = 0
         self._end_value: Any = final_value
         self._duration: float = duration
         self._ease_function: Callable[[float], float] = linear
         self._elapsed: float = 0.0
+        self._step_function: Callable[[Any, Any, float], Any] = CUSTOM_STEPS.get(
+            type(final_value), step_float
+        )
 
     def transition(self, ease_function: Callable[[float], float]) -> Tweener:
         """Set the easing function for this Tweener object, by default linear is used."""
@@ -53,7 +78,7 @@ class Tweener:
         self._elapsed += delta
         t: float = self._elapsed / self._duration
         a: float = self._ease_function(t)
-        value: Any = self._start_value + (self._end_value - self._start_value) * a
+        value: Any = self._step_function(self._start_value, self._end_value, a)
         self._tween_val(value)
         return self._elapsed >= self._duration
 
@@ -93,9 +118,6 @@ class PropertyTweener(Tweener):
         return cast("PropertyTweener", super().transition(ease_function))
 
     def _tween_val(self, value: Any) -> None:
-        prop_type: type = type(getattr(self._obj, self._property_name))
-        if prop_type == int:
-            value = int(value)
         setattr(self._obj, self._property_name, value)
 
 
@@ -129,7 +151,7 @@ class TimerTweener(Tweener):
     """
 
     def __init__(self, duration: float) -> None:
-        super().__init__(final_value=None, duration=duration)
+        super().__init__(final_value=0, duration=duration)
 
     def transition(self, ease_function: Callable[[float], float]) -> "TimerTweener":
         return cast("TimerTweener", super().transition(ease_function))
@@ -176,6 +198,12 @@ class Tween:
             final_value=final_value,
             duration=duration,
         )
+        self._tweeners.append(tweener)
+        return tweener
+
+    def tween_timer(self, duration: float) -> TimerTweener:
+        """Create a new TimerTweener object"""
+        tweener = TimerTweener(duration=duration)
         self._tweeners.append(tweener)
         return tweener
 
