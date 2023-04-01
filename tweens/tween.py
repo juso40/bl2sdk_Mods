@@ -96,8 +96,13 @@ class PropertyTweener(Tweener):
         duration: float,
     ) -> None:
         super().__init__(final_value=final_value, duration=duration)
-        self._obj = obj
-        self._property_name = property_name
+        self._obj: object = obj
+        self._property_name: str = property_name
+
+        # Overwrite our step function, as it should depend on our property type
+        self._step_function = CUSTOM_STEPS.get(
+            type(getattr(obj, property_name)), step_float
+        )
 
     def from_val(self, value: Any) -> "PropertyTweener":
         """Set the start value for this Tweener object"""
