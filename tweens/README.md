@@ -77,4 +77,5 @@ tween.set_parallel(True)  # Set the tween to run the animations in parallel
 tween.start()
 ```
 
+![Borderlands2_gFf64WABEF](https://user-images.githubusercontent.com/39841117/229279066-21b420b8-0880-4c3a-9dc7-39e706ddca8e.gif)
 
