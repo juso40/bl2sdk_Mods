@@ -1,19 +1,32 @@
-import unrealsdk
+from typing import Optional
 
-from ..ModMenu import EnabledSaveType, SDKMod
+import unrealsdk  # type: ignore
+
+from Mods.ModMenu import EnabledSaveType, Hook, RegisterMod, SDKMod
 
 
 class Bossbar(SDKMod):
     Name: str = "Bossbar"
-    Description: str = "Adds a bossbar to minibosses and named enemies, for example Saturn."
+    Description: str = (
+        "Adds a bossbar to minibosses and named enemies."
+    )
     Author: str = "Juso"
     Version: str = "1.1"
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadOnMainMenu
+    
 
-    boss_pawn = None
-    bar_active = False
+    def __init__(self) -> None:
+        super().__init__()
+        self.boss_pawn: Optional[unrealsdk.UObject] = None
+        self.bar_active: bool = False
 
-    def HandleKill(self, caller, function, params):
+    @Hook("WillowGame.WillowPawn.Died")
+    def hk_pawn_died(
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
+    ) -> bool:
         if caller == self.boss_pawn:
             self.boss_pawn = None
             gri = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI
@@ -22,37 +35,22 @@ class Bossbar(SDKMod):
             self.bar_active = False
         return True
 
-    def InitBar(self):
-        gri = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI
-        if gri:
-            gri.InitBossBar(True, self.boss_pawn)
-            self.bar_active = True
+    @Hook("WillowGame.WillowPawn.TakeDamage")
+    def hk_pawn_take_damage(
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
+    ) -> bool:
+        if BBInstance.boss_pawn is None and (caller.IsChampion() or caller.IsBoss()):
+            self.boss_pawn = caller
+            gri: unrealsdk.UObject = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI
+            if gri:
+                gri.InitBossBar(True, self.boss_pawn)
+                self.bar_active = True
 
-    def Enable(self):
-        unrealsdk.RegisterHook("WillowGame.WillowPawn.Died", "KillHook", KilledHook)
-        unrealsdk.RegisterHook("WillowGame.WillowPawn.TakeDamage", "TakeDamageHook", PawnDamageHook)
-
-    def Disable(self):
-        unrealsdk.RemoveHook("WillowGame.WillowPawn.Died", "KillHook")
-        unrealsdk.RemoveHook("WillowGame.WillowPawn.TakeDamage", "TakeDamageHook")
+        return True
 
 
 BBInstance = Bossbar()
-
-
-def KilledHook(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
-    BBInstance.HandleKill(caller, function, params)
-    return True
-
-
-def PawnDamageHook(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
-    if BBInstance.boss_pawn is None:
-        if caller.IsChampion() or caller.IsBoss():
-            BBInstance.boss_pawn = caller
-            BBInstance.InitBar()
-    # elif BBInstance.bar_active:
-    #  GetEngine().GetCurrentWorldInfo().GRI.UpdateBossBarInfo()
-    return True
-
-
-unrealsdk.RegisterMod(BBInstance)
+RegisterMod(BBInstance)
