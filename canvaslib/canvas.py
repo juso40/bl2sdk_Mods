@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-from enum import Enum, IntEnum, auto
+from enum import Enum, auto
 from functools import lru_cache
-from types import TracebackType
-from typing import Optional, Tuple, Type, Union
+from typing import TYPE_CHECKING, Optional, Tuple, Type, Union
 
-import unrealsdk
+import unrealsdk  # type: ignore  # noqa: TCH002
 
 from .fonts import FontRenderInfo
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 BGRA = Tuple[float, float, float, float]
 
@@ -26,9 +28,12 @@ class VerticalAlign(Enum):
 
 @lru_cache(maxsize=256)
 def get_aligned_pos(
-        x: Union[int, float], y: Union[int, float],
-        width: Union[int, float], height: Union[int, float],
-        halign: HorizontalAlign, valign: VerticalAlign
+    x: Union[int, float],
+    y: Union[int, float],
+    width: Union[int, float],
+    height: Union[int, float],
+    halign: HorizontalAlign,
+    valign: VerticalAlign,
 ) -> Tuple[float, float]:
     if halign == HorizontalAlign.LEFT:
         pass
@@ -51,7 +56,7 @@ def get_aligned_pos(
 
 
 def relative_to_screen_coordinates(
-        canvas: unrealsdk.UObject, x: Union[int, float], y: Union[int, float]
+    canvas: unrealsdk.UObject, x: Union[int, float], y: Union[int, float]
 ) -> Tuple[float, float]:
     """Converts relative coordinates to screen coordinates.
 
@@ -61,6 +66,9 @@ def relative_to_screen_coordinates(
         y: The relative y coordinate. Between 0 and 1.
     """
     return x * canvas.ClipX, y * canvas.ClipY
+
+
+font_render_info: FontRenderInfo = FontRenderInfo()
 
 
 class Canvas:
@@ -82,7 +90,9 @@ class Canvas:
     >>>                 vertical_align=VerticalAlign.TOP)
     """
 
-    def __init__(self, canvas: unrealsdk.UObject, ufont: Optional[unrealsdk.UObject] = None):
+    def __init__(
+        self, canvas: unrealsdk.UObject, ufont: Optional[unrealsdk.UObject] = None
+    ):
         self.canvas: unrealsdk.UObject = canvas
         self.font: Optional[unrealsdk.UObject] = ufont
         self.backup_font: unrealsdk.UObject = self.canvas.Font
@@ -92,14 +102,17 @@ class Canvas:
         self.canvas.Font = self.font or self.backup_font
         return self
 
-    def __exit__(self,
-                 exc_type: Optional[Type[BaseException]],
-                 exc_val: Optional[BaseException],
-                 exc_tb: Optional[TracebackType]
-                 ):
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional["TracebackType"],
+    ):
         self.canvas.Font = self.backup_font
 
-    def text_size(self, text: str, scale_x: float = 1.0, scale_y: float = 1.0) -> Tuple[float, float]:
+    def text_size(
+        self, text: str, scale_x: float = 1.0, scale_y: float = 1.0
+    ) -> Tuple[float, float]:
         """Returns the width and height of the text in pixels."""
         x, y = self.canvas.TextSize(text)
         return x * scale_x, y * scale_y
@@ -110,16 +123,16 @@ class Canvas:
         return self
 
     def draw_text(
-            self,
-            text: str,
-            x: Union[int, float],
-            y: Union[int, float],
-            scale_x: float = 1.0,
-            scale_y: float = 1.0,
-            horizontal_align: HorizontalAlign = HorizontalAlign.CENTER,
-            vertical_align: VerticalAlign = VerticalAlign.CENTER,
-            color: Optional[BGRA] = None,
-            font_render_info: FontRenderInfo = FontRenderInfo()
+        self,
+        text: str,
+        x: Union[int, float],
+        y: Union[int, float],
+        scale_x: float = 1.0,
+        scale_y: float = 1.0,
+        horizontal_align: HorizontalAlign = HorizontalAlign.CENTER,
+        vertical_align: VerticalAlign = VerticalAlign.CENTER,
+        color: Optional[BGRA] = None,
+        font_render_info: FontRenderInfo = font_render_info
     ) -> Tuple[float, float]:
         """Draws text on the canvas.
         If x or y is [0.0-1.0], it will be treated as a percentage of the screen width or height.
@@ -144,14 +157,14 @@ class Canvas:
         return x + width, y + height
 
     def draw_rect(
-            self,
-            x: Union[int, float],
-            y: Union[int, float],
-            width: Union[int, float],
-            height: Union[int, float],
-            horizontal_align: HorizontalAlign = HorizontalAlign.LEFT,
-            vertical_align: VerticalAlign = VerticalAlign.TOP,
-            color: Optional[BGRA] = None,
+        self,
+        x: Union[int, float],
+        y: Union[int, float],
+        width: Union[int, float],
+        height: Union[int, float],
+        horizontal_align: HorizontalAlign = HorizontalAlign.LEFT,
+        vertical_align: VerticalAlign = VerticalAlign.TOP,
+        color: Optional[BGRA] = None,
     ) -> Tuple[float, float]:
         canvas = self.canvas
         if x <= 1:
@@ -169,13 +182,13 @@ class Canvas:
         return x + width, y + height
 
     def draw_line(
-            self,
-            x1: Union[int, float],
-            y1: Union[int, float],
-            x2: Union[int, float],
-            y2: Union[int, float],
-            width: Union[int, float] = 1,
-            color: Optional[BGRA] = None,
+        self,
+        x1: Union[int, float],
+        y1: Union[int, float],
+        x2: Union[int, float],
+        y2: Union[int, float],
+        width: Union[int, float] = 1,
+        color: Optional[BGRA] = None,
     ) -> None:
         canvas = self.canvas
         if x1 <= 1:
@@ -188,6 +201,14 @@ class Canvas:
             y2 = canvas.SizeY * y2
 
         canvas.DrawTextureLine(
-            StartPoint=(x1, y1, 0), EndPoint=(x2, y2, 0), Perc=1, Width=width, LineColor=color or self.draw_color,
-            LineTexture=canvas.DefaultTexture, U=0, V=0, UL=1, VL=1
+            StartPoint=(x1, y1, 0),
+            EndPoint=(x2, y2, 0),
+            Perc=1,
+            Width=width,
+            LineColor=color or self.draw_color,
+            LineTexture=canvas.DefaultTexture,
+            U=0,
+            V=0,
+            UL=1,
+            VL=1,
         )

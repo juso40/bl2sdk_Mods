@@ -1,11 +1,17 @@
 from typing import Any
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from Mods.ModMenu import Game, ModTypes, SDKMod
-from Mods.ModMenu import OptionManager
 from Mods.coroutines import start_coroutine_post_render
-from .canvas import Canvas, HorizontalAlign, VerticalAlign, get_aligned_pos, relative_to_screen_coordinates
+from Mods.ModMenu import Game, ModTypes, OptionManager, SDKMod
+
+from .canvas import (
+    Canvas,
+    HorizontalAlign,
+    VerticalAlign,
+    get_aligned_pos,
+    relative_to_screen_coordinates,
+)
 from .examples import examples_coroutine, options, show_examples
 from .fonts import DepthFieldGlowInfo, FontRenderInfo, Fonts
 
@@ -31,7 +37,9 @@ class CanvasLIB(SDKMod):
     SupportedGames = Game.BL2 | Game.TPS | Game.TPS
     Options = [options]
 
-    def ModOptionChanged(self, option: OptionManager.Options.Base, new_value: Any) -> None:
+    def ModOptionChanged(  # noqa: N802
+        self, option: OptionManager.Options.Base, new_value: Any
+    ) -> None:
         super().ModOptionChanged(option, new_value)
         if option is show_examples and new_value is True:
             start_coroutine_post_render(examples_coroutine())
