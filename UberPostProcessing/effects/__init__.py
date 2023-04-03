@@ -2,24 +2,6 @@ import unrealsdk  # type: ignore
 
 from Mods.ModMenu import Options
 
-from .bloom import BloomOptions
-from .dof import DOFOptions
-from .grain import ImageGrainOptions
-from .motionblur import MotionBlurOptions
-from .scene import SceneOptions
-from .tonemapper import TonemapperOptions
-from .vignette import VignetteOptions
-
-all_options = [
-    TonemapperOptions,
-    SceneOptions,
-    VignetteOptions,
-    MotionBlurOptions,
-    ImageGrainOptions,
-    BloomOptions,
-    DOFOptions,
-]
-
 
 def rcon(
     atrr: str, value: str, *, obje: str = "UberPostProcessEffect", cmd: str = ""
@@ -85,3 +67,22 @@ def callback_normal_worldInfo(option: Options.Value, new_value):  # noqa: N802
         f"({option.Caption}={new_value})",
         obje="WorldInfo",
     )
+
+
+from .bloom import BloomOptions  # noqa: E402
+from .dof import DOFOptions  # noqa: E402
+from .grain import ImageGrainOptions  # noqa: E402
+from .motionblur import MotionBlurOptions  # noqa: E402
+from .scene import SceneOptions  # noqa: E402
+from .tonemapper import TonemapperOptions  # noqa: E402
+from .vignette import VignetteOptions  # noqa: E402
+
+all_options = [
+    TonemapperOptions,
+    SceneOptions,
+    VignetteOptions,
+    MotionBlurOptions,
+    ImageGrainOptions,
+    BloomOptions,
+    DOFOptions,
+]
