@@ -778,7 +778,7 @@
       "requirements": {
         "Coroutines": ">=1.1",
         "UEMath Library": ">=1.3",
-        "canvaslib": ">=1.0"
+        "CanvasLIB": ">=1.0"
       },
       "supports": [
         "BL2",
