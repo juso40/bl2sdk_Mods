@@ -523,15 +523,17 @@
     {
       "name": "NoCrosshair",
       "description": [
-        "Disables your Crosshair."
+        "Disables your Crosshair.\n",
+        "If you have the ``coroutines`` and ``canvaslib`` libraries installed, you may enable a static square crosshair in the center of the screen.\n",
+        "This static square can further be customized in the mods settings menu."
       ],
       "tagline": "Disables your Crosshair.",
       "types": [
         "Utility"
       ],
-      "latest": "1.0",
+      "latest": "1.1",
       "versions": {
-        "1.0": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/NoCrosshair/__init__.py"
+        "1.1": "https://raw.githubusercontent.com/juso40/bl2sdk_Mods/master/NoCrosshair/NoCrosshair.zip"
       },
       "requirements": {}
     },
