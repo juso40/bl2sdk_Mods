@@ -7,7 +7,6 @@ import pygame._sdl2.controller
 
 class JoystickTypeTest(unittest.TestCase):
     def todo_test_Joystick(self):
-
         # __doc__ (as of 2008-08-02) for pygame.joystick.Joystick:
 
         # pygame.joystick.Joystick(id): return Joystick
@@ -126,16 +125,13 @@ class JoystickModuleTest(unittest.TestCase):
 
 
 class JoystickInteractiveTest(unittest.TestCase):
-
     __tags__ = ["interactive"]
 
     def test_get_count_interactive(self):
         # Test get_count correctly identifies number of connected joysticks
         prompt(
-            (
-                "Please connect any joysticks/controllers now before starting the "
-                "joystick.get_count() test."
-            )
+            "Please connect any joysticks/controllers now before starting the "
+            "joystick.get_count() test."
         )
 
         pygame.joystick.init()
@@ -144,12 +140,10 @@ class JoystickInteractiveTest(unittest.TestCase):
         count = pygame.joystick.get_count()
 
         response = question(
-            (
-                "NOTE: Having Steam open may add an extra virtual controller for "
-                "each joystick/controller physically plugged in.\n"
-                "joystick.get_count() thinks there is [{}] joystick(s)/controller(s)"
-                "connected to this system. Is this correct?".format(count)
-            )
+            "NOTE: Having Steam open may add an extra virtual controller for "
+            "each joystick/controller physically plugged in.\n"
+            f"joystick.get_count() thinks there is [{count}] joystick(s)/controller(s)"
+            "connected to this system. Is this correct?"
         )
 
         self.assertTrue(response)

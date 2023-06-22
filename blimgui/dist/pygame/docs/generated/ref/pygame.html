@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">the top level pygame package</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 1%" />
-<col style="width: 70%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="pygame.html#pygame.init">pygame.init</a></div>
 </td>
@@ -271,13 +266,19 @@ rarely be needed.</p>
 <span class="sig-prename descclassname"><span class="pre">pygame.</span></span><span class="sig-name descname"><span class="pre">get_sdl_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.get_sdl_version" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">get the version number of SDL</span></div>
-<div class="line"><span class="signature">get_sdl_version() -&gt; major, minor, patch</span></div>
+<div class="line"><span class="signature">get_sdl_version(linked=True) -&gt; major, minor, patch</span></div>
 </div>
-<p>Returns the three version numbers of the SDL library. This version is built
-at compile time. It can be used to detect which features may or may not be
+<p>Returns the three version numbers of the SDL library. <code class="docutils literal notranslate"><span class="pre">linked=True</span></code>
+will cause the function to return the version of the library that pygame
+is linked against while <code class="docutils literal notranslate"><span class="pre">linked=False</span></code> will cause the function to return
+the version of the library that pygame is compiled against.
+It can be used to detect which features may or may not be
 available through pygame.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in pygame 1.7.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in pygame 2.2.0: </span><code class="docutils literal notranslate"><span class="pre">linked</span></code> keyword argument added</p>
 </div>
 </dd></dl>
 
@@ -362,11 +363,6 @@ supported.</p>
 <div class="line"><span class="summaryline">small module containing version information</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 30%" />
-<col style="width: 1%" />
-<col style="width: 68%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="pygame.html#pygame.version.ver">pygame.version.ver</a></div>
 </td>
@@ -652,6 +648,17 @@ apps. This is usually a good thing as it's faster, however if you
 have an app which <em>doesn't</em> update every frame and are using linux
 you may want to disable this bypass. The bypass has reported problems
 on KDE linux. This variable is only used on x11/linux platforms.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS</span>
+<span class="n">Set</span> <span class="n">to</span> <span class="s2">&quot;1&quot;</span> <span class="n">to</span> <span class="n">allow</span> <span class="n">joysticks</span> <span class="n">to</span> <span class="n">be</span> <span class="n">updated</span> <span class="n">even</span> <span class="n">when</span> <span class="n">the</span> <span class="n">window</span> <span class="ow">is</span> <span class="n">out</span> <span class="n">of</span> <span class="n">focus</span>
+</pre></div>
+</div>
+<p>By default, when the window is not in focus, input devices do not get
+updated. However, using this environment variable it is possible to get
+joystick updates even when the window is in the background. Must be set
+before calling <a class="tooltip reference internal" href="#pygame.init" title=""><code class="xref py py-func docutils literal notranslate"><span class="pre">pygame.init()</span></code><span class="tooltip-content">initialize all imported pygame modules</span></a> or <a class="tooltip reference internal" href="joystick.html#pygame.joystick.init" title=""><code class="xref py py-func docutils literal notranslate"><span class="pre">pygame.joystick.init()</span></code><span class="tooltip-content">Initialize the joystick module.</span></a>.</p>
 </dd></dl>
 
 </section>
@@ -680,14 +687,14 @@ on KDE linux. This variable is only used on x11/linux platforms.</p>
         <li class="right" >
           <a href="pixelcopy.html" title="pygame.pixelcopy"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

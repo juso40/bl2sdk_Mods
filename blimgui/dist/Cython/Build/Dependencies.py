@@ -43,7 +43,7 @@ except:
     pythran = None
 
 from .. import Utils
-from ..Utils import (cached_function, cached_method, path_exists,
+from ..Utils import (cached_function, cached_method, path_exists, write_depfile,
     safe_makedirs, copy_file_to_dir_if_newer, is_package_dir, replace_suffix)
 from ..Compiler.Main import Context, CompilationOptions, default_options
 
@@ -963,6 +963,9 @@ def cythonize(module_list, exclude=None, nthreads=0, aliases=None, quiet=False, 
         pythran_options.cplus = True
         pythran_options.np_pythran = True
 
+    if force is None:
+        force = os.environ.get("CYTHON_FORCE_REGEN") == "1"  # allow global overrides for build systems
+
     c_options = CompilationOptions(**options)
     cpp_options = CompilationOptions(**options); cpp_options.cplus = True
     ctx = c_options.create_context()
@@ -1030,22 +1033,7 @@ def cythonize(module_list, exclude=None, nthreads=0, aliases=None, quiet=False, 
                 # write out the depfile, if requested
                 if depfile:
                     dependencies = deps.all_dependencies(source)
-                    src_base_dir, _ = os.path.split(source)
-                    if not src_base_dir.endswith(os.sep):
-                        src_base_dir += os.sep
-                    # paths below the base_dir are relative, otherwise absolute
-                    paths = []
-                    for fname in dependencies:
-                        if (fname.startswith(src_base_dir) or
-                            fname.startswith('.' + os.path.sep)):
-                            paths.append(os.path.relpath(fname, src_base_dir))
-                        else:
-                            paths.append(os.path.abspath(fname))
-
-                    depline = os.path.split(c_file)[1] + ": \\\n  "
-                    depline += " \\\n  ".join(paths) + "\n"
-                    with open(c_file+'.dep', 'w') as outfile:
-                        outfile.write(depline)
+                    write_depfile(c_file, source, dependencies)
 
                 if os.path.exists(c_file):
                     c_timestamp = os.path.getmtime(c_file)

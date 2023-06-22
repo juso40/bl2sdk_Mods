@@ -3,7 +3,7 @@ import re
 from ctypes import c_int, byref
 from .. import surface, pixels, rwops, rect
 from .compat import byteify, stringify, utf8, _is_text
-from .common import raise_sdl_err
+from .err import raise_sdl_err
 from .color import Color, convert_to_color
 from .draw import prepare_color
 from .resources import _validate_path
@@ -342,7 +342,7 @@ class FontTTF(object):
         line_h = self._parse_line_height(line_h, default_skip)
         height = line_h * (len(lines) - 1) + font_height
         if width == None:
-            width = max([line.contents.w for line in rendered])
+            width = max([line.contents.w for line in rendered if line])
 
         # Create background surface for the text and render lines to it
         sf = _create_surface((width, height), bg_col, errname="background")

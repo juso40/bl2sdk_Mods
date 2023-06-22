@@ -1559,7 +1559,7 @@ class GlobalState(object):
 
             init_globals = self.parts['init_globals']
             init_globals.putln(
-                "if (__Pyx_InitStrings(%s) < 0) %s;" % (
+                "if (__Pyx_InitStrings(%s) < 0) %s" % (
                     Naming.stringtab_cname,
                     init_globals.error_goto(self.module_pos)))
 
@@ -2233,8 +2233,8 @@ class CCodeWriter(object):
         method_flags = entry.signature.method_flags()
         if not method_flags:
             return
-        if entry.is_special:
-            from . import TypeSlots
+        from . import TypeSlots
+        if entry.is_special or TypeSlots.is_reverse_number_slot(entry.name):
             method_flags += [TypeSlots.method_coexist]
         func_ptr = wrapper_code_writer.put_pymethoddef_wrapper(entry) if wrapper_code_writer else entry.func_cname
         # Add required casts, but try not to shadow real warnings.

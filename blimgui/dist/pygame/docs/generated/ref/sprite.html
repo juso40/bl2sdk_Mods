@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.sprite &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.sprite &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,26 +104,31 @@
 <div class="line"><span class="summaryline">pygame module with basic game object classes</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 28%" />
-<col style="width: 1%" />
-<col style="width: 72%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.Sprite">pygame.sprite.Sprite</a></div>
 </td>
 <td>—</td>
 <td>Simple base class for visible game objects.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.DirtySprite">pygame.sprite.DirtySprite</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.WeakSprite">pygame.sprite.WeakSprite</a></div>
+</td>
+<td>—</td>
+<td>A subclass of Sprite that references its Groups weakly. This means that any group this belongs to that is not referenced anywhere else is garbage collected automatically.</td>
+</tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.DirtySprite">pygame.sprite.DirtySprite</a></div>
 </td>
 <td>—</td>
 <td>A subclass of Sprite with more attributes and features.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.Group">pygame.sprite.Group</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.Group">pygame.sprite.Group</a></div>
 </td>
 <td>—</td>
 <td>A container class to hold and manage multiple Sprite objects.</td>
+</tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.WeakDirtySprite">pygame.sprite.WeakDirtySprite</a></div>
+</td>
+<td>—</td>
+<td>A subclass of WeakSprite and DirtySprite that combines the benefits of both classes.</td>
 </tr>
 <tr class="row-even"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.RenderPlain">pygame.sprite.RenderPlain</a></div>
 </td>
@@ -211,7 +216,7 @@ most games.</p>
 of objects in the game. There is also a base Group class that simply stores
 sprites. A game could create new types of Group classes that operate on
 specially customized Sprite instances they contain.</p>
-<p>The basic Sprite class can draw the Sprites it contains to a Surface. The
+<p>The basic Group class can draw the Sprites it contains to a Surface. The
 <code class="docutils literal notranslate"><span class="pre">Group.draw()</span></code> method requires that each Sprite have a <code class="docutils literal notranslate"><span class="pre">Surface.image</span></code>
 attribute and a <code class="docutils literal notranslate"><span class="pre">Surface.rect</span></code>. The <code class="docutils literal notranslate"><span class="pre">Group.clear()</span></code> method requires these
 same attributes, and can be used to erase all the Sprites with background.
@@ -245,11 +250,6 @@ extend those when you add a Sprite or Group class.</p>
 <div class="line"><span class="signature">Sprite(*groups) -&gt; Sprite</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 37%" />
-<col style="width: 1%" />
-<col style="width: 62%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.Sprite.update">pygame.sprite.Sprite.update</a></div>
 </td>
@@ -379,6 +379,15 @@ to Groups.</p>
 </dd></dl>
 
 <dl class="py class definition">
+<dt class="sig sig-object py title" id="pygame.sprite.WeakSprite">
+<span class="sig-prename descclassname"><span class="pre">pygame.sprite.</span></span><span class="sig-name descname"><span class="pre">WeakSprite</span></span><a class="headerlink" href="#pygame.sprite.WeakSprite" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">A subclass of Sprite that references its Groups weakly. This means that any group this belongs to that is not referenced anywhere else is garbage collected automatically.</span></div>
+<div class="line"><span class="signature">WeakSprite(*groups) -&gt; WeakSprite</span></div>
+</div>
+</dd></dl>
+
+<dl class="py class definition">
 <dt class="sig sig-object py title" id="pygame.sprite.DirtySprite">
 <span class="sig-prename descclassname"><span class="pre">pygame.sprite.</span></span><span class="sig-name descname"><span class="pre">DirtySprite</span></span><a class="headerlink" href="#pygame.sprite.DirtySprite" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -422,11 +431,6 @@ to Groups.</p>
 <div class="line"><span class="signature">Group(*sprites) -&gt; Group</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 35%" />
-<col style="width: 1%" />
-<col style="width: 64%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.Group.sprites">pygame.sprite.Group.sprites</a></div>
 </td>
@@ -569,11 +573,13 @@ methods.</p>
 <span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.sprite.Group.draw" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">blit the Sprite images</span></div>
-<div class="line"><span class="signature">draw(Surface) -&gt; List[Rect]</span></div>
+<div class="line"><span class="signature">draw(Surface, bgsurf=None, special_flags=0) -&gt; List[Rect]</span></div>
 </div>
 <p>Draws the contained Sprites to the Surface argument. This uses the
 <code class="docutils literal notranslate"><span class="pre">Sprite.image</span></code> attribute for the source surface, and <code class="docutils literal notranslate"><span class="pre">Sprite.rect</span></code>
-for the position.</p>
+for the position. <code class="docutils literal notranslate"><span class="pre">special_flags</span></code> is passed to <code class="docutils literal notranslate"><span class="pre">Surface.blit()</span></code>.
+<code class="docutils literal notranslate"><span class="pre">bgsurf</span></code> is unused in this method but <code class="docutils literal notranslate"><span class="pre">LayeredDirty.draw()</span></code> uses
+it.</p>
 <p>The Group does not keep sprites in any order, so the draw order is
 arbitrary.</p>
 </dd></dl>
@@ -613,6 +619,15 @@ background callback function will be called several times each clear.</p>
 </dd></dl>
 
 <dl class="py class definition">
+<dt class="sig sig-object py title" id="pygame.sprite.WeakDirtySprite">
+<span class="sig-prename descclassname"><span class="pre">pygame.sprite.</span></span><span class="sig-name descname"><span class="pre">WeakDirtySprite</span></span><a class="headerlink" href="#pygame.sprite.WeakDirtySprite" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">A subclass of WeakSprite and DirtySprite that combines the benefits of both classes.</span></div>
+<div class="line"><span class="signature">WeakDirtySprite(*groups) -&gt; WeakDirtySprite</span></div>
+</div>
+</dd></dl>
+
+<dl class="py class definition">
 <dt class="sig sig-object py title" id="pygame.sprite.RenderPlain">
 <span class="sig-prename descclassname"><span class="pre">pygame.sprite.</span></span><span class="sig-name descname"><span class="pre">RenderPlain</span></span><a class="headerlink" href="#pygame.sprite.RenderPlain" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -638,11 +653,6 @@ background callback function will be called several times each clear.</p>
 <div class="line"><span class="signature">RenderUpdates(*sprites) -&gt; RenderUpdates</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 37%" />
-<col style="width: 1%" />
-<col style="width: 62%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.RenderUpdates.draw">pygame.sprite.RenderUpdates.draw</a></div>
 </td>
@@ -658,12 +668,13 @@ background callback function will be called several times each clear.</p>
 <span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.sprite.RenderUpdates.draw" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">blit the Sprite images and track changed areas</span></div>
-<div class="line"><span class="signature">draw(surface) -&gt; Rect_list</span></div>
+<div class="line"><span class="signature">draw(surface, bgsurf=None, special_flags=0) -&gt; Rect_list</span></div>
 </div>
 <p>Draws all the Sprites to the surface, the same as <code class="docutils literal notranslate"><span class="pre">Group.draw()</span></code>. This
 method also returns a list of Rectangular areas on the screen that have
 been changed. The returned changes include areas of the screen that have
-been affected by previous <code class="docutils literal notranslate"><span class="pre">Group.clear()</span></code> calls.</p>
+been affected by previous <code class="docutils literal notranslate"><span class="pre">Group.clear()</span></code> calls. <code class="docutils literal notranslate"><span class="pre">special_flags</span></code> is
+passed to <code class="docutils literal notranslate"><span class="pre">Surface.blit()</span></code>.</p>
 <p>The returned Rect list should be passed to <code class="docutils literal notranslate"><span class="pre">pygame.display.update()</span></code>.
 This will help performance on software driven display modes. This type of
 updating is usually only helpful on destinations with non-animating
@@ -677,7 +688,7 @@ backgrounds.</p>
 <span class="sig-prename descclassname"><span class="pre">pygame.sprite.</span></span><span class="sig-name descname"><span class="pre">OrderedUpdates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.sprite.OrderedUpdates" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">RenderUpdates sub-class that draws Sprites in order of addition.</span></div>
-<div class="line"><span class="signature">OrderedUpdates(*spites) -&gt; OrderedUpdates</span></div>
+<div class="line"><span class="signature">OrderedUpdates(*sprites) -&gt; OrderedUpdates</span></div>
 </div>
 <p>This class derives from <code class="docutils literal notranslate"><span class="pre">pygame.sprite.RenderUpdates()</span></code>. It maintains the
 order in which the Sprites were added to the Group for rendering. This makes
@@ -690,14 +701,9 @@ Groups.</p>
 <span class="sig-prename descclassname"><span class="pre">pygame.sprite.</span></span><span class="sig-name descname"><span class="pre">LayeredUpdates</span></span><a class="headerlink" href="#pygame.sprite.LayeredUpdates" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">LayeredUpdates is a sprite group that handles layers and draws like OrderedUpdates.</span></div>
-<div class="line"><span class="signature">LayeredUpdates(*spites, **kwargs) -&gt; LayeredUpdates</span></div>
+<div class="line"><span class="signature">LayeredUpdates(*sprites, **kwargs) -&gt; LayeredUpdates</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 42%" />
-<col style="width: 1%" />
-<col style="width: 58%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.LayeredUpdates.add">pygame.sprite.LayeredUpdates.add</a></div>
 </td>
@@ -819,7 +825,7 @@ passed then the <code class="docutils literal notranslate"><span class="pre">spr
 <span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.sprite.LayeredUpdates.draw" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">draw all sprites in the right order onto the passed surface.</span></div>
-<div class="line"><span class="signature">draw(surface) -&gt; Rect_list</span></div>
+<div class="line"><span class="signature">draw(surface, bgsurf=None, special_flags=0) -&gt; Rect_list</span></div>
 </div>
 </dd></dl>
 
@@ -958,14 +964,9 @@ uses linear search and the sprites are not removed from layer.</p>
 <span class="sig-prename descclassname"><span class="pre">pygame.sprite.</span></span><span class="sig-name descname"><span class="pre">LayeredDirty</span></span><a class="headerlink" href="#pygame.sprite.LayeredDirty" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">LayeredDirty group is for DirtySprite objects.  Subclasses LayeredUpdates.</span></div>
-<div class="line"><span class="signature">LayeredDirty(*spites, **kwargs) -&gt; LayeredDirty</span></div>
+<div class="line"><span class="signature">LayeredDirty(*sprites, **kwargs) -&gt; LayeredDirty</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 37%" />
-<col style="width: 1%" />
-<col style="width: 62%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sprite.html#pygame.sprite.LayeredDirty.draw">pygame.sprite.LayeredDirty.draw</a></div>
 </td>
@@ -1034,10 +1035,13 @@ additional attributes through kwargs:</p>
 <span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.sprite.LayeredDirty.draw" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">draw all sprites in the right order onto the passed surface.</span></div>
-<div class="line"><span class="signature">draw(surface, bgd=None) -&gt; Rect_list</span></div>
+<div class="line"><span class="signature">draw(surface, bgsurf=None, special_flags=None) -&gt; Rect_list</span></div>
 </div>
 <p>You can pass the background too. If a background is already set, then the
-bgd argument has no effect.</p>
+bgsurf argument has no effect. If present, the <code class="docutils literal notranslate"><span class="pre">special_flags</span></code> argument is
+always passed to <code class="docutils literal notranslate"><span class="pre">Surface.blit()</span></code>, overriding <code class="docutils literal notranslate"><span class="pre">DirtySprite.blendmode</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">special_flags</span></code> is not present, <code class="docutils literal notranslate"><span class="pre">DirtySprite.blendmode</span></code> is passed
+to the <code class="docutils literal notranslate"><span class="pre">Surface.blit()</span></code> instead.</p>
 </dd></dl>
 
 <dl class="py method definition">
@@ -1115,7 +1119,7 @@ below 80 frames per second.</p>
 <p><span class="versionmodified added">New in pygame 2.1.1.</span></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>TypeError</strong> -- if <code class="docutils literal notranslate"><span class="pre">time_ms</span></code> is not int or float</p>
 </dd>
 </dl>
@@ -1273,7 +1277,7 @@ to the group collide functions (see <a class="reference internal" href="#pygame.
 <a class="reference internal" href="#pygame.sprite.groupcollide" title="pygame.sprite.groupcollide"><code class="xref py py-meth docutils literal notranslate"><span class="pre">groupcollide()</span></code></a>, <a class="reference internal" href="#pygame.sprite.spritecollideany" title="pygame.sprite.spritecollideany"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spritecollideany()</span></code></a>).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>To increase performance, create and set a <code class="docutils literal notranslate"><span class="pre">mask</span></code> attibute for all
+<p>To increase performance, create and set a <code class="docutils literal notranslate"><span class="pre">mask</span></code> attribute for all
 sprites that will use this function to check for collisions. Otherwise,
 each time this function is called it will create new masks.</p>
 </div>
@@ -1287,11 +1291,11 @@ each time this function is called it will create new masks.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>first point of collision between the masks or <code class="docutils literal notranslate"><span class="pre">None</span></code> if no
 collision</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple(int, int) or NoneType</p>
 </dd>
 </dl>
@@ -1368,14 +1372,14 @@ which will be used to calculate the collision.</p>
         <li class="right" >
           <a href="sndarray.html" title="pygame.sndarray"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.sprite</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

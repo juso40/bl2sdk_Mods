@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.display &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.display &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">pygame module to control the display window and screen</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 36%" />
-<col style="width: 1%" />
-<col style="width: 63%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="display.html#pygame.display.init">pygame.display.init</a></div>
 </td>
@@ -270,7 +265,7 @@ the number and size of attached screens, you can use
 and display index to pass to <code class="docutils literal notranslate"><span class="pre">pygame.display.set_mode()</span></code>.</p>
 <p>For backward compatibility <code class="docutils literal notranslate"><span class="pre">pygame.display</span></code> allows precise control over
 the pixel format or display resolutions. This used to be necessary with old
-grahics cards and CRT screens, but is usually not needed any more. Use the
+graphics cards and CRT screens, but is usually not needed any more. Use the
 functions <code class="docutils literal notranslate"><span class="pre">pygame.display.mode_ok()</span></code>, <code class="docutils literal notranslate"><span class="pre">pygame.display.list_modes()</span></code>, and
 <code class="docutils literal notranslate"><span class="pre">pygame.display.Info()</span></code> to query detailed information about the display.</p>
 <p>Once the display Surface is created, the functions from this module affect the
@@ -384,7 +379,7 @@ several to choose from, and you can even combine multiple types using the
 bitwise or operator, (the pipe &quot;|&quot; character). Here are the display
 flags you will want to choose from:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pygame</span><span class="o">.</span><span class="n">FULLSCREEN</span>    <span class="n">create</span> <span class="n">a</span> <span class="n">fullscreen</span> <span class="n">display</span>
-<span class="n">pygame</span><span class="o">.</span><span class="n">DOUBLEBUF</span>     <span class="p">(</span><span class="n">obsolete</span> <span class="ow">in</span> <span class="n">pygame</span> <span class="mi">2</span><span class="p">)</span> <span class="n">recommended</span> <span class="k">for</span> <span class="n">HWSURFACE</span> <span class="ow">or</span> <span class="n">OPENGL</span>
+<span class="n">pygame</span><span class="o">.</span><span class="n">DOUBLEBUF</span>     <span class="n">only</span> <span class="n">applicable</span> <span class="k">with</span> <span class="n">OPENGL</span>
 <span class="n">pygame</span><span class="o">.</span><span class="n">HWSURFACE</span>     <span class="p">(</span><span class="n">obsolete</span> <span class="ow">in</span> <span class="n">pygame</span> <span class="mi">2</span><span class="p">)</span> <span class="n">hardware</span> <span class="n">accelerated</span><span class="p">,</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">FULLSCREEN</span>
 <span class="n">pygame</span><span class="o">.</span><span class="n">OPENGL</span>        <span class="n">create</span> <span class="n">an</span> <span class="n">OpenGL</span><span class="o">-</span><span class="n">renderable</span> <span class="n">display</span>
 <span class="n">pygame</span><span class="o">.</span><span class="n">RESIZABLE</span>     <span class="n">display</span> <span class="n">window</span> <span class="n">should</span> <span class="n">be</span> <span class="n">sizeable</span>
@@ -425,6 +420,11 @@ environment variable.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in pygame 1.9.5: </span><code class="docutils literal notranslate"><span class="pre">display</span></code> argument added</p>
 </div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in pygame 2.1.3: </span>pygame now ensures that subsequent calls to this function clears the
+window to black. On older versions, this was an implementation detail
+on the major platforms this function was tested with.</p>
+</div>
 </dd></dl>
 
 <dl class="py function definition">
@@ -461,7 +461,7 @@ swap.</p>
 <div class="line"><span class="signature">update(rectangle_list) -&gt; None</span></div>
 </div>
 <p>This function is like an optimized version of <code class="docutils literal notranslate"><span class="pre">pygame.display.flip()</span></code> for
-software displays. It allows only a portion of the screen to updated,
+software displays. It allows only a portion of the screen to be updated,
 instead of the entire area. If no argument is passed it updates the entire
 Surface area like <code class="docutils literal notranslate"><span class="pre">pygame.display.flip()</span></code>.</p>
 <p>Note that calling <code class="docutils literal notranslate"><span class="pre">display.update(None)</span></code> means no part of the window is
@@ -549,7 +549,7 @@ key with the value set to the system id for the current display.</p>
 <div class="line"><span class="summaryline">Get sizes of active desktops</span></div>
 <div class="line"><span class="signature">get_desktop_sizes() -&gt; list</span></div>
 </div>
-<p>This function returns the sizes of the currrently configured
+<p>This function returns the sizes of the currently configured
 virtual desktops as a list of (x, y) tuples of integers.</p>
 <p>The length of the list is not the same as the number of attached monitors,
 as a desktop can be mirrored across multiple monitors. The desktop sizes
@@ -745,7 +745,7 @@ systems and displays support an iconified display. The function will return
 True if successful.</p>
 <p>When the display is iconified <code class="docutils literal notranslate"><span class="pre">pygame.display.get_active()</span></code> will return
 <code class="docutils literal notranslate"><span class="pre">False</span></code>. The event queue should receive an <code class="docutils literal notranslate"><span class="pre">ACTIVEEVENT</span></code> event when the
-window has been iconified. Additionally, the event queue also recieves a
+window has been iconified. Additionally, the event queue also receives a
 <code class="docutils literal notranslate"><span class="pre">WINDOWEVENT_MINIMIZED</span></code> event when the window has been iconified on pygame 2.</p>
 </dd></dl>
 
@@ -791,12 +791,16 @@ See <a class="reference external" href="https://github.com/pygame/pygame/issues/
 <div class="line"><span class="summaryline">Change the hardware gamma ramps</span></div>
 <div class="line"><span class="signature">set_gamma(red, green=None, blue=None) -&gt; bool</span></div>
 </div>
+<p>DEPRECATED: This functionality will go away in SDL3.</p>
 <p>Set the red, green, and blue gamma values on the display hardware. If the
 green and blue arguments are not passed, they will both be the same as red.
 Not all systems and hardware support gamma ramps, if the function succeeds
 it will return <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <p>A gamma value of <code class="docutils literal notranslate"><span class="pre">1.0</span></code> creates a linear color table. Lower values will
 darken the display and higher values will brighten.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since pygame 2.2.0.</span></p>
+</div>
 </dd></dl>
 
 <dl class="py function definition">
@@ -806,10 +810,14 @@ darken the display and higher values will brighten.</p>
 <div class="line"><span class="summaryline">Change the hardware gamma ramps with a custom lookup</span></div>
 <div class="line"><span class="signature">set_gamma_ramp(red, green, blue) -&gt; bool</span></div>
 </div>
+<p>DEPRECATED: This functionality will go away in SDL3.</p>
 <p>Set the red, green, and blue gamma ramps with an explicit lookup table. Each
 argument should be sequence of 256 integers. The integers should range
 between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">0xffff</span></code>. Not all systems and hardware support gamma
 ramps, if the function succeeds it will return <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since pygame 2.2.0.</span></p>
+</div>
 </dd></dl>
 
 <dl class="py function definition">
@@ -977,14 +985,14 @@ SDL1.2 does not implement this.</p>
         <li class="right" >
           <a href="cursors.html" title="pygame.cursors"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.display</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

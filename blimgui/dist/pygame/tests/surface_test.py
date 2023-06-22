@@ -3,7 +3,6 @@ import unittest
 from pygame.tests import test_utils
 from pygame.tests.test_utils import (
     example_path,
-    AssertRaisesRegexMixin,
     SurfaceSubclass,
 )
 
@@ -23,7 +22,7 @@ import ctypes
 IS_PYPY = "PyPy" == platform.python_implementation()
 
 
-class SurfaceTypeTest(AssertRaisesRegexMixin, unittest.TestCase):
+class SurfaceTypeTest(unittest.TestCase):
     def test_surface__pixel_format_as_surface_subclass(self):
         """Ensure a subclassed surface can be used for pixel format
         when creating a new surface."""
@@ -40,6 +39,15 @@ class SurfaceTypeTest(AssertRaisesRegexMixin, unittest.TestCase):
         self.assertEqual(surface.get_size(), expected_size)
         self.assertEqual(surface.get_flags(), expected_flags)
         self.assertEqual(surface.get_bitsize(), expected_depth)
+
+    def test_surface_created_opaque_black(self):
+        surf = pygame.Surface((20, 20))
+        self.assertEqual(surf.get_at((0, 0)), (0, 0, 0, 255))
+
+        # See https://github.com/pygame/pygame/issues/1395
+        pygame.display.set_mode((500, 500))
+        surf = pygame.Surface((20, 20))
+        self.assertEqual(surf.get_at((0, 0)), (0, 0, 0, 255))
 
     def test_set_clip(self):
         """see if surface.set_clip(None) works correctly."""
@@ -71,7 +79,6 @@ class SurfaceTypeTest(AssertRaisesRegexMixin, unittest.TestCase):
         self.assertEqual(surf_16.get_bytesize(), 2)
 
     def test_set_at(self):
-
         # 24bit surfaces
         s = pygame.Surface((100, 100), 0, 24)
         s.fill((0, 0, 0))
@@ -125,7 +132,7 @@ class SurfaceTypeTest(AssertRaisesRegexMixin, unittest.TestCase):
             self.assertEqual(surf2.get_flags() & SRCALPHA, SRCALPHA)
 
     def test_flags_default0_nodisplay(self):
-        """is set to zero, and SRCALPH is not set by default with no display initialized."""
+        """is set to zero, and SRCALPHA is not set by default with no display initialized."""
         pygame.display.quit()
         surf = pygame.Surface((70, 70))
         self.assertEqual(surf.get_flags() & SRCALPHA, 0)
@@ -401,7 +408,6 @@ class SurfaceTypeTest(AssertRaisesRegexMixin, unittest.TestCase):
             pygame.display.quit()
 
     def test_fill_negative_coordinates(self):
-
         # negative coordinates should be clipped by fill, and not draw outside the surface.
         color = (25, 25, 25, 25)
         color2 = (20, 20, 20, 25)
@@ -732,7 +738,7 @@ class SurfaceTypeTest(AssertRaisesRegexMixin, unittest.TestCase):
 
             self.assertIsInstance(v, BufferProxy)
             self.assertEqual(v.length, length)
-            self.assertEqual(repr(v), "<BufferProxy(" + str(length) + ")>")
+            self.assertEqual(repr(v), f"<BufferProxy({length})>")
 
         # Check for a subsurface (not contiguous)
         s = pygame.Surface((7, 10), 0, 32)
@@ -780,7 +786,6 @@ class SurfaceTypeTest(AssertRaisesRegexMixin, unittest.TestCase):
         self.assertEqual(seglen, s.get_bytesize())
 
     def test_set_colorkey(self):
-
         # __doc__ (as of 2008-06-25) for pygame.surface.Surface.set_colorkey:
 
         # Surface.set_colorkey(Color, flags=0): return None
@@ -902,7 +907,7 @@ class TestSurfaceBlit(unittest.TestCase):
             self.assertEqual(self.dst_surface.get_at(k), (255, 255, 255))
 
     def test_blit_overflow_nonorigin(self):
-        """Test Rectange Dest, with overflow but with starting rect with top-left at (1,1)"""
+        """Test Rectangle Dest, with overflow but with starting rect with top-left at (1,1)"""
         result = self.dst_surface.blit(self.src_surface, dest=pygame.Rect((1, 1, 1, 1)))
         self.assertIsInstance(result, pygame.Rect)
         self.assertEqual(result.size, (63, 63))
@@ -1056,14 +1061,14 @@ class TestSurfaceBlit(unittest.TestCase):
         target.blit(source, (0, 0))
 
 
-class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
+class GeneralSurfaceTests(unittest.TestCase):
     @unittest.skipIf(
         os.environ.get("SDL_VIDEODRIVER") == "dummy",
         'requires a non-"dummy" SDL_VIDEODRIVER',
     )
     def test_image_convert_bug_131(self):
-        # Bitbucket bug #131: Unable to Surface.convert(32) some 1-bit images.
-        # https://bitbucket.org/pygame/pygame/issue/131/unable-to-surfaceconvert-32-some-1-bit
+        # bug #131: Unable to Surface.convert(32) some 1-bit images.
+        # https://github.com/pygame/pygame/issues/131
 
         pygame.display.init()
         try:
@@ -1577,12 +1582,14 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
                         src_surf, (0, 0), special_flags=pygame.BLEND_ALPHA_SDL2
                     )
                     key = ((dst_r, dst_b, dst_a), (src_r, src_b, src_a))
-                    results[key] = dest_surf.get_at((65, 33))
-                    self.assertEqual(results[key], results_expected[key])
+                    results[key] = tuple(dest_surf.get_at((65, 33)))
+                    for i in range(4):
+                        self.assertAlmostEqual(
+                            results[key][i], results_expected[key][i], delta=4
+                        )
 
         # print("(dest_r, dest_b, dest_a), (src_r, src_b, src_a): color")
         # pprint(results)
-        self.assertEqual(results, results_expected)
 
     def test_opaque_destination_blit_with_set_alpha(self):
         # no set_alpha()
@@ -1604,31 +1611,32 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
         self.assertEqual(no_surf_alpha_col, surf_alpha_col)
 
     def todo_test_convert(self):
-
-        # __doc__ (as of 2008-08-02) for pygame.surface.Surface.convert:
-
-        # Surface.convert(Surface): return Surface
-        # Surface.convert(depth, flags=0): return Surface
-        # Surface.convert(masks, flags=0): return Surface
-        # Surface.convert(): return Surface
-        # change the pixel format of an image
-        #
-        # Creates a new copy of the Surface with the pixel format changed. The
-        # new pixel format can be determined from another existing Surface.
-        # Otherwise depth, flags, and masks arguments can be used, similar to
-        # the pygame.Surface() call.
-        #
-        # If no arguments are passed the new Surface will have the same pixel
-        # format as the display Surface. This is always the fastest format for
-        # blitting. It is a good idea to convert all Surfaces before they are
-        # blitted many times.
-        #
-        # The converted Surface will have no pixel alphas. They will be
-        # stripped if the original had them. See Surface.convert_alpha() for
-        # preserving or creating per-pixel alphas.
-        #
-
         self.fail()
+
+    # Below should not use a display Surface, but create one and check it is converted
+    # to the depth of the display surface.
+
+    # def test_convert(self):
+    #     """Ensure to creates a new copy of the Surface with the pixel format changed"""
+    #     width = 23
+    #     height = 17
+    #     size = (width, height)
+    #     flags = 0
+    #     depth = 32
+    #     pygame.display.init()
+
+    #     try:
+    #         convert_surface = pygame.display.set_mode(size)
+    #         surface = pygame.surface.Surface.convert(convert_surface)
+    #         self.assertIsNot(surface, convert_surface)
+    #         self.assertNotEqual(surface.get_size(), size)
+
+    #         depth_surface = pygame.display.set_mode(size, flags, depth)
+    #         surface2 = pygame.surface.Surface.convert(depth_surface)
+    #         self.assertIsNot(surface2, depth_surface)
+    #         self.assertEqual(surface2.get_size(), size)
+    #     finally:
+    #         pygame.display.quit()
 
     def test_convert__pixel_format_as_surface_subclass(self):
         """Ensure convert accepts a Surface subclass argument."""
@@ -1961,7 +1969,6 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
         self.assertIs(surf.get_locked(), blit_locked_test(surf))  # Unlocked
 
     def test_get_locks(self):
-
         # __doc__ (as of 2008-08-02) for pygame.surface.Surface.get_locks:
 
         # Surface.get_locks(): return tuple
@@ -2013,7 +2020,7 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
             mask8 = (224, 28, 3, 0)
             mask15 = (31744, 992, 31, 0)
             mask16 = (63488, 2016, 31, 0)
-            mask24 = (4278190080, 16711680, 65280, 0)
+            mask24 = (16711680, 65280, 255, 0)
             mask32 = (4278190080, 16711680, 65280, 255)
 
             # Surfaces with standard depths and masks
@@ -2117,38 +2124,27 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
             pygame.display.quit()
 
     def test_get_palette(self):
-        pygame.display.init()
-        try:
-            palette = [Color(i, i, i) for i in range(256)]
-            pygame.display.set_mode((100, 50))
-            surf = pygame.Surface((2, 2), 0, 8)
-            surf.set_palette(palette)
-            palette2 = surf.get_palette()
-            r, g, b = palette2[0]
+        palette = [Color(i, i, i) for i in range(256)]
+        surf = pygame.Surface((2, 2), 0, 8)
+        surf.set_palette(palette)
+        palette2 = surf.get_palette()
 
-            self.assertEqual(len(palette2), len(palette))
-            for c2, c in zip(palette2, palette):
-                self.assertEqual(c2, c)
-            for c in palette2:
-                self.assertIsInstance(c, pygame.Color)
-        finally:
-            pygame.display.quit()
+        self.assertEqual(len(palette2), len(palette))
+        for c2, c in zip(palette2, palette):
+            self.assertEqual(c2, c)
+        for c in palette2:
+            self.assertIsInstance(c, pygame.Color)
 
     def test_get_palette_at(self):
         # See also test_get_palette
-        pygame.display.init()
-        try:
-            pygame.display.set_mode((100, 50))
-            surf = pygame.Surface((2, 2), 0, 8)
-            color = pygame.Color(1, 2, 3, 255)
-            surf.set_palette_at(0, color)
-            color2 = surf.get_palette_at(0)
-            self.assertIsInstance(color2, pygame.Color)
-            self.assertEqual(color2, color)
-            self.assertRaises(IndexError, surf.get_palette_at, -1)
-            self.assertRaises(IndexError, surf.get_palette_at, 256)
-        finally:
-            pygame.display.quit()
+        surf = pygame.Surface((2, 2), 0, 8)
+        color = pygame.Color(1, 2, 3, 255)
+        surf.set_palette_at(0, color)
+        color2 = surf.get_palette_at(0)
+        self.assertIsInstance(color2, pygame.Color)
+        self.assertEqual(color2, color)
+        self.assertRaises(IndexError, surf.get_palette_at, -1)
+        self.assertRaises(IndexError, surf.get_palette_at, 256)
 
     def test_get_pitch(self):
         # Test get_pitch() on several surfaces of varying size/depth
@@ -2209,7 +2205,6 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
             self.assertEqual((width, height), found_size)
 
     def test_lock(self):
-
         # __doc__ (as of 2008-08-02) for pygame.surface.Surface.lock:
 
         # Surface.lock(): return None
@@ -2349,59 +2344,58 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
         palette[11] = tuple(palette[11])[0:3]  # 3 element tuple
 
         surf = pygame.Surface((2, 2), 0, 8)
-        pygame.display.init()
-        try:
-            pygame.display.set_mode((100, 50))
-            surf.set_palette(palette)
-            for i in range(256):
-                self.assertEqual(surf.map_rgb(palette[i]), i, "palette color %i" % (i,))
-                c = palette[i]
-                surf.fill(c)
-                self.assertEqual(surf.get_at((0, 0)), c, "palette color %i" % (i,))
-            for i in range(10):
-                palette[i] = pygame.Color(255 - i, 0, 0)
-            surf.set_palette(palette[0:10])
-            for i in range(256):
-                self.assertEqual(surf.map_rgb(palette[i]), i, "palette color %i" % (i,))
-                c = palette[i]
-                surf.fill(c)
-                self.assertEqual(surf.get_at((0, 0)), c, "palette color %i" % (i,))
-            self.assertRaises(ValueError, surf.set_palette, [Color(1, 2, 3, 254)])
-            self.assertRaises(ValueError, surf.set_palette, (1, 2, 3, 254))
-        finally:
-            pygame.display.quit()
+        surf.set_palette(palette)
+        for i in range(256):
+            self.assertEqual(surf.map_rgb(palette[i]), i, "palette color %i" % (i,))
+            c = palette[i]
+            surf.fill(c)
+            self.assertEqual(surf.get_at((0, 0)), c, "palette color %i" % (i,))
+        for i in range(10):
+            palette[i] = pygame.Color(255 - i, 0, 0)
+        surf.set_palette(palette[0:10])
+        for i in range(256):
+            self.assertEqual(surf.map_rgb(palette[i]), i, "palette color %i" % (i,))
+            c = palette[i]
+            surf.fill(c)
+            self.assertEqual(surf.get_at((0, 0)), c, "palette color %i" % (i,))
+        self.assertRaises(ValueError, surf.set_palette, [Color(1, 2, 3, 254)])
+        self.assertRaises(ValueError, surf.set_palette, (1, 2, 3, 254))
 
     def test_set_palette__fail(self):
-        pygame.init()
         palette = 256 * [(10, 20, 30)]
         surf = pygame.Surface((2, 2), 0, 32)
         self.assertRaises(pygame.error, surf.set_palette, palette)
-        pygame.quit()
+
+    def test_set_palette__set_at(self):
+        surf = pygame.Surface((2, 2), depth=8)
+        palette = 256 * [(10, 20, 30)]
+        palette[1] = (50, 40, 30)
+        surf.set_palette(palette)
+
+        # calling set_at on a palettized surface should set the pixel to
+        # the closest color in the palette.
+        surf.set_at((0, 0), (60, 50, 40))
+        self.assertEqual(surf.get_at((0, 0)), (50, 40, 30, 255))
+        self.assertEqual(surf.get_at((1, 0)), (10, 20, 30, 255))
 
     def test_set_palette_at(self):
-        pygame.display.init()
-        try:
-            pygame.display.set_mode((100, 50))
-            surf = pygame.Surface((2, 2), 0, 8)
-            original = surf.get_palette_at(10)
-            replacement = Color(1, 1, 1, 255)
-            if replacement == original:
-                replacement = Color(2, 2, 2, 255)
-            surf.set_palette_at(10, replacement)
-            self.assertEqual(surf.get_palette_at(10), replacement)
-            next = tuple(original)
-            surf.set_palette_at(10, next)
-            self.assertEqual(surf.get_palette_at(10), next)
-            next = tuple(original)[0:3]
-            surf.set_palette_at(10, next)
-            self.assertEqual(surf.get_palette_at(10), next)
-            self.assertRaises(IndexError, surf.set_palette_at, 256, replacement)
-            self.assertRaises(IndexError, surf.set_palette_at, -1, replacement)
-        finally:
-            pygame.display.quit()
+        surf = pygame.Surface((2, 2), 0, 8)
+        original = surf.get_palette_at(10)
+        replacement = Color(1, 1, 1, 255)
+        if replacement == original:
+            replacement = Color(2, 2, 2, 255)
+        surf.set_palette_at(10, replacement)
+        self.assertEqual(surf.get_palette_at(10), replacement)
+        next = tuple(original)
+        surf.set_palette_at(10, next)
+        self.assertEqual(surf.get_palette_at(10), next)
+        next = tuple(original)[0:3]
+        surf.set_palette_at(10, next)
+        self.assertEqual(surf.get_palette_at(10), next)
+        self.assertRaises(IndexError, surf.set_palette_at, 256, replacement)
+        self.assertRaises(IndexError, surf.set_palette_at, -1, replacement)
 
     def test_subsurface(self):
-
         # __doc__ (as of 2008-08-02) for pygame.surface.Surface.subsurface:
 
         # Surface.subsurface(Rect): return Surface
@@ -2437,7 +2431,7 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
         self.assertEqual(s.get_masks(), surf.get_masks())
         self.assertEqual(s.get_losses(), surf.get_losses())
 
-        # Issue 2 at Bitbucket.org/pygame/pygame
+        # Issue https://github.com/pygame/pygame/issues/2
         surf = pygame.Surface.__new__(pygame.Surface)
         self.assertRaises(pygame.error, surf.subsurface, (0, 0, 0, 0))
 
@@ -2478,16 +2472,11 @@ class GeneralSurfaceTests(AssertRaisesRegexMixin, unittest.TestCase):
         surf = pygame.Surface((2, 2), 0, 8)
         c = (1, 1, 1)  # Unlikely to be in a default palette.
         i = 67
-        pygame.display.init()
-        try:
-            pygame.display.set_mode((100, 50))
-            surf.set_palette_at(i, c)
-            unmapped_c = surf.unmap_rgb(i)
-            self.assertEqual(unmapped_c, c)
-            # Confirm it is a Color instance
-            self.assertIsInstance(unmapped_c, pygame.Color)
-        finally:
-            pygame.display.quit()
+        surf.set_palette_at(i, c)
+        unmapped_c = surf.unmap_rgb(i)
+        self.assertEqual(unmapped_c, c)
+        # Confirm it is a Color instance
+        self.assertIsInstance(unmapped_c, pygame.Color)
 
         # Remaining, non-pallete, cases.
         c = (128, 64, 12, 255)
@@ -3228,7 +3217,7 @@ class SurfaceBlendTest(unittest.TestCase):
         blend = [
             ("BLEND_ADD", (0, 25, 100, 255), lambda a, b: min(a + b, 255)),
             ("BLEND_SUB", (100, 25, 0, 100), lambda a, b: max(a - b, 0)),
-            ("BLEND_MULT", (100, 200, 0, 0), lambda a, b: (a * b) // 256),
+            ("BLEND_MULT", (100, 200, 0, 0), lambda a, b: ((a * b) + 255) >> 8),
             ("BLEND_MIN", (255, 0, 0, 255), min),
             ("BLEND_MAX", (0, 255, 0, 255), max),
         ]
@@ -3272,7 +3261,7 @@ class SurfaceBlendTest(unittest.TestCase):
                 p.append(tuple(c))
             dst.fill(dst_color)
             dst.blit(src, (0, 0), special_flags=getattr(pygame, blend_name))
-            self._assert_surface(dst, p, ", %s" % blend_name)
+            self._assert_surface(dst, p, f", {blend_name}")
 
         # Blend blits are special cased for 32 to 32 bit surfaces.
         #
@@ -3295,7 +3284,7 @@ class SurfaceBlendTest(unittest.TestCase):
                 p.append(tuple(c))
             dst.fill(dst_color)
             dst.blit(src, (0, 0), special_flags=getattr(pygame, blend_name))
-            self._assert_surface(dst, p, ", %s" % blend_name)
+            self._assert_surface(dst, p, f", {blend_name}")
 
     def test_blit_blend_rgba(self):
         sources = [
@@ -3317,7 +3306,7 @@ class SurfaceBlendTest(unittest.TestCase):
         blend = [
             ("BLEND_RGBA_ADD", (0, 25, 100, 255), lambda a, b: min(a + b, 255)),
             ("BLEND_RGBA_SUB", (0, 25, 100, 255), lambda a, b: max(a - b, 0)),
-            ("BLEND_RGBA_MULT", (0, 7, 100, 255), lambda a, b: (a * b) // 256),
+            ("BLEND_RGBA_MULT", (0, 7, 100, 255), lambda a, b: ((a * b) + 255) >> 8),
             ("BLEND_RGBA_MIN", (0, 255, 0, 255), min),
             ("BLEND_RGBA_MAX", (0, 255, 0, 255), max),
         ]
@@ -3357,12 +3346,12 @@ class SurfaceBlendTest(unittest.TestCase):
         )
         for blend_name, dst_color, op in blend:
             p = [
-                tuple([op(dst_color[i], src_color[i]) for i in range(4)])
+                tuple(op(dst_color[i], src_color[i]) for i in range(4))
                 for src_color in self._test_palette
             ]
             dst.fill(dst_color)
             dst.blit(src, (0, 0), special_flags=getattr(pygame, blend_name))
-            self._assert_surface(dst, p, ", %s" % blend_name)
+            self._assert_surface(dst, p, f", {blend_name}")
 
         # Confirm this special case handles subsurfaces.
         src = pygame.Surface((8, 10), SRCALPHA, 32)
@@ -3717,7 +3706,7 @@ class SurfaceBlendTest(unittest.TestCase):
         blend = [
             ("BLEND_ADD", (0, 25, 100, 255), lambda a, b: min(a + b, 255)),
             ("BLEND_SUB", (0, 25, 100, 255), lambda a, b: max(a - b, 0)),
-            ("BLEND_MULT", (0, 7, 100, 255), lambda a, b: (a * b) // 256),
+            ("BLEND_MULT", (0, 7, 100, 255), lambda a, b: ((a * b) + 255) >> 8),
             ("BLEND_MIN", (0, 255, 0, 255), min),
             ("BLEND_MAX", (0, 255, 0, 255), max),
         ]
@@ -3737,7 +3726,7 @@ class SurfaceBlendTest(unittest.TestCase):
                     c = dst.unmap_rgb(dst.map_rgb(c))
                     p.append(c)
                 dst.fill(fill_color, special_flags=getattr(pygame, blend_name))
-                self._assert_surface(dst, p, ", %s" % blend_name)
+                self._assert_surface(dst, p, f", {blend_name}")
 
     def test_fill_blend_rgba(self):
         destinations = [
@@ -3751,7 +3740,7 @@ class SurfaceBlendTest(unittest.TestCase):
         blend = [
             ("BLEND_RGBA_ADD", (0, 25, 100, 255), lambda a, b: min(a + b, 255)),
             ("BLEND_RGBA_SUB", (0, 25, 100, 255), lambda a, b: max(a - b, 0)),
-            ("BLEND_RGBA_MULT", (0, 7, 100, 255), lambda a, b: (a * b) // 256),
+            ("BLEND_RGBA_MULT", (0, 7, 100, 255), lambda a, b: ((a * b) + 255) >> 8),
             ("BLEND_RGBA_MIN", (0, 255, 0, 255), min),
             ("BLEND_RGBA_MAX", (0, 255, 0, 255), max),
         ]
@@ -3769,13 +3758,81 @@ class SurfaceBlendTest(unittest.TestCase):
                     c = dst.unmap_rgb(dst.map_rgb(c))
                     p.append(c)
                 dst.fill(fill_color, special_flags=getattr(pygame, blend_name))
-                self._assert_surface(dst, p, ", %s" % blend_name)
+                self._assert_surface(dst, p, f", {blend_name}")
+
+    def test_surface_premul_alpha(self):
+        """Ensure that .premul_alpha() works correctly"""
+
+        # basic functionality at valid bit depths - 32, 16 & 8
+        s1 = pygame.Surface((100, 100), pygame.SRCALPHA, 32)
+        s1.fill(pygame.Color(255, 255, 255, 100))
+        s1_alpha = s1.premul_alpha()
+        self.assertEqual(s1_alpha.get_at((50, 50)), pygame.Color(100, 100, 100, 100))
+
+        # 16 bit colour has less precision
+        s2 = pygame.Surface((100, 100), pygame.SRCALPHA, 16)
+        s2.fill(
+            pygame.Color(
+                int(15 / 15 * 255),
+                int(15 / 15 * 255),
+                int(15 / 15 * 255),
+                int(10 / 15 * 255),
+            )
+        )
+        s2_alpha = s2.premul_alpha()
+        self.assertEqual(
+            s2_alpha.get_at((50, 50)),
+            pygame.Color(
+                int(10 / 15 * 255),
+                int(10 / 15 * 255),
+                int(10 / 15 * 255),
+                int(10 / 15 * 255),
+            ),
+        )
+
+        # invalid surface - we need alpha to pre-multiply
+        invalid_surf = pygame.Surface((100, 100), 0, 32)
+        invalid_surf.fill(pygame.Color(255, 255, 255, 100))
+        with self.assertRaises(ValueError):
+            invalid_surf.premul_alpha()
+
+        # churn a bunch of values
+        test_colors = [
+            (200, 30, 74),
+            (76, 83, 24),
+            (184, 21, 6),
+            (74, 4, 74),
+            (76, 83, 24),
+            (184, 21, 234),
+            (160, 30, 74),
+            (96, 147, 204),
+            (198, 201, 60),
+            (132, 89, 74),
+            (245, 9, 224),
+            (184, 112, 6),
+        ]
+
+        for r, g, b in test_colors:
+            for a in range(255):
+                with self.subTest(r=r, g=g, b=b, a=a):
+                    surf = pygame.Surface((10, 10), pygame.SRCALPHA, 32)
+                    surf.fill(pygame.Color(r, g, b, a))
+                    surf = surf.premul_alpha()
+                    self.assertEqual(
+                        surf.get_at((5, 5)),
+                        Color(
+                            ((r + 1) * a) >> 8,
+                            ((g + 1) * a) >> 8,
+                            ((b + 1) * a) >> 8,
+                            a,
+                        ),
+                    )
 
 
 class SurfaceSelfBlitTest(unittest.TestCase):
     """Blit to self tests.
 
-    This test case is in response to MotherHamster Bugzilla Bug 19.
+    This test case is in response to https://github.com/pygame/pygame/issues/19
     """
 
     def setUp(self):
@@ -3856,7 +3913,7 @@ class SurfaceSelfBlitTest(unittest.TestCase):
     @unittest.skipIf("ppc64le" in platform.uname(), "known ppc64le issue")
     def test_colorkey(self):
         # Check a workaround for an SDL 1.2.13 surface self-blit problem
-        # (MotherHamster Bugzilla bug 19).
+        # https://github.com/pygame/pygame/issues/19
         pygame.display.set_mode((100, 50))  # Needed for 8bit surface
         bitsizes = [8, 16, 24, 32]
         for bitsize in bitsizes:
@@ -3879,7 +3936,7 @@ class SurfaceSelfBlitTest(unittest.TestCase):
     @unittest.skipIf("ppc64le" in platform.uname(), "known ppc64le issue")
     def test_blanket_alpha(self):
         # Check a workaround for an SDL 1.2.13 surface self-blit problem
-        # (MotherHamster Bugzilla bug 19).
+        # https://github.com/pygame/pygame/issues/19
         pygame.display.set_mode((100, 50))  # Needed for 8bit surface
         bitsizes = [8, 16, 24, 32]
         for bitsize in bitsizes:
@@ -3949,7 +4006,7 @@ class SurfaceSelfBlitTest(unittest.TestCase):
         self._assert_same(surf, comp)
 
         # Blitting a subsurface to its owner is forbidden because of
-        # lock conficts. This limitation allows the overlap check
+        # lock conflicts. This limitation allows the overlap check
         # in PySurface_Blit of alphablit.c to be simplified.
         def do_blit(d, s):
             d.blit(s, (0, 0))

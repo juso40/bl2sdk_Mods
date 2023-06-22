@@ -282,10 +282,10 @@
    .. method:: close
 
       | :sl:`Closes the PixelArray, and releases Surface lock.`
-      | :sg:`transpose() -> PixelArray`
+      | :sg:`close() -> PixelArray`
 
       This method is for explicitly closing the PixelArray, and releasing
-      a lock on the Suface.
+      a lock on the Surface.
 
       .. versionadded:: 1.9.4
 

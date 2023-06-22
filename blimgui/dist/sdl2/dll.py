@@ -5,16 +5,10 @@ import warnings
 from platform import machine as cpu_arch
 from ctypes import CDLL, POINTER, Structure, c_uint8, cast, addressof
 from ctypes.util import find_library
+from ._internal import AttributeDict, prettywarn, get_pointer
 
-# Prints warning without stack or line info
-def prettywarn(msg, warntype):
-    """Prints a suppressable warning without stack or line info."""
-    original = warnings.formatwarning
-    def _pretty_fmt(message, category, filename, lineno, line=None):
-        return "{0}: {1}\n".format(category.__name__, message)
-    warnings.formatwarning = _pretty_fmt
-    warnings.warn(msg, warntype)
-    warnings.formatwarning = original
+__all__ = ["DLL", "nullfunc"]
+
 
 # Use DLLs from pysdl2-dll, if installed and DLL path not explicitly set
 try:
@@ -23,35 +17,84 @@ try:
     postpath = os.getenv('PYSDL2_DLL_PATH')
     if prepath != postpath:
         msg = "Using SDL2 binaries from pysdl2-dll {0}"
-        prettywarn(msg.format(sdl2dll.__version__), UserWarning)
+        vstr = sdl2dll.__version__
+        prettywarn(msg.format(vstr), UserWarning)
+        # Warn if on Apple Silicon and pysdl2-dll isn't fully native
+        vernum = tuple([int(i) for i in vstr.split(".")[:3]])
+        need_update = vernum <= (2, 0, 22) and "post" not in vstr
+        if sys.platform == "darwin" and cpu_arch() == "arm64" and need_update:
+            msg = "The installed version of pysdl2-dll does not fully support\n"
+            msg += "Apple Silicon. Please update to the latest version for "
+            msg += "full compatibility."
+            prettywarn(msg.format(sdl2dll.__version__), UserWarning)
+
 except ImportError:
     pass
 
-__all__ = ["DLL", "nullfunc"]
+
+# Wrapper functions for handling calls to missing or unsupported functions
+
+def nullfunc(*args):
+    """A simple no-op function to be used as dll replacement."""
+    return
+
+def _unavailable(err):
+    """A wrapper that raises a RuntimeError if a function is not supported."""
+    def wrapper(*fargs, **kw):
+        raise RuntimeError(err)
+    return wrapper
+
+def _nonexistent(funcname, func):
+    """A simple wrapper to mark functions and methods as nonexistent."""
+    def wrapper(*fargs, **kw):
+        warnings.warn("%s does not exist" % funcname,
+                      category=RuntimeWarning, stacklevel=2)
+        return func(*fargs, **kw)
+    wrapper.__name__ = func.__name__
+    return wrapper
 
 
-# Gets a usable pointer from an SDL2 ctypes object
-def get_pointer(ctypes_obj):
-    pointer_type = POINTER(type(ctypes_obj))
-    return cast(addressof(ctypes_obj), pointer_type)
+# Functions and structures for working with library version numbers
 
-
-# For determining DLL version on load
 class SDL_version(Structure):
-    _fields_ = [("major", c_uint8),
-                ("minor", c_uint8),
-                ("patch", c_uint8),
-                ]
+    # NOTE: defined here so library versions can be detected on load
+    _fields_ = [
+        ("major", c_uint8),
+        ("minor", c_uint8),
+        ("patch", c_uint8),
+    ]
+
+def _version_tuple_to_int(v):
+    # Convert a tuple to an integer (e.g. (2,0,18) to 2018, (2,24,1) to 2241)
+    if v[1] > 99:
+        # Cap the minor version at 99 to avoid ambiguity: in practice
+        # the version number is unlikely to reach 2.99.z.
+        return v[0] * 1000 + 999
+    elif v[1] > 0:
+        # For SDL2 >= 2.23.0 (new version scheme): 2.23.0 -> 2230
+        # Note that this is not the same encoding as SDL_VERSIONNUM.
+        # Cap the micro version at 9 to avoid ambiguity: we're unlikely
+        # to need to distinguish between 2.y.9 and 2.y.10, since those
+        # would be patch/bugfix releases from the same branch anyway.
+        return v[0] * 1000 + v[1] * 10 + min(v[2], 9)
+    else:
+        # For SDL2 <= 2.0.22 (old version scheme): 2.0.22 -> 2022
+        # This is the same encoding as SDL_VERSIONNUM.
+        return v[0] * 1000 + v[1] * 100 + v[2]
+
+def _version_tuple_to_str(v):
+    return ".".join(map(str, v))
+
+def _version_str_to_tuple(s):
+    return tuple(map(int, s.split('.')))
+
+def _so_version_num(libname):
+    """Extracts the version number from an .so filename as a list of ints."""
+    return list(map(int, libname.split('.so.')[1].split('.')))
 
 
-# Defines an internal container class for SDL function definitions
-class SDLFunc(object):
-    def __init__(self, name, args=None, returns=None, added=None):
-        self.name = name
-        self.args = args
-        self.returns = returns
-        self.added = added
 
+# Functions for allowing Microsoft Store Python to load image/ttf/mixer
 
 def _using_ms_store_python():
     """Checks if the Python interpreter was installed from the Microsoft Store."""
@@ -95,8 +138,11 @@ def _preload_deps(libname, dllpath):
     return preloaded
 
 
-def _finds_libs_at_path(libnames, path, patterns):
+# Functions for finding SDL libraries within a set of given paths
 
+def _finds_libs_at_path(libnames, path, patterns):
+    """Find libraries matching a given name (e.g. SDL2) in a specific path.
+    """
     # Adding the potential 'd' suffix that is present on the library
     # when built in debug configuration
     searchfor = libnames + [libname + 'd' for libname in libnames]
@@ -128,9 +174,11 @@ def _finds_libs_at_path(libnames, path, patterns):
 
 
 def _findlib(libnames, path=None):
-    """Finds SDL2 libraries and returns them in a list, with libraries found in the directory
-    optionally specified by 'path' being first (taking precedence) and libraries found in system
-    search paths following.
+    """Find libraries with a given name and return their paths in a list.
+
+    If a path is specified, libraries found in that directory will take precedence,
+    with libraries found in system search paths following.
+
     """
 
     platform = sys.platform
@@ -168,6 +216,17 @@ def _findlib(libnames, path=None):
     return results
 
 
+# Classes for loading libraries and binding ctypes functions
+
+class SDLFunc(object):
+    # A container class for SDL ctypes function definitions
+    def __init__(self, name, args=None, returns=None, added=None):
+        self.name = name
+        self.args = args
+        self.returns = returns
+        self.added = added
+
+
 class DLLWarning(Warning):
     pass
 
@@ -182,11 +241,11 @@ class DLL(object):
         self._libname = libinfo
         self._version = None
         minversions = {
-            "SDL2": 2005,
-            "SDL2_mixer": 2001,
-            "SDL2_ttf": 2014,
-            "SDL2_image": 2001,
-            "SDL2_gfx": 1003
+            "SDL2": (2, 0, 5),
+            "SDL2_mixer": (2, 0, 1),
+            "SDL2_ttf": (2, 0, 14),
+            "SDL2_image": (2, 0, 1),
+            "SDL2_gfx": (1, 0, 3)
         }
         foundlibs = _findlib(libnames, path)
         dllmsg = "PYSDL2_DLL_PATH: %s" % (os.getenv("PYSDL2_DLL_PATH") or "unset")
@@ -197,10 +256,10 @@ class DLL(object):
             try:
                 self._dll = CDLL(libfile)
                 self._libfile = libfile
-                self._version = self._get_version(libinfo, self._dll)
-                if self._version < minversions[libinfo]:
-                    versionstr = self._version_int_to_str(self._version)
-                    minimumstr = self._version_int_to_str(minversions[libinfo])
+                self._version_tuple = self._get_version_tuple(libinfo, self._dll)
+                if self._version_tuple < minversions[libinfo]:
+                    versionstr = _version_tuple_to_str(self._version_tuple)
+                    minimumstr = _version_tuple_to_str(minversions[libinfo])
                     err = "{0} (v{1}) is too old to be used by py-sdl2"
                     err += " (minimum v{0})".format(minimumstr)
                     raise RuntimeError(err.format(libfile, versionstr))
@@ -210,6 +269,7 @@ class DLL(object):
                 # about something weird going on - this may become noisy, but
                 # is better than confusing the users with the RuntimeError below
                 self._dll = None
+
                 warnings.warn(repr(exc), DLLWarning)
         if self._dll is None:
             raise RuntimeError("found %s, but it's not usable for the library %s" %
@@ -236,10 +296,10 @@ class DLL(object):
                 function was added, in the format '2.x.x'.
         """
         func = getattr(self._dll, funcname, None)
-        min_version = self._version_str_to_int(added) if added else None
+        min_version = _version_str_to_tuple(added) if added else None
         if not func:
-            versionstr = self._version_int_to_str(self._version)
-            if min_version and min_version > self._version:
+            versionstr = _version_tuple_to_str(self._version_tuple)
+            if min_version and min_version > self._version_tuple:
                 e = "'{0}' requires {1} <= {2}, but the loaded version is {3}."
                 errmsg = e.format(funcname, self._libname, added, versionstr)
                 return _unavailable(errmsg)
@@ -251,16 +311,7 @@ class DLL(object):
         func.restype = returns
         return func
 
-    def _version_str_to_int(self, s):
-        v = [int(n) for n in s.split('.')]
-        return v[0] * 1000 + v[1] * 100 + v[2]
-
-    def _version_int_to_str(self, i):
-        v = str(i)
-        v = [v[0], v[1], str(int(v[2:4]))]
-        return ".".join(v)
-
-    def _get_version(self, libname, dll):
+    def _get_version_tuple(self, libname, dll):
         """Gets the version of the linked SDL library"""
         if libname == "SDL2":
             dll.SDL_GetVersion.argtypes = [POINTER(SDL_version)]
@@ -274,11 +325,12 @@ class DLL(object):
             elif libname == "SDL2_image":
                 func = dll.IMG_Linked_Version
             elif libname == "SDL2_gfx":
-                return 1004 # not supported in SDL2_gfx, so just assume latest
+                return (1, 0, 4) # not supported in SDL2_gfx, so just assume latest
             func.argtypes = None
             func.restype = POINTER(SDL_version)
             v = func().contents
-        return v.major * 1000 + v.minor * 100 + v.patch
+
+        return (v.major, v.minor, v.patch)
 
     @property
     def libfile(self):
@@ -286,37 +338,25 @@ class DLL(object):
         return self._libfile
 
     @property
+    def version_tuple(self):
+        """tuple: The version of the loaded library in the form of a
+        tuple of integers (e.g. (2, 24, 1) for SDL 2.24.1).
+        """
+        return self._version_tuple
+
+    @property
     def version(self):
         """int: The version of the loaded library in the form of a 4-digit
-        integer (e.g. '2008' for SDL 2.0.8, '2010' for SDL 2.0.10).
+        integer (e.g. '2008' for SDL 2.0.8, '2231' for SDL 2.23.1).
+
+        Note that this is not the same version encoding as SDL_VERSIONNUM,
+        and the exact encoding used is not guaranteed.
+        In new code, use version_tuple instead.
         """
-        return self._version
+        return _version_tuple_to_int(self._version_tuple)
 
 
-def _unavailable(err):
-    """A wrapper that raises a RuntimeError if a function is not supported."""
-    def wrapper(*fargs, **kw):
-        raise RuntimeError(err)
-    return wrapper
-
-def _nonexistent(funcname, func):
-    """A simple wrapper to mark functions and methods as nonexistent."""
-    def wrapper(*fargs, **kw):
-        warnings.warn("%s does not exist" % funcname,
-                      category=RuntimeWarning, stacklevel=2)
-        return func(*fargs, **kw)
-    wrapper.__name__ = func.__name__
-    return wrapper
-
-
-def _so_version_num(libname):
-    """Extracts the version number from an .so filename as a list of ints."""
-    return list(map(int, libname.split('.so.')[1].split('.')))
-
-
-def nullfunc(*args):
-    """A simple no-op function to be used as dll replacement."""
-    return
+# Once the DLL class is defined, try loading the main SDL2 library
 
 try:
     dll = DLL("SDL2", ["SDL2", "SDL2-2.0", "SDL2-2.0.0"], os.getenv("PYSDL2_DLL_PATH"))
@@ -329,3 +369,4 @@ def get_dll_file():
 
 _bind = dll.bind_function
 version = dll.version
+version_tuple = dll.version_tuple

@@ -198,9 +198,9 @@
     dB = (tmp >= 0 ? tmp : 0);
 
 #define BLEND_MULT(sR, sG, sB, sA, dR, dG, dB, dA) \
-    dR = (dR && sR) ? (dR * sR) >> 8 : 0;          \
-    dG = (dG && sG) ? (dG * sG) >> 8 : 0;          \
-    dB = (dB && sB) ? (dB * sB) >> 8 : 0;
+    dR = (dR && sR) ? ((dR * sR) + 255) >> 8 : 0;  \
+    dG = (dG && sG) ? ((dG * sG) + 255) >> 8 : 0;  \
+    dB = (dB && sB) ? ((dB * sB) + 255) >> 8 : 0;
 
 #define BLEND_MIN(sR, sG, sB, sA, dR, dG, dB, dA) \
     if (sR < dR) {                                \
@@ -245,10 +245,10 @@
     dA = (tmp >= 0 ? tmp : 0);
 
 #define BLEND_RGBA_MULT(sR, sG, sB, sA, dR, dG, dB, dA) \
-    dR = (dR && sR) ? (dR * sR) >> 8 : 0;               \
-    dG = (dG && sG) ? (dG * sG) >> 8 : 0;               \
-    dB = (dB && sB) ? (dB * sB) >> 8 : 0;               \
-    dA = (dA && sA) ? (dA * sA) >> 8 : 0;
+    dR = (dR && sR) ? ((dR * sR) + 255) >> 8 : 0;       \
+    dG = (dG && sG) ? ((dG * sG) + 255) >> 8 : 0;       \
+    dB = (dB && sB) ? ((dB * sB) + 255) >> 8 : 0;       \
+    dA = (dA && sA) ? ((dA * sA) + 255) >> 8 : 0;
 
 #define BLEND_RGBA_MIN(sR, sG, sB, sA, dR, dG, dB, dA) \
     if (sR < dR) {                                     \
@@ -351,5 +351,11 @@ pygame_AlphaBlit(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
 int
 pygame_Blit(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
             SDL_Rect *dstrect, int the_args);
+
+int
+premul_surf_color_by_alpha(SDL_Surface *src, SDL_Surface *dst);
+
+int
+pg_warn_simd_at_runtime_but_uncompiled();
 
 #endif /* SURFACE_H */

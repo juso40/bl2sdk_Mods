@@ -447,3 +447,29 @@ def build_hex_version(version_string):
         hexversion = (hexversion << 8) + digit
 
     return '0x%08X' % hexversion
+
+
+def write_depfile(target, source, dependencies):
+    src_base_dir = os.path.dirname(source)
+    cwd = os.getcwd()
+    if not src_base_dir.endswith(os.sep):
+        src_base_dir += os.sep
+    # paths below the base_dir are relative, otherwise absolute
+    paths = []
+    for fname in dependencies:
+        fname = os.path.abspath(fname)
+        if fname.startswith(src_base_dir):
+            try:
+                newpath = os.path.relpath(fname, cwd)
+            except ValueError:
+                # if they are on different Windows drives, absolute is fine
+                newpath = fname
+        else:
+            newpath = fname
+        paths.append(newpath)
+
+    depline = os.path.relpath(target, cwd) + ": \\\n  "
+    depline += " \\\n  ".join(paths) + "\n"
+
+    with open(target+'.dep', 'w') as outfile:
+        outfile.write(depline)

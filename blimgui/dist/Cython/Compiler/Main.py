@@ -514,6 +514,10 @@ def run_pipeline(source, options, full_module_name=None, context=None):
     context.setup_errors(options, result)
     err, enddata = Pipeline.run_pipeline(pipeline, source)
     context.teardown_errors(err, options, result)
+    if err is None and options.depfile:
+        from ..Build.Dependencies import create_dependency_tree
+        dependencies = create_dependency_tree(context).all_dependencies(result.main_source_file)
+        Utils.write_depfile(result.c_file, result.main_source_file, dependencies)
     return result
 
 
@@ -735,6 +739,9 @@ def compile_multiple(sources, options):
     a CompilationResultSet. Performs timestamp checking and/or recursion
     if these are specified in the options.
     """
+    if options.module_name and len(sources) > 1:
+        raise RuntimeError('Full module name can only be set '
+                           'for single source compilation')
     # run_pipeline creates the context
     # context = options.create_context()
     sources = [os.path.abspath(source) for source in sources]
@@ -753,8 +760,9 @@ def compile_multiple(sources, options):
             if (not timestamps) or out_of_date:
                 if verbose:
                     sys.stderr.write("Compiling %s\n" % source)
-
-                result = run_pipeline(source, options, context=context)
+                result = run_pipeline(source, options,
+                                      full_module_name=options.module_name,
+                                      context=context)
                 results.add(source, result)
                 # Compiling multiple sources in one context doesn't quite
                 # work properly yet.
@@ -877,6 +885,7 @@ default_options = dict(
     errors_to_stderr = 1,
     cplus = 0,
     output_file = None,
+    depfile = None,
     annotate = None,
     annotate_coverage_xml = None,
     generate_pxi = 0,
@@ -900,5 +909,6 @@ default_options = dict(
     build_dir=None,
     cache=None,
     create_extension=None,
+    module_name=None,
     np_pythran=False
 )

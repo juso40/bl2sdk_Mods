@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>User-controllable objects &#8212; pygame v2.1.2 documentation</title>
+    <title>User-controllable objects &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,25 +98,25 @@
             
 <section id="user-controllable-objects">
 <section id="makegames-5">
-<span id="id1"></span><h2>5. User-controllable objects<a class="headerlink" href="#makegames-5" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>5. User-controllable objects<a class="headerlink" href="#makegames-5" title="Permalink to this heading">¶</a></h2>
 <p>So far you can create a Pygame window, and render a ball that will fly across the screen. The next step is to make some bats which
 the user can control. This is potentially far more simple than the ball, because it requires no physics (unless your user-controlled
 object will move in ways more complex than up and down, e.g. a platform character like Mario, in which case you'll need more physics).
 User-controllable objects are pretty easy to create, thanks to Pygame's event queue system, as you'll see.</p>
 <section id="a-simple-bat-class">
-<span id="makegames-5-1"></span><h3>5.1. A simple bat class<a class="headerlink" href="#a-simple-bat-class" title="Permalink to this headline">¶</a></h3>
+<span id="makegames-5-1"></span><h3>5.1. A simple bat class<a class="headerlink" href="#a-simple-bat-class" title="Permalink to this heading">¶</a></h3>
 <p>The principle behind the bat class is similar to that of the ball class. You need an <code class="docutils literal notranslate"><span class="pre">__init__</span></code> function to initialise the
 ball (so you can create object instances for each bat), an <code class="docutils literal notranslate"><span class="pre">update</span></code> function to perform per-frame changes on the bat before
 it is blitted the bat to the screen, and the functions that will define what this class will actually do. Here's some sample code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Bat</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Movable tennis &#39;bat&#39; with which one hits the ball</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Movable tennis &#39;bat&#39; with which one hits the ball</span>
 <span class="sd">    Returns: bat object</span>
 <span class="sd">    Functions: reinit, update, moveup, movedown</span>
 <span class="sd">    Attributes: which, speed&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">side</span><span class="p">):</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">load_png</span><span class="p">(</span><span class="s1">&#39;bat.png&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">load_png</span><span class="p">(</span><span class="s2">&quot;bat.png&quot;</span><span class="p">)</span>
         <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">get_surface</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="n">side</span>
@@ -151,7 +151,7 @@ it is blitted the bat to the screen, and the functions that will define what thi
 First of all, there is a reinit function, which is used when a round ends, and the bat needs to be set back in its starting place,
 with any attributes set back to their necessary values. Next, the way in which the bat is moved is a little more complex than with the
 ball, because here its movement is simple (up/down), but it relies on the user telling it to move, unlike the ball which just keeps
-moving in every frame. To make sense of how the ball moves, it is helpful to look at a quick diagram to show the sequence of events:</p>
+moving in every frame. To make sense of how the bat moves, it is helpful to look at a quick diagram to show the sequence of events:</p>
 <img alt="../_images/tom_event-flowchart.png" src="../_images/tom_event-flowchart.png" />
 <p>What happens here is that the person controlling the bat pushes down on the key that moves the bat up. For each iteration of the main
 game loop (for every frame), if the key is still held down, then the <code class="docutils literal notranslate"><span class="pre">state</span></code> attribute of that bat object will be set to
@@ -162,7 +162,7 @@ would like some useful debugging output.</p>
 <p>As soon as the player lets go of that key, the second set of boxes is invoked, and the <code class="docutils literal notranslate"><span class="pre">state</span></code> attribute of the bat object
 will be set back to &quot;still&quot;, and the <code class="docutils literal notranslate"><span class="pre">movepos</span></code> attribute will be set back to [0,0], meaning that when the <code class="docutils literal notranslate"><span class="pre">update</span></code> function is called, it won't move the bat any more. So when the player lets go of the key, the bat stops moving. Simple!</p>
 <section id="diversion-3-pygame-events">
-<span id="makegames-5-1-1"></span><h4>5.1.1. Diversion 3: Pygame events<a class="headerlink" href="#diversion-3-pygame-events" title="Permalink to this headline">¶</a></h4>
+<span id="makegames-5-1-1"></span><h4>5.1.1. Diversion 3: Pygame events<a class="headerlink" href="#diversion-3-pygame-events" title="Permalink to this heading">¶</a></h4>
 <p>So how do we know when the player is pushing keys down, and then releasing them? With the Pygame event queue system, dummy! It's a
 really easy system to use and understand, so this shouldn't take long :) You've already seen the event queue in action in the basic
 Pygame program, where it was used to check if the user was quitting the application. The code for moving the bat is about as simple
@@ -224,7 +224,7 @@ been &quot;let go&quot; (i.e. are no longer being held down), and again if they'
         <li class="right" >
           <a href="tom_games4.html" title="Game object classes"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="MakeGames.html" accesskey="U">Making Games With Pygame</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">User-controllable objects</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
@@ -232,7 +232,7 @@ been &quot;let go&quot; (i.e. are no longer being held down), and again if they'
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

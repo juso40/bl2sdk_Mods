@@ -1,5 +1,4 @@
 #################################### IMPORTS ###################################
-# -*- encoding: utf-8 -*-
 
 
 import unittest
@@ -239,7 +238,6 @@ class SpriteCollideTest(unittest.TestCase):
         )
 
     def test_spritecollideany__without_collided_callback(self):
-
         # pygame.sprite.spritecollideany(sprite, group) -> sprite
         # finds any sprites that collide
 
@@ -275,7 +273,6 @@ class SpriteCollideTest(unittest.TestCase):
         self.assertIn(collided_sprite, expected_sprite_choices)
 
     def test_spritecollideany__with_collided_callback(self):
-
         # pygame.sprite.spritecollideany(sprite, group) -> sprite
         # finds any sprites that collide
 
@@ -299,7 +296,6 @@ class SpriteCollideTest(unittest.TestCase):
             arg_dict_b=arg_dict_b,
             return_container=return_container,
         ):
-
             count = arg_dict_a.get(spr_a, 0)
             arg_dict_a[spr_a] = 1 + count
 
@@ -348,7 +344,6 @@ class SpriteCollideTest(unittest.TestCase):
             self.assertEqual(arg_dict_b[s], 1)
 
     def test_groupcollide__without_collided_callback(self):
-
         # pygame.sprite.groupcollide(groupa, groupb, dokilla, dokillb) -> dict
         # collision detection between group and group
 
@@ -385,7 +380,6 @@ class SpriteCollideTest(unittest.TestCase):
         self.assertDictEqual(expected_dict, crashed)
 
     def test_groupcollide__with_collided_callback(self):
-
         collided_callback_true = lambda spr_a, spr_b: True
         collided_callback_false = lambda spr_a, spr_b: False
 
@@ -570,14 +564,12 @@ class AbstractGroupTypeTest(unittest.TestCase):
         self.assertIn(self.s1, self.ag2)
 
     def test_clear(self):
-
         self.ag.draw(self.scr)
         self.ag.clear(self.scr, self.bg)
         self.assertEqual((0, 0, 0, 255), self.scr.get_at((5, 5)))
         self.assertEqual((0, 0, 0, 255), self.scr.get_at((15, 5)))
 
     def test_draw(self):
-
         self.ag.draw(self.scr)
         self.assertEqual((255, 0, 0, 255), self.scr.get_at((5, 5)))
         self.assertEqual((0, 255, 0, 255), self.scr.get_at((15, 5)))
@@ -586,7 +578,6 @@ class AbstractGroupTypeTest(unittest.TestCase):
         self.assertEqual(self.ag.spritedict[self.s2], pygame.Rect(10, 0, 10, 10))
 
     def test_empty(self):
-
         self.ag.empty()
         self.assertFalse(self.s1 in self.ag)
         self.assertFalse(self.s2 in self.ag)
@@ -596,7 +587,6 @@ class AbstractGroupTypeTest(unittest.TestCase):
         self.assertFalse(self.ag.has_internal(self.s3))
 
     def test_remove(self):
-
         # Test removal of 1 sprite
         self.ag.remove(self.s1)
         self.assertFalse(self.ag in self.s1.groups())
@@ -621,7 +611,6 @@ class AbstractGroupTypeTest(unittest.TestCase):
         self.assertFalse(self.ag.has(self.s1, self.s2, self.s3, self.s4))
 
     def test_remove_internal(self):
-
         self.ag.remove_internal(self.s1)
         self.assertFalse(self.ag.has_internal(self.s1))
 
@@ -1204,7 +1193,7 @@ class LayeredDirtyTypeTest__DirtySprite(LayeredGroupBase, unittest.TestCase):
 
                     color = surface.get_at((x, y))
 
-                    self.assertEqual(color, expected_color, "pos=({}, {})".format(x, y))
+                    self.assertEqual(color, expected_color, f"pos=({x}, {y})")
         finally:
             surface.unlock()
 
@@ -1237,7 +1226,6 @@ class SpriteBase:
         self.sprite = self.Sprite()
 
     def test_add_internal(self):
-
         for g in self.groups:
             self.sprite.add_internal(g)
 
@@ -1245,7 +1233,6 @@ class SpriteBase:
             self.assertIn(g, self.sprite.groups())
 
     def test_remove_internal(self):
-
         for g in self.groups:
             self.sprite.add_internal(g)
 
@@ -1256,6 +1243,7 @@ class SpriteBase:
             self.assertFalse(g in self.sprite.groups())
 
     def test_update(self):
+        # What does this and the next test actually test?
         class test_sprite(pygame.sprite.Sprite):
             sink = []
 
@@ -1360,6 +1348,27 @@ class DirtySpriteTypeTest(SpriteBase, unittest.TestCase):
         sprite.OrderedUpdates,
         sprite.LayeredDirty,
     ]
+
+
+class WeakSpriteTypeTest(SpriteTypeTest):
+    Sprite = sprite.WeakSprite
+
+    def test_weak_group_ref(self):
+        """
+        We create a list of groups, add them to the sprite.
+        When we then delete the groups, the sprite should be "dead"
+        """
+        import gc
+
+        groups = [Group() for Group in self.Groups]
+        self.sprite.add(groups)
+        del groups
+        gc.collect()
+        self.assertFalse(self.sprite.alive())
+
+
+class DirtyWeakSpriteTypeTest(DirtySpriteTypeTest, WeakSpriteTypeTest):
+    Sprite = sprite.WeakDirtySprite
 
 
 ############################## BUG TESTS #######################################

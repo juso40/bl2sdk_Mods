@@ -161,8 +161,7 @@ And now, my famous members
 
 __version__ = "$URL: http://pypng.googlecode.com/svn/trunk/code/png.py $ $Rev: 228 $"
 
-from array import array
-from pygame.tests.test_utils import tostring
+import io
 import itertools
 import math
 import operator
@@ -170,6 +169,10 @@ import struct
 import sys
 import zlib
 import warnings
+from array import array
+from functools import reduce
+
+from pygame.tests.test_utils import tostring
 
 __all__ = ["Image", "Reader", "Writer", "write_chunks", "from_array"]
 
@@ -279,7 +282,7 @@ class Error(Exception):
     prefix = "Error"
 
     def __str__(self):
-        return self.prefix + ": " + " ".join(self.args)
+        return f'{self.prefix}: {" ".join(self.args)}'
 
 
 class FormatError(Error):
@@ -317,7 +320,7 @@ class Writer:
         planes=None,
         colormap=None,
         maxval=None,
-        chunk_limit=2 ** 20,
+        chunk_limit=2**20,
     ):
         """
         Create a PNG encoder object.
@@ -465,9 +468,9 @@ class Writer:
                 except TypeError:
                     c = (c,)
                 if len(c) != 1:
-                    raise ValueError("%s for greyscale must be 1-tuple" % which)
+                    raise ValueError(f"{which} for greyscale must be 1-tuple")
                 if not isinteger(c[0]):
-                    raise ValueError("%s colour for greyscale must be integer" % which)
+                    raise ValueError(f"{which} colour for greyscale must be integer")
             else:
                 if not (
                     len(c) == 3
@@ -475,7 +478,7 @@ class Writer:
                     and isinteger(c[1])
                     and isinteger(c[2])
                 ):
-                    raise ValueError("%s colour must be a triple of integers" % which)
+                    raise ValueError(f"{which} colour must be a triple of integers")
             return c
 
         if size:
@@ -499,7 +502,7 @@ class Writer:
         if not isinteger(width) or not isinteger(height):
             raise ValueError("width and height must be integers")
         # http://www.w3.org/TR/PNG/#7Integers-and-byte-order
-        if width > 2 ** 32 - 1 or height > 2 ** 32 - 1:
+        if width > 2**32 - 1 or height > 2**32 - 1:
             raise ValueError("width and height cannot exceed 2**32-1")
 
         if alpha and transparent is not None:
@@ -515,7 +518,7 @@ class Writer:
         del bytes_per_sample
         if not isinteger(bitdepth) or bitdepth < 1 or 16 < bitdepth:
             raise ValueError(
-                "bitdepth (%r) must be a positive integer <= 16" % bitdepth
+                f"bitdepth ({bitdepth!r}) must be a positive integer <= 16"
             )
 
         self.rescale = None
@@ -725,7 +728,7 @@ class Writer:
         elif self.bitdepth == 16:
             # Decompose into bytes
             def extend(sl):
-                fmt = "!%dH" % len(sl)
+                fmt = f"!{len(sl)}H"
                 data.extend(array("B", struct.pack(fmt, *sl)))
 
         else:
@@ -793,7 +796,7 @@ class Writer:
             if len(data) > self.chunk_limit:
                 compressed = compressor.compress(tostring(data))
                 if len(compressed):
-                    # print >> sys.stderr, len(data), len(compressed)
+                    # print(len(data), len(compressed), file= >> sys.stderr)
                     write_chunk(outfile, "IDAT", compressed)
                 # Because of our very witty definition of ``extend``,
                 # above, we must re-use the same ``data`` object.  Hence
@@ -806,7 +809,7 @@ class Writer:
             compressed = ""
         flushed = compressor.flush()
         if len(compressed) or len(flushed):
-            # print >> sys.stderr, len(data), len(compressed), len(flushed)
+            # print(len(data), len(compressed), len(flushed), file=sys.stderr)
             write_chunk(outfile, "IDAT", compressed + flushed)
         # http://www.w3.org/TR/PNG/#11IEND
         write_chunk(outfile, "IEND")
@@ -976,7 +979,7 @@ def write_chunk(outfile, tag, data=strtobytes("")):
     outfile.write(data)
     checksum = zlib.crc32(tag)
     checksum = zlib.crc32(data, checksum)
-    checksum &= 2 ** 32 - 1
+    checksum &= 2**32 - 1
     outfile.write(struct.pack("!I", checksum))
 
 
@@ -1200,7 +1203,7 @@ def from_array(a, mode=None, info={}):
             if dimension in info:
                 if info[dimension] != info["size"][axis]:
                     raise Error(
-                        "info[%r] should match info['size'][%r]." % (dimension, axis)
+                        f"info[{dimension!r}] should match info['size'][{axis!r}]."
                     )
         info["width"], info["height"] = info["size"]
     if "height" not in info:
@@ -1379,7 +1382,7 @@ class Reader:
                 kw["bytes"] = _guess
             elif isinstance(_guess, str):
                 kw["filename"] = _guess
-            elif isinstance(_guess, file):
+            elif isinstance(_guess, io.IOBase):
                 kw["file"] = _guess
 
         if "filename" in kw:
@@ -1420,7 +1423,7 @@ class Reader:
                 )
             checksum = self.file.read(4)
             if len(checksum) != 4:
-                raise ValueError("Chunk %s too short for checksum.", tag)
+                raise ValueError("Chunk %s too short for checksum.", checksum)
             if seek and type != seek:
                 continue
             verify = zlib.crc32(strtobytes(type))
@@ -1430,14 +1433,14 @@ class Reader:
             # http://bugs.python.org/issue1202 .
             # We coerce it to be positive here (in a way which works on
             # Python 2.3 and older).
-            verify &= 2 ** 32 - 1
+            verify &= 2**32 - 1
             verify = struct.pack("!I", verify)
             if checksum != verify:
-                # print repr(checksum)
+                # print(repr(checksum))
                 (a,) = struct.unpack("!I", checksum)
                 (b,) = struct.unpack("!I", verify)
                 raise ChunkError(
-                    "Checksum error in %s chunk: 0x%08X != 0x%08X." % (type, a, b)
+                    f"Checksum error in {type} chunk: 0x{a:08X} != 0x{b:08X}."
                 )
             return type, data
 
@@ -1571,8 +1574,8 @@ class Reader:
         Return in flat row flat pixel format.
         """
 
-        # print >> sys.stderr, ("Reading interlaced, w=%s, r=%s, planes=%s," +
-        #     " bpp=%s") % (self.width, self.height, self.planes, self.bps)
+        # print("Reading interlaced, w=%s, r=%s, planes=%s, bpp=%s"
+        # % (self.width, self.height, self.planes, self.bps, file=sys.stderr))
         # Values per row (of the target image)
         vpr = self.width * self.planes
 
@@ -1584,8 +1587,8 @@ class Reader:
         source_offset = 0
 
         for xstart, ystart, xstep, ystep in _adam7:
-            # print >> sys.stderr, "Adam7: start=%s,%s step=%s,%s" % (
-            #     xstart, ystart, xstep, ystep)
+            # print("Adam7: start=%s,%s step=%s,%s" % (
+            #     xstart, ystart, xstep, ystep, file=sys.stderr))
             if xstart >= self.width:
                 continue
             # The previous (reconstructed) scanline.  None at the
@@ -1636,7 +1639,7 @@ class Reader:
             # Samples per byte
             spb = 8 // self.bitdepth
             out = array("B")
-            mask = 2 ** self.bitdepth - 1
+            mask = 2**self.bitdepth - 1
             shifts = map(self.bitdepth.__mul__, reversed(range(spb)))
             for o in raw:
                 out.extend(map(lambda i: mask & (o >> i), shifts))
@@ -1660,7 +1663,7 @@ class Reader:
         # Samples per byte
         spb = 8 // self.bitdepth
         out = array("B")
-        mask = 2 ** self.bitdepth - 1
+        mask = 2**self.bitdepth - 1
         shifts = map(self.bitdepth.__mul__, reversed(range(spb)))
         l = width
         for o in bytes:
@@ -1741,7 +1744,7 @@ class Reader:
             raise FormatError("End of file whilst reading chunk length and type.")
         length, type = struct.unpack("!I4s", x)
         type = bytestostr(type)
-        if length > 2 ** 31 - 1:
+        if length > 2**31 - 1:
             raise FormatError("Chunk %s is too large: %d." % (type, length))
         return length, type
 
@@ -1830,7 +1833,7 @@ class Reader:
             self.plte = data
             if len(data) % 3 != 0:
                 raise FormatError("PLTE chunk's length should be a multiple of 3.")
-            if len(data) > (2 ** self.bitdepth) * 3:
+            if len(data) > (2**self.bitdepth) * 3:
                 raise FormatError("PLTE chunk is too long.")
             if len(data) == 0:
                 raise FormatError("Empty PLTE is not allowed.")
@@ -1934,7 +1937,7 @@ class Reader:
             # each row.
             pixels = map(
                 lambda *row: array(arraycode, row),
-                *[iter(self.deinterlace(raw))] * self.width * self.planes
+                *[iter(self.deinterlace(raw))] * self.width * self.planes,
             )
         else:
             pixels = self.iterboxed(self.iterstraight(raw))
@@ -2039,7 +2042,7 @@ class Reader:
             meta["alpha"] = bool(self.trns)
             meta["bitdepth"] = 8
             meta["planes"] = 3 + bool(self.trns)
-            plte = self.palette()
+            plte = list(self.palette())
 
             def iterpal(pixels):
                 for row in pixels:
@@ -2077,12 +2080,12 @@ class Reader:
             pixels = itertrns(pixels)
         targetbitdepth = None
         if self.sbit:
-            sbit = struct.unpack("%dB" % len(self.sbit), self.sbit)
+            sbit = struct.unpack(f"{len(self.sbit)}B", self.sbit)
             targetbitdepth = max(sbit)
             if targetbitdepth > meta["bitdepth"]:
                 raise Error("sBIT chunk %r exceeds bitdepth %d" % (sbit, self.bitdepth))
             if min(sbit) <= 0:
-                raise Error("sBIT chunk %r has a 0-entry" % sbit)
+                raise Error(f"sBIT chunk {sbit!r} has a 0-entry")
             if targetbitdepth == meta["bitdepth"]:
                 targetbitdepth = None
         if targetbitdepth:
@@ -2119,7 +2122,7 @@ class Reader:
 
         width, height, pixels, meta = get()
         maxval = 2 ** meta["bitdepth"] - 1
-        targetmaxval = 2 ** targetbitdepth - 1
+        targetmaxval = 2**targetbitdepth - 1
         factor = float(targetmaxval) / float(maxval)
         meta["bitdepth"] = targetbitdepth
 
@@ -2234,6 +2237,7 @@ class Reader:
 
         else:
             assert not meta["alpha"] and not meta["greyscale"]
+
             # RGB to RGBA
             def convert():
                 for row in pixels:
@@ -2463,7 +2467,7 @@ class Test(unittest.TestCase):
             candi = candidate.replace("n", "i")
             if candi not in _pngsuite:
                 continue
-            print("adam7 read %s" % (candidate,))
+            print(f"adam7 read {candidate}")
             straight = Reader(bytes=_pngsuite[candidate])
             adam7 = Reader(bytes=_pngsuite[candi])
             # Just compare the pixels.  Ignore x,y (because they're
@@ -2488,7 +2492,7 @@ class Test(unittest.TestCase):
             it = Reader(bytes=bytes)
             x, y, pixels, meta = it.read()
             pngi = topngbytes(
-                "adam7wn" + name + ".png",
+                f"adam7wn{name}.png",
                 pixels,
                 x=x,
                 y=y,
@@ -2502,7 +2506,7 @@ class Test(unittest.TestCase):
             it = Reader(bytes=bytes)
             x, y, pixels, meta = it.read()
             pngs = topngbytes(
-                "adam7wi" + name + ".png",
+                f"adam7wi{name}.png",
                 pixels,
                 x=x,
                 y=y,
@@ -2722,7 +2726,7 @@ class Test(unittest.TestCase):
         img.save("testfromarray.png")
 
     def testfromarrayL16(self):
-        img = from_array(group(range(2 ** 16), 256), "L;16")
+        img = from_array(group(range(2**16), 256), "L;16")
         img.save("testL16.png")
 
     def testfromarrayRGB(self):
@@ -3488,7 +3492,7 @@ def test_suite(options, args):
         flat row flat pixel array.
         """
 
-        maxval = 2 ** bitdepth - 1
+        maxval = 2**bitdepth - 1
         if maxval > 255:
             a = array("H")
         else:
@@ -3528,7 +3532,7 @@ def test_suite(options, args):
 
         if name not in _pngsuite:
             raise NotImplementedError(
-                "cannot find PngSuite file %s (use -L for a list)" % name
+                f"cannot find PngSuite file {name} (use -L for a list)"
             )
         r = Reader(bytes=_pngsuite[name])
         w, h, pixels, meta = r.asDirect()
@@ -3651,7 +3655,7 @@ def read_pnm_header(infile, supported=("P5", "P6")):
     # is acceptable.
     type = infile.read(3).rstrip()
     if type not in supported:
-        raise NotImplementedError("file format %s not supported" % type)
+        raise NotImplementedError(f"file format {type} not supported")
     if type == strtobytes("P7"):
         # PAM header parsing is completely different.
         return read_pam_header(infile)
@@ -3683,7 +3687,7 @@ def read_pnm_header(infile, supported=("P5", "P6")):
             while c not in "\n\r":
                 c = getc()
         if not c.isdigit():
-            raise Error("unexpected character %s found in header" % c)
+            raise Error(f"unexpected character {c} found in header")
         # According to the specification it is legal to have comments
         # that appear in the middle of a token.
         # This is bonkers; I've never seen it; and it's a bit awkward to
@@ -3703,7 +3707,7 @@ def read_pnm_header(infile, supported=("P5", "P6")):
         while c not in "\n\r":
             c = getc()
     if not c.isspace():
-        raise Error("expected header to end with whitespace, not %s" % c)
+        raise Error(f"expected header to end with whitespace, not {c}")
 
     if type in pbm:
         # synthesize a MAXVAL
@@ -3716,7 +3720,7 @@ def write_pnm(file, width, height, pixels, meta):
     """Write a Netpbm PNM/PAM file."""
 
     bitdepth = meta["bitdepth"]
-    maxval = 2 ** bitdepth - 1
+    maxval = 2**bitdepth - 1
     # Rudely, the number of image planes can be used to determine
     # whether we are L (PGM), LA (PAM), RGB (PPM), or RGBA (PAM).
     planes = meta["planes"]
@@ -3956,12 +3960,12 @@ def _main(argv):
         # care about TUPLTYPE.
         greyscale = depth <= 2
         pamalpha = depth in (2, 4)
-        supported = map(lambda x: 2 ** x - 1, range(1, 17))
+        supported = map(lambda x: 2**x - 1, range(1, 17))
         try:
             mi = supported.index(maxval)
         except ValueError:
             raise NotImplementedError(
-                "your maxval (%s) not in supported list %s" % (maxval, str(supported))
+                f"your maxval ({maxval}) not in supported list {str(supported)}"
             )
         bitdepth = mi + 1
         writer = Writer(
@@ -3981,7 +3985,7 @@ def _main(argv):
             format, awidth, aheight, adepth, amaxval = read_pnm_header(pgmfile, "P5")
             if amaxval != "255":
                 raise NotImplementedError(
-                    "maxval %s not supported for alpha channel" % amaxval
+                    f"maxval {amaxval} not supported for alpha channel"
                 )
             if (awidth, aheight) != (width, height):
                 raise ValueError(
@@ -3998,4 +4002,4 @@ if __name__ == "__main__":
     try:
         _main(sys.argv)
     except Error as e:
-        sys.stderr.write("%s\n" % (e,))
+        sys.stderr.write(f"{e}\n")

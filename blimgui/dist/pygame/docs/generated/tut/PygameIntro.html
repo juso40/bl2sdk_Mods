@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Pygame Intro &#8212; pygame v2.1.2 documentation</title>
+    <title>Pygame Intro &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,24 +98,24 @@
             
 <section id="pygame-intro">
 <section id="python-pygame-introduction">
-<h2>Python Pygame Introduction<a class="headerlink" href="#python-pygame-introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Python Pygame Introduction<a class="headerlink" href="#python-pygame-introduction" title="Permalink to this heading">¶</a></h2>
 <dl class="docinfo field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Pete Shinners</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:pete&#37;&#52;&#48;shinners&#46;org">pete<span>&#64;</span>shinners<span>&#46;</span>org</a></p>
 </dd>
 </dl>
 <p>This article is an introduction to the <a class="reference external" href="http://www.pygame.org">pygame library</a>
 for <a class="reference external" href="https://www.python.org/">Python programmers</a>.
-The original version appeared in the <a class="reference external" href="http://pyzine.com/?p=18">Py Zine</a>,
-volume 1 issue 3. This version contains minor revisions, to
+The original version appeared in the <a class="reference external" href="https://web.archive.org/web/20030810011958/http://store.pyzine.com:80/article.phtml?a=2">PyZine volume 1 issue 3</a>.
+This version contains minor revisions, to
 create an all-around better article. Pygame is a Python extension
 library that wraps the <a class="reference external" href="http://www.libsdl.org">SDL</a> library
 and its helpers.</p>
 <section id="history">
-<h3>HISTORY<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h3>
+<h3>HISTORY<a class="headerlink" href="#history" title="Permalink to this heading">¶</a></h3>
 <p>Pygame started in the summer of 2000. Being a C programmer of many
 years, I discovered both Python and SDL at about the same time. You are
 already familiar with Python, which was at version 1.5.2. You may need
@@ -137,7 +137,7 @@ straightforward to do the difficult things. Pygame was started in
 October, 2000. Six months later pygame version 1.0 was released.</p>
 </section>
 <section id="taste">
-<h3>TASTE<a class="headerlink" href="#taste" title="Permalink to this headline">¶</a></h3>
+<h3>TASTE<a class="headerlink" href="#taste" title="Permalink to this heading">¶</a></h3>
 <p>I find the best way to understand a new library is to jump straight
 into an example. In the early days of pygame, I created a bouncing ball
 animation with 7 lines of code. Let's take a look at a friendlier
@@ -156,7 +156,7 @@ along, and a complete breakdown follows.</p>
 <span class="linenos">10</span><span class="n">ball</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;intro_ball.gif&quot;</span><span class="p">)</span>
 <span class="linenos">11</span><span class="n">ballrect</span> <span class="o">=</span> <span class="n">ball</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
 <span class="linenos">12</span>
-<span class="linenos">13</span><span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+<span class="linenos">13</span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
 <span class="linenos">14</span>    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
 <span class="linenos">15</span>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 <span class="linenos">16</span>
@@ -245,7 +245,7 @@ function and tutorials for all ranges of users. The pygame source comes
 with many examples of things like monkey punching and UFO shooting.</p>
 </section>
 <section id="python-and-gaming">
-<h3>PYTHON AND GAMING<a class="headerlink" href="#python-and-gaming" title="Permalink to this headline">¶</a></h3>
+<h3>PYTHON AND GAMING<a class="headerlink" href="#python-and-gaming" title="Permalink to this heading">¶</a></h3>
 <p>&quot;Is Python suitable for gaming?&quot; The answer is, &quot;It depends on the
 game.&quot;</p>
 <p>Python is actually quite capable at running games. It will likely even
@@ -305,7 +305,7 @@ a lot of code to get a more advanced framework put together. You'll
 need a better understanding of what you are doing.</p>
 </section>
 <section id="closing">
-<h3>CLOSING<a class="headerlink" href="#closing" title="Permalink to this headline">¶</a></h3>
+<h3>CLOSING<a class="headerlink" href="#closing" title="Permalink to this heading">¶</a></h3>
 <p>Developing games is very rewarding, there is something exciting about
 being able to see and interact with the code you've written. Pygame
 currently has almost 30 other projects using it. Several of them are
@@ -325,11 +325,11 @@ Python, you can use pygame to create a simple game in only one or two
 weeks. From there you'll need a surprising amount of time to add
 the polish to make that into a full presentable game.</p>
 <section id="pygame-modules-overview">
-<h4>Pygame Modules Overview<a class="headerlink" href="#pygame-modules-overview" title="Permalink to this headline">¶</a></h4>
-<table class="colwidths-given more-to-explore docutils align-default">
+<h4>Pygame Modules Overview<a class="headerlink" href="#pygame-modules-overview" title="Permalink to this heading">¶</a></h4>
+<table class="more-to-explore docutils align-default">
 <colgroup>
-<col style="width: 29%" />
-<col style="width: 71%" />
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../ref/cdrom.html#module-pygame.cdrom" title="pygame.cdrom: pygame module for audio cdrom control"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cdrom</span></code></a></p></td>
@@ -350,7 +350,7 @@ the polish to make that into a full presentable game.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../ref/font.html#module-pygame.font" title="pygame.font: pygame module for loading and rendering fonts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">font</span></code></a></p></td>
 <td><p>create and render TrueType fonts</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../ref/image.html#module-pygame.image" title="pygame.image: pygame module for image transfer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">image</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../ref/image.html#module-pygame.image" title="pygame.image: pygame module for loading and saving images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">image</span></code></a></p></td>
 <td><p>save and load images</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../ref/joystick.html#module-pygame.joystick" title="pygame.joystick: Pygame module for interacting with joysticks, gamepads, and trackballs."><code class="xref py py-mod docutils literal notranslate"><span class="pre">joystick</span></code></a></p></td>
@@ -405,14 +405,14 @@ the polish to make that into a full presentable game.</p>
         <li class="right" >
           <a href="MoveIt.html" title="Pygame Tutorials - Help! How Do I Move An Image?"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pygame Intro</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

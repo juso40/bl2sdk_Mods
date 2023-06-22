@@ -21,8 +21,6 @@ __all__ = ["getResource"]
 import sys
 import os
 
-from io import BytesIO
-
 try:
     from pkg_resources import resource_stream, resource_exists
 except ImportError:
@@ -72,7 +70,7 @@ def getResource(identifier, pkgname=__name__):
     mod = sys.modules[pkgname]
     path_to_file = getattr(mod, "__file__", None)
     if path_to_file is None:
-        raise IOError(f"{repr(mod)} has no __file__!")
+        raise OSError(f"{repr(mod)} has no __file__!")
     path = os.path.join(os.path.dirname(path_to_file), identifier)
 
     # pylint: disable=consider-using-with

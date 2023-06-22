@@ -1,6 +1,6 @@
 import ctypes
 from .compat import isiterable, UnsupportedError
-from .common import raise_sdl_err
+from .err import raise_sdl_err
 from .array import to_ctypes
 from .color import convert_to_color
 from .. import surface, pixels, rect
@@ -148,7 +148,9 @@ def line(target, color, dline, width=1):
 
     if bpp == 3:
         raise UnsupportedError("24bpp surfaces are not currently supported.")
-    if bpp == 2:
+    if bpp == 1:
+        pxbuf = ctypes.cast(rtarget.pixels, ctypes.POINTER(ctypes.c_uint8))
+    elif bpp == 2:
         pxbuf = ctypes.cast(rtarget.pixels, ctypes.POINTER(ctypes.c_uint16))
     elif bpp == 4:
         pxbuf = ctypes.cast(rtarget.pixels, ctypes.POINTER(ctypes.c_uint32))

@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Game object classes &#8212; pygame v2.1.2 documentation</title>
+    <title>Game object classes &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,7 +98,7 @@
             
 <section id="game-object-classes">
 <section id="makegames-4">
-<span id="id1"></span><h2>4. Game object classes<a class="headerlink" href="#makegames-4" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>4. Game object classes<a class="headerlink" href="#makegames-4" title="Permalink to this heading">¶</a></h2>
 <p>Once you've loaded your modules, and written your resource handling functions, you'll want to get on to writing some game objects.
 The way this is done is fairly simple, though it can seem complex at first. You write a class for each type of object in the game,
 and then create an instance of those classes for the objects. You can then use those classes' methods to manipulate the objects,
@@ -120,7 +120,7 @@ giving objects some motion and interactive capabilities. So your game, in pseudo
     <span class="c1"># [create new object as instance of ball class]</span>
     <span class="n">ball</span> <span class="o">=</span> <span class="n">Ball</span><span class="p">()</span>
 
-    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="c1"># [check for user input]</span>
 
         <span class="c1"># [call ball&#39;s update function]</span>
@@ -128,7 +128,7 @@ giving objects some motion and interactive capabilities. So your game, in pseudo
 </pre></div>
 </div>
 <p>This is, of course, a very simple example, and you'd need to put in all the code, instead of those little bracketed comments. But
-you should get the basic idea. You crate a class, into which you put all the functions for a ball, including <code class="docutils literal notranslate"><span class="pre">__init__</span></code>,
+you should get the basic idea. You create a class, into which you put all the functions for a ball, including <code class="docutils literal notranslate"><span class="pre">__init__</span></code>,
 which would create all the ball's attributes, and <code class="docutils literal notranslate"><span class="pre">update</span></code>, which would move the ball to its new position, before blitting
 it onto the screen in this position.</p>
 <p>You can then create more classes for all of your other game objects, and then create instances of them so that you can handle them
@@ -138,11 +138,11 @@ an advantage: It allows you to put all of the code for each object in one place;
 objects, and manipulating them, more flexible. Rather than adding more code for each new ball object, you could simply create new
 instances of the <code class="docutils literal notranslate"><span class="pre">Ball</span></code> class for each new ball object. Magic!</p>
 <section id="a-simple-ball-class">
-<span id="makegames-4-1"></span><h3>4.1. A simple ball class<a class="headerlink" href="#a-simple-ball-class" title="Permalink to this headline">¶</a></h3>
+<span id="makegames-4-1"></span><h3>4.1. A simple ball class<a class="headerlink" href="#a-simple-ball-class" title="Permalink to this heading">¶</a></h3>
 <p>Here is a simple class with the functions necessary for creating a ball object that will, if the <code class="docutils literal notranslate"><span class="pre">update</span></code> function is called
 in the main loop, move across the screen:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Ball</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A ball that will move across the screen</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ball that will move across the screen</span>
 <span class="sd">    Returns: ball object</span>
 <span class="sd">    Functions: update, calcnewpos</span>
 <span class="sd">    Attributes: area, vector&quot;&quot;&quot;</span>
@@ -171,7 +171,7 @@ thing to note is the documentation string, which is a little bit longer this tim
 are handy not only to yourself and other programmers looking at the code, but also for tools to parse your code and document it. They
 won't make much of a difference in small programs, but with large ones they're invaluable, so it's a good habit to get into.</p>
 <section id="diversion-1-sprites">
-<span id="makegames-4-1-1"></span><h4>4.1.1. Diversion 1: Sprites<a class="headerlink" href="#diversion-1-sprites" title="Permalink to this headline">¶</a></h4>
+<span id="makegames-4-1-1"></span><h4>4.1.1. Diversion 1: Sprites<a class="headerlink" href="#diversion-1-sprites" title="Permalink to this heading">¶</a></h4>
 <p>The other reason for creating a class for each object is sprites. Each image you render in your game will be a sprite object, and so
 to begin with, the class for each object should inherit the <a class="reference internal" href="../ref/sprite.html#pygame.sprite.Sprite" title="pygame.sprite.Sprite"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sprite</span></code></a> class.
 This is a really nice feature of Python - class
@@ -186,7 +186,7 @@ be a waste because the <code class="docutils literal notranslate"><span class="p
 to do this for you.</p>
 </section>
 <section id="diversion-2-vector-physics">
-<span id="makegames-4-1-2"></span><h4>4.1.2. Diversion 2: Vector physics<a class="headerlink" href="#diversion-2-vector-physics" title="Permalink to this headline">¶</a></h4>
+<span id="makegames-4-1-2"></span><h4>4.1.2. Diversion 2: Vector physics<a class="headerlink" href="#diversion-2-vector-physics" title="Permalink to this heading">¶</a></h4>
 <p>Other than the structure of the <code class="docutils literal notranslate"><span class="pre">Ball</span></code> class, the notable thing about this code is the vector physics, used to calculate
 the ball's movement. With any game involving angular movement, you won't get very far unless you're comfortable with trigonometry, so
 I'll just introduce the basics you need to know to make sense of the <code class="docutils literal notranslate"><span class="pre">calcnewpos</span></code> function.</p>
@@ -235,7 +235,7 @@ useful formulae to remember, that will help you visualise the angles (I find it 
         <li class="right" >
           <a href="tom_games3.html" title="Kicking things off"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="MakeGames.html" accesskey="U">Making Games With Pygame</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Game object classes</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
@@ -243,7 +243,7 @@ useful formulae to remember, that will help you visualise the angles (I find it 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

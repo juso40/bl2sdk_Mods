@@ -1,17 +1,19 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; pygame v2.1.2 documentation</title>
+    <title>Index &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pygame.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="_static/pygame.ico"/>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -25,7 +27,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Index</a></li> 
       </ul>
     </div>  
@@ -67,7 +69,7 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="ref/event.html#pygame.event.EventType.__dict__">__dict__ (pygame.event.EventType attribute)</a>
+      <li><a href="ref/event.html#pygame.event.Event.__dict__">__dict__ (pygame.event.Event attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -207,8 +209,6 @@
 </li>
       <li><a href="ref/gfxdraw.html#pygame.gfxdraw.box">box() (in module pygame.gfxdraw)</a>
 </li>
-      <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Window.brightness">brightness (pygame._sdl2.video.Window attribute)</a>
-</li>
       <li><a href="ref/bufferproxy.html#pygame.BufferProxy">BufferProxy (class in pygame)</a>
 </li>
   </ul></td>
@@ -243,10 +243,26 @@
         <li><a href="ref/gfxdraw.html#pygame.gfxdraw.circle">(in module pygame.gfxdraw)</a>
 </li>
       </ul></li>
-      <li><a href="ref/rect.html#pygame.Rect.clamp">clamp() (pygame.Rect method)</a>
+      <li><a href="ref/math.html#pygame.math.clamp">clamp() (in module pygame.math)</a>
+
+      <ul>
+        <li><a href="ref/rect.html#pygame.Rect.clamp">(pygame.Rect method)</a>
 </li>
+      </ul></li>
       <li><a href="ref/rect.html#pygame.Rect.clamp_ip">clamp_ip() (pygame.Rect method)</a>
 </li>
+      <li><a href="ref/math.html#pygame.math.Vector2.clamp_magnitude">clamp_magnitude() (pygame.math.Vector2 method)</a>
+
+      <ul>
+        <li><a href="ref/math.html#pygame.math.Vector3.clamp_magnitude">(pygame.math.Vector3 method)</a>
+</li>
+      </ul></li>
+      <li><a href="ref/math.html#pygame.math.Vector2.clamp_magnitude_ip">clamp_magnitude_ip() (pygame.math.Vector2 method)</a>
+
+      <ul>
+        <li><a href="ref/math.html#pygame.math.Vector3.clamp_magnitude_ip">(pygame.math.Vector3 method)</a>
+</li>
+      </ul></li>
       <li><a href="ref/event.html#pygame.event.clear">clear() (in module pygame.event)</a>
 
       <ul>
@@ -285,15 +301,19 @@
 </li>
       <li><a href="ref/sprite.html#pygame.sprite.collide_rect_ratio">collide_rect_ratio() (in module pygame.sprite)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/rect.html#pygame.Rect.collidedict">collidedict() (pygame.Rect method)</a>
 </li>
       <li><a href="ref/rect.html#pygame.Rect.collidedictall">collidedictall() (pygame.Rect method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/rect.html#pygame.Rect.collidelist">collidelist() (pygame.Rect method)</a>
 </li>
       <li><a href="ref/rect.html#pygame.Rect.collidelistall">collidelistall() (pygame.Rect method)</a>
+</li>
+      <li><a href="ref/rect.html#pygame.Rect.collideobjects">collideobjects() (pygame.Rect method)</a>
+</li>
+      <li><a href="ref/rect.html#pygame.Rect.collideobjectsall">collideobjectsall() (pygame.Rect method)</a>
 </li>
       <li><a href="ref/rect.html#pygame.Rect.collidepoint">collidepoint() (pygame.Rect method)</a>
 </li>
@@ -453,21 +473,25 @@
 </li>
       <li><a href="ref/pygame.html#pygame.encode_file_path">encode_file_path() (in module pygame)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/pygame.html#pygame.encode_string">encode_string() (in module pygame)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ref/math.html#pygame.math.Vector2.epsilon">epsilon (pygame.math.Vector2 attribute)</a>
+
+      <ul>
+        <li><a href="ref/math.html#pygame.math.Vector3.epsilon">(pygame.math.Vector3 attribute)</a>
+</li>
+      </ul></li>
       <li><a href="ref/mask.html#pygame.mask.Mask.erase">erase() (pygame.mask.Mask method)</a>
 </li>
       <li><a href="ref/pygame.html#pygame.error">error</a>
 </li>
-      <li><a href="ref/event.html#pygame.event.Event">Event() (in module pygame.event)</a>
+      <li><a href="ref/event.html#pygame.event.Event">Event (class in pygame.event)</a>
 </li>
       <li><a href="ref/event.html#pygame.event.event_name">event_name() (in module pygame.event)</a>
 </li>
       <li><a href="ref/examples.html#pygame.examples.eventlist.main">eventlist.main() (in module pygame.examples)</a>
-</li>
-      <li><a href="ref/event.html#pygame.event.EventType">EventType (class in pygame.event)</a>
 </li>
       <li><a href="ref/pixelarray.html#pygame.PixelArray.extract">extract() (pygame.PixelArray method)</a>
 </li>
@@ -519,11 +543,11 @@
         <li><a href="ref/transform.html#pygame.transform.flip">(in module pygame.transform)</a>
 </li>
       </ul></li>
+      <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Image.flip_x">flip_x (pygame._sdl2.video.Image attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Image.flipX">flipX (pygame._sdl2.video.Image attribute)</a>
-</li>
-      <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Image.flipY">flipY (pygame._sdl2.video.Image attribute)</a>
+      <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Image.flip_y">flip_y (pygame._sdl2.video.Image attribute)</a>
 </li>
       <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Window.focus">focus() (pygame._sdl2.video.Window method)</a>
 </li>
@@ -556,8 +580,14 @@
       <li><a href="ref/mask.html#pygame.mask.from_threshold">from_threshold() (in module pygame.mask)</a>
 </li>
       <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Renderer.from_window">from_window() (pygame._sdl2.video.Renderer class method)</a>
+
+      <ul>
+        <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Window.from_window">(pygame._sdl2.video.Window class method)</a>
 </li>
+      </ul></li>
       <li><a href="ref/image.html#pygame.image.frombuffer">frombuffer() (in module pygame.image)</a>
+</li>
+      <li><a href="ref/image.html#pygame.image.frombytes">frombytes() (in module pygame.image)</a>
 </li>
       <li><a href="ref/image.html#pygame.image.fromstring">fromstring() (in module pygame.image)</a>
 </li>
@@ -787,10 +817,10 @@
         <li><a href="ref/joystick.html#pygame.joystick.Joystick.get_init">(pygame.joystick.Joystick method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/joystick.html#pygame.joystick.Joystick.get_instance_id">get_instance_id() (pygame.joystick.Joystick method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/font.html#pygame.font.Font.get_italic">get_italic() (pygame.font.Font method)</a>
 </li>
       <li><a href="ref/sprite.html#pygame.sprite.LayeredUpdates.get_layer_of_sprite">get_layer_of_sprite() (pygame.sprite.LayeredUpdates method)</a>
@@ -899,6 +929,8 @@
 </li>
       <li><a href="ref/mixer.html#pygame.mixer.get_sdl_mixer_version">get_sdl_mixer_version() (in module pygame.mixer)</a>
 </li>
+      <li><a href="ref/font.html#pygame.font.get_sdl_ttf_version">get_sdl_ttf_version() (in module pygame.font)</a>
+</li>
       <li><a href="ref/pygame.html#pygame.get_sdl_version">get_sdl_version() (in module pygame)</a>
 </li>
       <li><a href="ref/surface.html#pygame.Surface.get_shifts">get_shifts() (pygame.Surface method)</a>
@@ -930,6 +962,8 @@
       <li><a href="ref/sprite.html#pygame.sprite.LayeredUpdates.get_sprites_at">get_sprites_at() (pygame.sprite.LayeredUpdates method)</a>
 </li>
       <li><a href="ref/sprite.html#pygame.sprite.LayeredUpdates.get_sprites_from_layer">get_sprites_from_layer() (pygame.sprite.LayeredUpdates method)</a>
+</li>
+      <li><a href="ref/font.html#pygame.font.Font.get_strikethrough">get_strikethrough() (pygame.font.Font method)</a>
 </li>
       <li><a href="ref/display.html#pygame.display.get_surface">get_surface() (in module pygame.display)</a>
 </li>
@@ -981,6 +1015,12 @@
 </li>
       <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Window.grab">grab (pygame._sdl2.video.Window attribute)</a>
 </li>
+      <li><a href="ref/transform.html#pygame.transform.grayscale">grayscale() (in module pygame.transform)</a>
+
+      <ul>
+        <li><a href="ref/color.html#pygame.Color.grayscale">(pygame.Color method)</a>
+</li>
+      </ul></li>
       <li><a href="ref/sprite.html#pygame.sprite.Group">Group (class in pygame.sprite)</a>
 </li>
       <li><a href="ref/sprite.html#pygame.sprite.groupcollide">groupcollide() (in module pygame.sprite)</a>
@@ -1139,22 +1179,24 @@
         <li><a href="ref/math.html#pygame.math.Vector3.length_squared">(pygame.math.Vector3 method)</a>
 </li>
       </ul></li>
-      <li><a href="ref/color.html#pygame.Color.lerp">lerp() (pygame.Color method)</a>
+      <li><a href="ref/math.html#pygame.math.lerp">lerp() (in module pygame.math)</a>
 
       <ul>
+        <li><a href="ref/color.html#pygame.Color.lerp">(pygame.Color method)</a>
+</li>
         <li><a href="ref/math.html#pygame.math.Vector2.lerp">(pygame.math.Vector2 method)</a>
 </li>
         <li><a href="ref/math.html#pygame.math.Vector3.lerp">(pygame.math.Vector3 method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/draw.html#pygame.draw.line">line() (in module pygame.draw)</a>
 
       <ul>
         <li><a href="ref/gfxdraw.html#pygame.gfxdraw.line">(in module pygame.gfxdraw)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/draw.html#pygame.draw.lines">lines() (in module pygame.draw)</a>
 </li>
       <li><a href="ref/examples.html#pygame.examples.liquid.main">liquid.main() (in module pygame.examples)</a>
@@ -1324,6 +1366,18 @@
 </li>
       <li><a href="ref/sprite.html#pygame.sprite.LayeredUpdates.move_to_front">move_to_front() (pygame.sprite.LayeredUpdates method)</a>
 </li>
+      <li><a href="ref/math.html#pygame.math.Vector2.move_towards">move_towards() (pygame.math.Vector2 method)</a>
+
+      <ul>
+        <li><a href="ref/math.html#pygame.math.Vector3.move_towards">(pygame.math.Vector3 method)</a>
+</li>
+      </ul></li>
+      <li><a href="ref/math.html#pygame.math.Vector2.move_towards_ip">move_towards_ip() (pygame.math.Vector2 method)</a>
+
+      <ul>
+        <li><a href="ref/math.html#pygame.math.Vector3.move_towards_ip">(pygame.math.Vector3 method)</a>
+</li>
+      </ul></li>
       <li><a href="ref/examples.html#pygame.examples.moveit.main">moveit.main() (in module pygame.examples)</a>
 </li>
       <li><a href="ref/surface.html#pygame.Surface.mustlock">mustlock() (pygame.Surface method)</a>
@@ -1490,16 +1544,6 @@
 </li>
       <li><a href="c_api/bufferproxy.html#c.pgBufproxy_Type">pgBufproxy_Type (C var)</a>
 </li>
-      <li><a href="c_api/cdrom.html#c.pgCD_AsID">pgCD_AsID (C function)</a>
-</li>
-      <li><a href="c_api/cdrom.html#c.pgCD_Check">pgCD_Check (C function)</a>
-</li>
-      <li><a href="c_api/cdrom.html#c.pgCD_New">pgCD_New (C function)</a>
-</li>
-      <li><a href="c_api/cdrom.html#c.pgCD_Type">pgCD_Type (C var)</a>
-</li>
-      <li><a href="c_api/cdrom.html#c.pgCDObject">pgCDObject (C type)</a>
-</li>
       <li><a href="c_api/mixer.html#c.pgChannel_AsInt">pgChannel_AsInt (C function)</a>
 </li>
       <li><a href="c_api/mixer.html#c.pgChannel_Check">pgChannel_Check (C function)</a>
@@ -1580,8 +1624,6 @@
 </li>
       <li><a href="c_api/rwobject.html#c.pgRWops_FromObject">pgRWops_FromObject (C function)</a>
 </li>
-      <li><a href="c_api/rwobject.html#c.pgRWops_GetFileExtension">pgRWops_GetFileExtension (C function)</a>
-</li>
       <li><a href="c_api/rwobject.html#c.pgRWops_IsFileObject">pgRWops_IsFileObject (C function)</a>
 </li>
       <li><a href="c_api/rwobject.html#c.pgRWops_ReleaseObject">pgRWops_ReleaseObject (C function)</a>
@@ -1618,14 +1660,14 @@
 </li>
       <li><a href="c_api/surflock.html#c.pgSurface_UnLockBy">pgSurface_UnLockBy (C function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="c_api/surflock.html#c.pgSurface_Unprep">pgSurface_Unprep (C function)</a>
 </li>
       <li><a href="c_api/surface.html#c.pgSurfaceObject">pgSurfaceObject (C type)</a>
 </li>
       <li><a href="c_api/display.html#c.pgVidInfo_AsVidInfo">pgVidInfo_AsVidInfo (C function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="c_api/display.html#c.pgVidInfo_Check">pgVidInfo_Check (C function)</a>
 </li>
       <li><a href="c_api/display.html#c.pgVidInfo_New">pgVidInfo_New (C function)</a>
@@ -1693,7 +1735,11 @@
       <li><a href="ref/mixer.html#pygame.mixer.pre_init">pre_init() (in module pygame.mixer)</a>
 </li>
       <li><a href="ref/color.html#pygame.Color.premul_alpha">premul_alpha() (pygame.Color method)</a>
+
+      <ul>
+        <li><a href="ref/surface.html#pygame.Surface.premul_alpha">(pygame.Surface method)</a>
 </li>
+      </ul></li>
       <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Renderer.present">present() (pygame._sdl2.video.Renderer method)</a>
 </li>
       <li><a href="ref/math.html#pygame.math.Vector2.project">project() (pygame.math.Vector2 method)</a>
@@ -2168,6 +2214,14 @@
       </ul></li>
       <li><a href="ref/transform.html#pygame.transform.scale2x">scale2x() (in module pygame.transform)</a>
 </li>
+      <li><a href="ref/transform.html#pygame.transform.scale_by">scale_by() (in module pygame.transform)</a>
+
+      <ul>
+        <li><a href="ref/rect.html#pygame.Rect.scale_by">(pygame.Rect method)</a>
+</li>
+      </ul></li>
+      <li><a href="ref/rect.html#pygame.Rect.scale_by_ip">scale_by_ip() (pygame.Rect method)</a>
+</li>
       <li><a href="ref/math.html#pygame.math.Vector2.scale_to_length">scale_to_length() (pygame.math.Vector2 method)</a>
 
       <ul>
@@ -2284,9 +2338,13 @@
 </li>
       <li><a href="ref/mixer.html#pygame.mixer.set_reserved">set_reserved() (in module pygame.mixer)</a>
 </li>
+      <li><a href="ref/font.html#pygame.font.Font.set_script">set_script() (pygame.font.Font method)</a>
+</li>
       <li><a href="ref/surface.html#pygame.Surface.set_shifts">set_shifts() (pygame.Surface method)</a>
 </li>
       <li><a href="ref/transform.html#pygame.transform.set_smoothscale_backend">set_smoothscale_backend() (in module pygame.transform)</a>
+</li>
+      <li><a href="ref/font.html#pygame.font.Font.set_strikethrough">set_strikethrough() (pygame.font.Font method)</a>
 </li>
       <li><a href="ref/key.html#pygame.key.set_text_input_rect">set_text_input_rect() (in module pygame.key)</a>
 </li>
@@ -2331,6 +2389,8 @@
 </li>
       </ul></li>
       <li><a href="ref/transform.html#pygame.transform.smoothscale">smoothscale() (in module pygame.transform)</a>
+</li>
+      <li><a href="ref/transform.html#pygame.transform.smoothscale_by">smoothscale_by() (in module pygame.transform)</a>
 </li>
       <li><a href="ref/mixer.html#pygame.mixer.Sound">Sound (class in pygame.mixer)</a>
 </li>
@@ -2383,6 +2443,8 @@
       <li><a href="ref/freetype.html#pygame.freetype.Font.strength">strength (pygame.freetype.Font attribute)</a>
 </li>
       <li><a href="ref/pixelarray.html#pygame.PixelArray.strides">strides (pygame.PixelArray attribute)</a>
+</li>
+      <li><a href="ref/font.html#pygame.font.Font.strikethrough">strikethrough (pygame.font.Font attribute)</a>
 </li>
       <li><a href="ref/freetype.html#pygame.freetype.Font.strong">strong (pygame.freetype.Font attribute)</a>
 </li>
@@ -2438,6 +2500,8 @@
         <li><a href="ref/mask.html#pygame.mask.Mask.to_surface">(pygame.mask.Mask method)</a>
 </li>
       </ul></li>
+      <li><a href="ref/image.html#pygame.image.tobytes">tobytes() (in module pygame.image)</a>
+</li>
       <li><a href="ref/display.html#pygame.display.toggle_fullscreen">toggle_fullscreen() (in module pygame.display)</a>
 </li>
       <li><a href="ref/image.html#pygame.image.tostring">tostring() (in module pygame.image)</a>
@@ -2449,7 +2513,7 @@
       <li><a href="ref/cursors.html#pygame.cursors.Cursor.type">type (pygame.cursors.Cursor attribute)</a>
 
       <ul>
-        <li><a href="ref/event.html#pygame.event.EventType.type">(pygame.event.EventType attribute)</a>
+        <li><a href="ref/event.html#pygame.event.Event.type">(pygame.event.Event attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -2556,10 +2620,14 @@
       </ul></li>
       <li><a href="ref/freetype.html#pygame.freetype.was_init">was_init() (in module pygame.freetype)</a>
 </li>
-      <li><a href="ref/freetype.html#pygame.freetype.Font.wide">wide (pygame.freetype.Font attribute)</a>
+      <li><a href="ref/sprite.html#pygame.sprite.WeakDirtySprite">WeakDirtySprite (class in pygame.sprite)</a>
+</li>
+      <li><a href="ref/sprite.html#pygame.sprite.WeakSprite">WeakSprite (class in pygame.sprite)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ref/freetype.html#pygame.freetype.Font.wide">wide (pygame.freetype.Font attribute)</a>
+</li>
       <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Texture.width">width (pygame._sdl2.video.Texture attribute)</a>
 </li>
       <li><a href="ref/sdl2_video.html#pygame._sdl2.video.Window">Window (class in pygame._sdl2.video)</a>
@@ -2593,12 +2661,12 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Index</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

@@ -11,6 +11,7 @@ from .resources import *
 from .events import *
 from .ebs import *
 
+from .err import *
 from .common import *
 from .draw import *
 from .bitmapfont import *
@@ -24,3 +25,5 @@ from .sprite import *
 from .spritesystem import *
 from .surface import *
 from .window import *
+from .mouse import *
+from .displays import *

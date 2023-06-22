@@ -5,7 +5,7 @@ from ctypes import addressof
 
 from sdl2 import ext as sdl2ext
 from sdl2 import dll
-from sdl2.rect import SDL_Point
+from sdl2.rect import SDL_Point, SDL_Rect
 from sdl2.render import SDL_Renderer, SDL_Texture
 from sdl2.surface import SDL_CreateRGBSurface, SDL_FreeSurface
 
@@ -87,12 +87,24 @@ class TestExtRenderer(object):
         assert isinstance(renderer.sdlrenderer.contents, SDL_Renderer)
         renderer.destroy()
 
+        # Create software renderer with Window
+        renderer = sdl2ext.Renderer(window, backend='software')
+        assert renderer.rendertarget == window
+        assert isinstance(renderer.sdlrenderer.contents, SDL_Renderer)
+        renderer.destroy()
+
         # Create renderer with SDL_Window
         sdlwindow = window.window
         renderer = sdl2ext.Renderer(sdlwindow)
         assert renderer.rendertarget == sdlwindow
         assert isinstance(renderer.sdlrenderer.contents, SDL_Renderer)
         renderer.destroy()
+
+        # Test exception on invalid renderer backend
+        with pytest.raises(RuntimeError):
+            sdl2ext.Renderer(window, backend='QuickDraw3D')
+        with pytest.raises(sdl2ext.SDLError):
+            sdl2ext.Renderer(window, backend=100)
         del window
 
         # Test exception on using a destroyed renderer (and random type errors)
@@ -110,6 +122,15 @@ class TestExtRenderer(object):
         window = sdl2ext.Window("Test", size=(150, 50))
         sprite = sdl2ext.SoftwareSprite(sf.contents, True)
 
+        # Test initializing with custom logical size
+        renderer = sdl2ext.Renderer(window, logical_size=(200, 200))
+        assert isinstance(renderer.sdlrenderer.contents, SDL_Renderer)
+        assert renderer.logical_size == (200, 200)
+        renderer.reset_logical_size()
+        assert renderer.logical_size == (150, 50)
+        renderer.destroy()
+
+        # Test changing and resetting logical size with different target types
         targets = {
             "SDL_Surface": sf.contents,
             "SDL_Surface_pointer": sf,
@@ -211,6 +232,15 @@ class TestExtRenderer(object):
         # Test copying a subset of a Texture
         renderer.clear(0xAABBCC) # reset surface
         renderer.copy(tx, srcrect=(0, 0, 10, 10), dstrect=(10, 10))
+        renderer.present()
+        assert view[0][0] == 0xAABBCC
+        assert view[10][10] == 0
+        assert view[19][19] == 0
+        assert view[20][20] == 0xAABBCC
+
+        # Test copying a subset of a Texture w/ point/rect args
+        renderer.clear(0xAABBCC) # reset surface
+        renderer.copy(tx, srcrect=SDL_Rect(0, 0, 10, 10), dstrect=SDL_Point(10, 10))
         renderer.present()
         assert view[0][0] == 0xAABBCC
         assert view[10][10] == 0

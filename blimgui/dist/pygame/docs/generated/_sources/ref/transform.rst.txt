@@ -49,6 +49,25 @@ Instead, always begin with the original image and scale to the desired size.)
 
    .. ## pygame.transform.scale ##
 
+.. function:: scale_by
+
+   | :sl:`resize to new resolution, using scalar(s)`
+   | :sg:`scale_by(surface, factor, dest_surface=None) -> Surface`
+
+   **Experimental:** feature still in development available for testing and feedback. It may change.
+   `Please leave scale_by feedback with authors <https://github.com/pygame/pygame/pull/2723>`_
+
+   Same as :func:`scale()`, but scales by some factor, rather than taking
+   the new size explicitly. For example, :code:`transform.scale_by(surf, 3)`
+   will triple the size of the surface in both dimensions. Optionally, the
+   scale factor can be a sequence of two numbers, controlling x and y scaling
+   separately. For example, :code:`transform.scale_by(surf, (2, 1))` doubles
+   the image width but keeps the height the same.
+
+   .. versionadded:: 2.1.3
+
+   .. ## pygame.transform.scale_by ##
+
 .. function:: rotate
 
    | :sl:`rotate an image`
@@ -115,6 +134,26 @@ Instead, always begin with the original image and scale to the desired size.)
    .. versionadded:: 1.8
 
    .. ## pygame.transform.smoothscale ##
+
+.. function:: smoothscale_by
+
+   | :sl:`resize to new resolution, using scalar(s)`
+   | :sg:`smoothscale_by(surface, factor, dest_surface=None) -> Surface`
+
+   **Experimental:** feature still in development available for testing and feedback. It may change.
+   `Please leave smoothscale_by feedback with authors <https://github.com/pygame/pygame/pull/2723>`_
+
+   Same as :func:`smoothscale()`, but scales by some factor, rather than
+   taking the new size explicitly. For example,
+   :code:`transform.smoothscale_by(surf, 3)` will triple the size of the
+   surface in both dimensions. Optionally, the scale factor can be a sequence
+   of two numbers, controlling x and y scaling separately. For example,
+   :code:`transform.smoothscale_by(surf, (2, 1))` doubles the image width but
+   keeps the height the same.
+
+   .. versionadded:: 2.1.3
+
+   .. ## pygame.transform.smoothscale_by ##
 
 .. function:: get_smoothscale_backend
 
@@ -194,12 +233,27 @@ Instead, always begin with the original image and scale to the desired size.)
 .. function:: average_color
 
    | :sl:`finds the average color of a surface`
-   | :sg:`average_color(surface, rect=None) -> Color`
+   | :sg:`average_color(surface, rect=None, consider_alpha=False) -> Color`
 
    Finds the average color of a Surface or a region of a surface specified by a
-   Rect, and returns it as a Color.
+   Rect, and returns it as a Color. If consider_alpha is set to True, then alpha is
+   taken into account (removing the black artifacts).
+
+   .. versionadded:: 2.1.2 ``consider_alpha`` argument
 
    .. ## pygame.transform.average_color ##
+
+.. function:: grayscale
+
+   | :sl:`grayscale a surface`
+   | :sg:`grayscale(surface, dest_surface=None) -> Surface`
+
+   Returns a grayscaled version of the original surface using the luminosity formula which weights red, green and blue according to their wavelengths.
+
+   An optional destination surface can be passed which is faster than creating a new Surface.
+   This destination surface must have the same dimensions (width, height) and depth as the source Surface.
+
+   .. ## pygame.transform.grayscale ##
 
 .. function:: threshold
 
@@ -256,7 +310,7 @@ Instead, always begin with the original image and scale to the desired size.)
 
    :Examples:
 
-   See the threshold tests for a full of examples: https://github.com/pygame/pygame/blob/master/test/transform_test.py
+   See the threshold tests for a full of examples: https://github.com/pygame/pygame/blob/main/test/transform_test.py
 
    .. literalinclude:: ../../../test/transform_test.py
       :pyobject: TransformModuleTest.test_threshold_dest_surf_not_change

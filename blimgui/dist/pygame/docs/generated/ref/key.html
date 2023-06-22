@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.key &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.key &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">pygame module to work with the keyboard</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 30%" />
-<col style="width: 1%" />
-<col style="width: 69%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="key.html#pygame.key.get_focused">pygame.key.get_focused</a></div>
 </td>
@@ -415,6 +410,11 @@ translate these pushed keys into a fully translated character value. See
 the <code class="docutils literal notranslate"><span class="pre">pygame.KEYDOWN</span></code> events on the <a class="tooltip reference internal" href="event.html#module-pygame.event" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.event</span></code><span class="tooltip-content">pygame module for interacting with events and queues</span></a> queue for this
 functionality.</p>
 </div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.2.0: </span>The collection of bools returned by <code class="docutils literal notranslate"><span class="pre">get_pressed</span></code> can not be iterated
+over because the indexes of the internal tuple does not correpsond to the
+keycodes.</p>
+</div>
 </dd></dl>
 
 <dl class="py function definition">
@@ -460,7 +460,7 @@ not provided or is 0, then the <code class="docutils literal notranslate"><span 
 set to 0.</p>
 <p>When pygame is initialized the key repeat is disabled.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ValueError</strong> -- if <code class="docutils literal notranslate"><span class="pre">delay</span></code> or <code class="docutils literal notranslate"><span class="pre">interval</span></code> is &lt; 0</p>
 </dd>
 </dl>
@@ -489,9 +489,26 @@ set to 0.</p>
 <span class="sig-prename descclassname"><span class="pre">pygame.key.</span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.key.name" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">get the name of a key identifier</span></div>
-<div class="line"><span class="signature">name(key) -&gt; string</span></div>
+<div class="line"><span class="signature">name(key, use_compat=True) -&gt; str</span></div>
 </div>
-<p>Get the descriptive name of the button from a keyboard button id constant.</p>
+<p>Get the descriptive name of the button from a keyboard button id constant.
+Returns an empty string (<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>) if the key is not found.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">use_compat</span></code> argument is <code class="docutils literal notranslate"><span class="pre">True</span></code> (which is the default), this function
+returns the legacy name of a key where applicable. The return value is
+expected to be the same across different pygame versions (provided the
+corresponding key constant exists and is unique). If the return value is
+passed to the <code class="docutils literal notranslate"><span class="pre">key_code</span></code> function, the original constant will be returned.</p>
+<p><strong>Experimental:</strong> <code class="docutils literal notranslate"><span class="pre">use_compat</span></code> paramater still in development for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/3312">Please leave use_compat feedback with authors</a></p>
+<p>If this argument is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the returned name may be prettier to display
+and may cover a wider range of keys than with <code class="docutils literal notranslate"><span class="pre">use_compat</span></code>, but there are
+no guarantees that this name will be the same across different pygame
+versions. If the name returned is passed to the <code class="docutils literal notranslate"><span class="pre">key_code</span></code> function, the
+original constant is returned back (this is an implementation detail which
+may change later, do not rely on this)</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in pygame 2.1.3: </span>Added <code class="docutils literal notranslate"><span class="pre">use_compat</span></code> argument and guaranteed API stability for it</p>
+</div>
 </dd></dl>
 
 <dl class="py function definition">
@@ -512,11 +529,8 @@ returns an integer matching one of the K_* keycodes. For example:</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ValueError</strong> -- if the key name is not known.</p></li>
-<li><p><strong>NotImplementedError</strong> -- if used with SDL 1.</p></li>
-</ul>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> -- if the key name is not known.</p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -615,14 +629,14 @@ It controls where the candidate list will open, if supported.</p>
         <li class="right" >
           <a href="joystick.html" title="pygame.joystick"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.key</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

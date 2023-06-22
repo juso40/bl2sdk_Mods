@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Revision: Pygame fundamentals &#8212; pygame v2.1.2 documentation</title>
+    <title>Revision: Pygame fundamentals &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,9 +98,9 @@
             
 <section id="revision-pygame-fundamentals">
 <section id="makegames-2">
-<span id="id1"></span><h2>2. Revision: Pygame fundamentals<a class="headerlink" href="#makegames-2" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>2. Revision: Pygame fundamentals<a class="headerlink" href="#makegames-2" title="Permalink to this heading">¶</a></h2>
 <section id="the-basic-pygame-game">
-<span id="makegames-2-1"></span><h3>2.1. The basic Pygame game<a class="headerlink" href="#the-basic-pygame-game" title="Permalink to this headline">¶</a></h3>
+<span id="makegames-2-1"></span><h3>2.1. The basic Pygame game<a class="headerlink" href="#the-basic-pygame-game" title="Permalink to this heading">¶</a></h3>
 <p>For the sake of revision, and to ensure that you are familiar with the basic structure of a Pygame program, I'll briefly run through
 a basic Pygame program, which will display no more than a window with some text in it, that should, by the end, look something like
 this (though of course the window decoration will probably be different on your system):</p>
@@ -134,7 +134,7 @@ this (though of course the window decoration will probably be different on your 
     <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
 
     <span class="c1"># Event loop</span>
-    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">QUIT</span><span class="p">:</span>
                 <span class="k">return</span>
@@ -148,7 +148,7 @@ this (though of course the window decoration will probably be different on your 
 </div>
 </section>
 <section id="basic-pygame-objects">
-<span id="makegames-2-2"></span><h3>2.2. Basic Pygame objects<a class="headerlink" href="#basic-pygame-objects" title="Permalink to this headline">¶</a></h3>
+<span id="makegames-2-2"></span><h3>2.2. Basic Pygame objects<a class="headerlink" href="#basic-pygame-objects" title="Permalink to this heading">¶</a></h3>
 <p>As you can see, the code consists of three main objects: the screen, the background, and the text. Each of these objects is created
 by first calling an instance of an in-built Pygame object, and then modifying it to fit our needs. The screen is a slightly special
 case, because we still modify the display through Pygame calls, rather than calling methods belonging to the screen object. But for
@@ -170,7 +170,7 @@ axis). We could also set the y coordinate, but it's not any different so I left 
 small anyway, it didn't seem necessary.</p>
 </section>
 <section id="blitting">
-<span id="makegames-2-3"></span><h3>2.3. Blitting<a class="headerlink" href="#blitting" title="Permalink to this headline">¶</a></h3>
+<span id="makegames-2-3"></span><h3>2.3. Blitting<a class="headerlink" href="#blitting" title="Permalink to this heading">¶</a></h3>
 <p>Now we have created our game objects, we need to actually render them. If we didn't and we ran the program, we'd just see a
 blank window, and the objects would remain invisible. The term used for rendering objects is <em class="firstterm">blitting</em>, which is where
 you copy the pixels belonging to said object onto the destination object. So to render the background object, you blit it onto the
@@ -183,7 +183,7 @@ to blit the background onto the area that the ball previously occupied, which ca
 blitting the ball, so that you are only blitting two small areas.</p>
 </section>
 <section id="the-event-loop">
-<span id="makegames-2-4"></span><h3>2.4. The event loop<a class="headerlink" href="#the-event-loop" title="Permalink to this headline">¶</a></h3>
+<span id="makegames-2-4"></span><h3>2.4. The event loop<a class="headerlink" href="#the-event-loop" title="Permalink to this heading">¶</a></h3>
 <p>Once you've set the game up, you need to put it into a loop so that it will continuously run until the user signals that he/she wants
 to exit. So you start an open <code class="docutils literal notranslate"><span class="pre">while</span></code> loop, and then for each iteration of the loop, which will be each frame of the game,
 update the game. The first thing is to check for any Pygame events, which will be the user hitting the keyboard, clicking a mouse
@@ -194,7 +194,7 @@ in this example, we don't strictly speaking need to re-blit the background in ev
 moving around on the screen, you will need to do all your blitting here.</p>
 </section>
 <section id="ta-da">
-<span id="makegames-2-5"></span><h3>2.5. Ta-da!<a class="headerlink" href="#ta-da" title="Permalink to this headline">¶</a></h3>
+<span id="makegames-2-5"></span><h3>2.5. Ta-da!<a class="headerlink" href="#ta-da" title="Permalink to this heading">¶</a></h3>
 <p>And that's it - your most basic Pygame game! All games will take a form similar to this, but with lots more code for the actual game
 functions themselves, which are more to do your with programming, and less guided in structure by the workings of Pygame. This is what
 this tutorial is really about, and will now go onto.</p>
@@ -226,7 +226,7 @@ this tutorial is really about, and will now go onto.</p>
         <li class="right" >
           <a href="MakeGames.html" title="Making Games With Pygame"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="MakeGames.html" accesskey="U">Making Games With Pygame</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Revision: Pygame fundamentals</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
@@ -234,7 +234,7 @@ this tutorial is really about, and will now go onto.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

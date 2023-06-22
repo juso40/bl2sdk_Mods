@@ -1,13 +1,22 @@
 import math
-import sys
 import unittest
+from collections.abc import Collection, Sequence
 import platform
+import random
+import unittest
 
 from pygame import Rect, Vector2
 from pygame.tests import test_utils
 
-
 IS_PYPY = "PyPy" == platform.python_implementation()
+
+# todo can they be different on different platforms?
+_int_min = -2147483647 - 1  # min value of int in C
+_int_max = 2147483647  # max value of int in C
+
+
+def _random_int():
+    return random.randint(_int_min, _int_max)
 
 
 class RectTypeTest(unittest.TestCase):
@@ -50,6 +59,14 @@ class RectTypeTest(unittest.TestCase):
         self.assertEqual((r.left, r.centery), r.midleft)
         self.assertEqual((r.right, r.centery), r.midright)
 
+    def test_rect_iter(self):
+        rect = Rect(50, 100, 150, 200)
+
+        # call __iter__ explicitly to test that it is defined
+        rect_iterator = rect.__iter__()
+        for i, val in enumerate(rect_iterator):
+            self.assertEqual(rect[i], val)
+
     def test_normalize(self):
         """Ensures normalize works when width and height are both negative."""
         test_rect = Rect((1, 2), (-3, -6))
@@ -62,7 +79,6 @@ class RectTypeTest(unittest.TestCase):
 
         self.assertEqual(test_rect, expected_normalized_rect)
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy sometimes")
     def test_normalize__positive_height(self):
         """Ensures normalize works with a negative width and a positive height."""
         test_rect = Rect((1, 2), (-3, 6))
@@ -75,7 +91,6 @@ class RectTypeTest(unittest.TestCase):
 
         self.assertEqual(test_rect, expected_normalized_rect)
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy sometimes")
     def test_normalize__positive_width(self):
         """Ensures normalize works with a positive width and a negative height."""
         test_rect = Rect((1, 2), (3, -6))
@@ -88,7 +103,6 @@ class RectTypeTest(unittest.TestCase):
 
         self.assertEqual(test_rect, expected_normalized_rect)
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy sometimes")
     def test_normalize__zero_height(self):
         """Ensures normalize works with a negative width and a zero height."""
         test_rect = Rect((1, 2), (-3, 0))
@@ -101,7 +115,6 @@ class RectTypeTest(unittest.TestCase):
 
         self.assertEqual(test_rect, expected_normalized_rect)
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy sometimes")
     def test_normalize__zero_width(self):
         """Ensures normalize works with a zero width and a negative height."""
         test_rect = Rect((1, 2), (0, -6))
@@ -114,7 +127,6 @@ class RectTypeTest(unittest.TestCase):
 
         self.assertEqual(test_rect, expected_normalized_rect)
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy")
     def test_normalize__non_negative(self):
         """Ensures normalize works when width and height are both non-negative.
 
@@ -726,6 +738,9 @@ class RectTypeTest(unittest.TestCase):
         self.assertTrue(2 in Rect(0, 0, 1, 2), "r does not contain 2")
         self.assertFalse(3 in Rect(0, 0, 1, 2), "r contains 3")
 
+        self.assertRaises(TypeError, lambda: "string" in Rect(0, 0, 1, 2))
+        self.assertRaises(TypeError, lambda: 4 + 3j in Rect(0, 0, 1, 2))
+
     def test_collidepoint(self):
         r = Rect(1, 2, 3, 4)
 
@@ -812,6 +827,182 @@ class RectTypeTest(unittest.TestCase):
         self.assertEqual(r.bottom - 3, r2.bottom)
         self.assertEqual(r.width - 4, r2.width)
         self.assertEqual(r.height - 6, r2.height)
+
+    def test_scale_by__larger_single_argument(self):
+        """The scale method scales around the center of the rectangle"""
+        r = Rect(2, 4, 6, 8)
+        r2 = r.scale_by(2)
+
+        self.assertEqual(r.center, r2.center)
+        self.assertEqual(r.left - 3, r2.left)
+        self.assertEqual(r.top - 4, r2.top)
+        self.assertEqual(r.right + 3, r2.right)
+        self.assertEqual(r.bottom + 4, r2.bottom)
+        self.assertEqual(r.width * 2, r2.width)
+        self.assertEqual(r.height * 2, r2.height)
+
+    def test_scale_by__smaller_single_argument(self):
+        """The scale method scales around the center of the rectangle"""
+        r = Rect(2, 4, 8, 8)
+        r2 = r.scale_by(0.5)
+
+        self.assertEqual(r.center, r2.center)
+        self.assertEqual(r.left + 2, r2.left)
+        self.assertEqual(r.top + 2, r2.top)
+        self.assertEqual(r.right - 2, r2.right)
+        self.assertEqual(r.bottom - 2, r2.bottom)
+        self.assertEqual(r.width - 4, r2.width)
+        self.assertEqual(r.height - 4, r2.height)
+
+    def test_scale_by__larger(self):
+        """The scale method scales around the center of the rectangle"""
+        # arrange
+        r = Rect(2, 4, 6, 8)
+        # act
+        r2 = r.scale_by(2, 4)
+        # assert
+        self.assertEqual(r.center, r2.center)
+        self.assertEqual(r.left - 3, r2.left)
+        self.assertEqual(r.centery - r.h * 4 / 2, r2.top)
+        self.assertEqual(r.right + 3, r2.right)
+        self.assertEqual(r.centery + r.h * 4 / 2, r2.bottom)
+        self.assertEqual(r.width * 2, r2.width)
+        self.assertEqual(r.height * 4, r2.height)
+
+    def test_scale_by__smaller(self):
+        """The scale method scales around the center of the rectangle"""
+        # arrange
+        r = Rect(2, 4, 8, 8)
+        # act
+        r2 = r.scale_by(0.5, 0.25)
+        # assert
+        self.assertEqual(r.center, r2.center)
+        self.assertEqual(r.left + 2, r2.left)
+        self.assertEqual(r.centery - r.h / 4 / 2, r2.top)
+        self.assertEqual(r.right - 2, r2.right)
+        self.assertEqual(r.centery + r.h / 4 / 2, r2.bottom)
+        self.assertEqual(r.width - 4, r2.width)
+        self.assertEqual(r.height // 4, r2.height)
+
+    def test_scale_by__subzero(self):
+        """The scale method scales around the center of the rectangle"""
+        r = Rect(2, 4, 6, 8)
+        r.scale_by(0)
+        r.scale_by(-1)
+        r.scale_by(-0.000001)
+        r.scale_by(0.00001)
+
+        rx1 = r.scale_by(10, 1)
+        self.assertEqual(r.centerx - r.w * 10 / 2, rx1.x)
+        self.assertEqual(r.y, rx1.y)
+        self.assertEqual(r.w * 10, rx1.w)
+        self.assertEqual(r.h, rx1.h)
+        rx2 = r.scale_by(-10, 1)
+        self.assertEqual(rx1.x, rx2.x)
+        self.assertEqual(rx1.y, rx2.y)
+        self.assertEqual(rx1.w, rx2.w)
+        self.assertEqual(rx1.h, rx2.h)
+
+        ry1 = r.scale_by(1, 10)
+        self.assertEqual(r.x, ry1.x)
+        self.assertEqual(r.centery - r.h * 10 / 2, ry1.y)
+        self.assertEqual(r.w, ry1.w)
+        self.assertEqual(r.h * 10, ry1.h)
+        ry2 = r.scale_by(1, -10)
+        self.assertEqual(ry1.x, ry2.x)
+        self.assertEqual(ry1.y, ry2.y)
+        self.assertEqual(ry1.w, ry2.w)
+        self.assertEqual(ry1.h, ry2.h)
+
+        r1 = r.scale_by(10)
+        self.assertEqual(r.centerx - r.w * 10 / 2, r1.x)
+        self.assertEqual(r.centery - r.h * 10 / 2, r1.y)
+        self.assertEqual(r.w * 10, r1.w)
+        self.assertEqual(r.h * 10, r1.h)
+
+    def test_scale_by_identity(self):
+        """The scale method scales around the center of the rectangle"""
+        # arrange
+        r = Rect(2, 4, 6, 8)
+        # act
+        actual = r.scale_by(1, 1)
+        # assert
+        self.assertEqual(r.x, actual.x)
+        self.assertEqual(r.y, actual.y)
+        self.assertEqual(r.w, actual.w)
+        self.assertEqual(r.h, actual.h)
+
+    def test_scale_by_negative_identity(self):
+        """The scale method scales around the center of the rectangle"""
+        # arrange
+        r = Rect(2, 4, 6, 8)
+        # act
+        actual = r.scale_by(-1, -1)
+        # assert
+        self.assertEqual(r.x, actual.x)
+        self.assertEqual(r.y, actual.y)
+        self.assertEqual(r.w, actual.w)
+        self.assertEqual(r.h, actual.h)
+
+    def test_scale_by_identity_single_argument(self):
+        """The scale method scales around the center of the rectangle"""
+        # arrange
+        r = Rect(2, 4, 6, 8)
+        # act
+        actual = r.scale_by(1)
+        # assert
+        self.assertEqual(r.x, actual.x)
+        self.assertEqual(r.y, actual.y)
+        self.assertEqual(r.w, actual.w)
+        self.assertEqual(r.h, actual.h)
+
+    def test_scale_by_negative_identity_single_argment(self):
+        """The scale method scales around the center of the rectangle"""
+        # arrange
+        r = Rect(2, 4, 6, 8)
+        # act
+        actual = r.scale_by(-1)
+        # assert
+        self.assertEqual(r.x, actual.x)
+        self.assertEqual(r.y, actual.y)
+        self.assertEqual(r.w, actual.w)
+        self.assertEqual(r.h, actual.h)
+
+    def test_scale_by_ip__larger(self):
+        """The scale method scales around the center of the rectangle"""
+        r = Rect(2, 4, 6, 8)
+        r2 = Rect(r)
+        r2.scale_by_ip(2)
+
+        self.assertEqual(r.center, r2.center)
+        self.assertEqual(r.left - 3, r2.left)
+        self.assertEqual(r.top - 4, r2.top)
+        self.assertEqual(r.right + 3, r2.right)
+        self.assertEqual(r.bottom + 4, r2.bottom)
+        self.assertEqual(r.width * 2, r2.width)
+        self.assertEqual(r.height * 2, r2.height)
+
+    def test_scale_by_ip__smaller(self):
+        """The scale method scales around the center of the rectangle"""
+        r = Rect(2, 4, 8, 8)
+        r2 = Rect(r)
+        r2.scale_by_ip(0.5)
+
+        self.assertEqual(r.center, r2.center)
+        self.assertEqual(r.left + 2, r2.left)
+        self.assertEqual(r.top + 2, r2.top)
+        self.assertEqual(r.right - 2, r2.right)
+        self.assertEqual(r.bottom - 2, r2.bottom)
+        self.assertEqual(r.width / 2, r2.width)
+        self.assertEqual(r.height / 2, r2.height)
+
+    def test_scale_by_ip__subzero(self):
+        """The scale method scales around the center of the rectangle"""
+        r = Rect(2, 4, 6, 8)
+        r.scale_by_ip(0)
+        r.scale_by_ip(-1)
+        r.scale_by_ip(-0.000001)
+        r.scale_by_ip(0.00001)
 
     def test_clamp(self):
         r = Rect(10, 10, 10, 10)
@@ -1254,7 +1445,6 @@ class RectTypeTest(unittest.TestCase):
             with self.assertRaises(TypeError):
                 clipped_line = rect.clipline(*line)
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy sometimes")
     def test_move(self):
         r = Rect(1, 2, 3, 4)
         move_x = 10
@@ -1263,7 +1453,6 @@ class RectTypeTest(unittest.TestCase):
         expected_r2 = Rect(r.left + move_x, r.top + move_y, r.width, r.height)
         self.assertEqual(expected_r2, r2)
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy sometimes")
     def test_move_ip(self):
         r = Rect(1, 2, 3, 4)
         r2 = Rect(r)
@@ -1272,6 +1461,224 @@ class RectTypeTest(unittest.TestCase):
         r2.move_ip(move_x, move_y)
         expected_r2 = Rect(r.left + move_x, r.top + move_y, r.width, r.height)
         self.assertEqual(expected_r2, r2)
+
+    @unittest.skipIf(
+        IS_PYPY, "fails on pypy (but only for: bottom, right, centerx, centery)"
+    )
+    def test_set_float_values(self):
+        zero = 0
+        pos = 124
+        neg = -432
+        # (initial, increment, expected, other)
+        data_rows = [
+            (zero, 0.1, zero, _random_int()),
+            (zero, 0.4, zero, _random_int()),
+            (zero, 0.5, zero + 1, _random_int()),
+            (zero, 1.1, zero + 1, _random_int()),
+            (zero, 1.5, zero + 2, _random_int()),  # >0f
+            (zero, -0.1, zero, _random_int()),
+            (zero, -0.4, zero, _random_int()),
+            (zero, -0.5, zero - 1, _random_int()),
+            (zero, -0.6, zero - 1, _random_int()),
+            (zero, -1.6, zero - 2, _random_int()),  # <0f
+            (zero, 1, zero + 1, _random_int()),
+            (zero, 4, zero + 4, _random_int()),  # >0i
+            (zero, -1, zero - 1, _random_int()),
+            (zero, -4, zero - 4, _random_int()),  # <0i
+            (pos, 0.1, pos, _random_int()),
+            (pos, 0.4, pos, _random_int()),
+            (pos, 0.5, pos + 1, _random_int()),
+            (pos, 1.1, pos + 1, _random_int()),
+            (pos, 1.5, pos + 2, _random_int()),  # >0f
+            (pos, -0.1, pos, _random_int()),
+            (pos, -0.4, pos, _random_int()),
+            (pos, -0.5, pos, _random_int()),
+            (pos, -0.6, pos - 1, _random_int()),
+            (pos, -1.6, pos - 2, _random_int()),  # <0f
+            (pos, 1, pos + 1, _random_int()),
+            (pos, 4, pos + 4, _random_int()),  # >0i
+            (pos, -1, pos - 1, _random_int()),
+            (pos, -4, pos - 4, _random_int()),  # <0i
+            (neg, 0.1, neg, _random_int()),
+            (neg, 0.4, neg, _random_int()),
+            (neg, 0.5, neg, _random_int()),
+            (neg, 1.1, neg + 1, _random_int()),
+            (neg, 1.5, neg + 1, _random_int()),  # >0f
+            (neg, -0.1, neg, _random_int()),
+            (neg, -0.4, neg, _random_int()),
+            (neg, -0.5, neg - 1, _random_int()),
+            (neg, -0.6, neg - 1, _random_int()),
+            (neg, -1.6, neg - 2, _random_int()),  # <0f
+            (neg, 1, neg + 1, _random_int()),
+            (neg, 4, neg + 4, _random_int()),  # >0i
+            (neg, -1, neg - 1, _random_int()),
+            (neg, -4, neg - 4, _random_int()),  # <0i
+        ]
+
+        single_value_attribute_names = [
+            "x",
+            "y",
+            "w",
+            "h",
+            "width",
+            "height",
+            "top",
+            "left",
+            "bottom",
+            "right",
+            "centerx",
+            "centery",
+        ]
+
+        tuple_value_attribute_names = [
+            "topleft",
+            "topright",
+            "bottomleft",
+            "bottomright",
+            "midtop",
+            "midleft",
+            "midbottom",
+            "midright",
+            "size",
+            "center",
+        ]
+
+        for row in data_rows:
+            initial, inc, expected, other = row
+            new_value = initial + inc
+            for attribute_name in single_value_attribute_names:
+                with self.subTest(row=row, name=f"r.{attribute_name}"):
+                    actual = Rect(
+                        _random_int(), _random_int(), _random_int(), _random_int()
+                    )
+                    # act
+                    setattr(actual, attribute_name, new_value)
+                    # assert
+                    self.assertEqual(expected, getattr(actual, attribute_name))
+
+            for attribute_name in tuple_value_attribute_names:
+                with self.subTest(row=row, name=f"r.{attribute_name}[0]"):
+                    actual = Rect(
+                        _random_int(), _random_int(), _random_int(), _random_int()
+                    )
+                    # act
+                    setattr(actual, attribute_name, (new_value, other))
+                    # assert
+                    self.assertEqual((expected, other), getattr(actual, attribute_name))
+
+                with self.subTest(row=row, name=f"r.{attribute_name}[1]"):
+                    actual = Rect(
+                        _random_int(), _random_int(), _random_int(), _random_int()
+                    )
+                    # act
+                    setattr(actual, attribute_name, (other, new_value))
+                    # assert
+                    self.assertEqual((other, expected), getattr(actual, attribute_name))
+
+    def test_set_out_of_range_number_raises_exception(self):
+        i = 0
+        # (initial, expected)
+        data_rows = [
+            (_int_max + 1, TypeError),
+            (_int_max + 0.00001, TypeError),
+            (_int_max, None),
+            (_int_max - 1, None),
+            (_int_max - 2, None),
+            (_int_max - 10, None),
+            (_int_max - 63, None),
+            (_int_max - 64, None),
+            (_int_max - 65, None),
+            (_int_min - 1, TypeError),
+            (_int_min - 0.00001, TypeError),
+            (_int_min, None),
+            (_int_min + 1, None),
+            (_int_min + 2, None),
+            (_int_min + 10, None),
+            (_int_min + 62, None),
+            (_int_min + 63, None),
+            (_int_min + 64, None),
+            (0, None),
+            (100000, None),
+            (-100000, None),
+        ]
+
+        single_attribute_names = [
+            "x",
+            "y",
+            "w",
+            "h",
+            "width",
+            "height",
+            "top",
+            "left",
+            "bottom",
+            "right",
+            "centerx",
+            "centery",
+        ]
+
+        tuple_value_attribute_names = [
+            "topleft",
+            "topright",
+            "bottomleft",
+            "bottomright",
+            "midtop",
+            "midleft",
+            "midbottom",
+            "midright",
+            "size",
+            "center",
+        ]
+
+        for row in data_rows:
+            for attribute_name in single_attribute_names:
+                value, expected = row
+                with self.subTest(row=row, name=f"r.{attribute_name}"):
+                    actual = Rect(0, 0, 0, 0)
+                    if expected:
+                        # act/ assert
+                        self.assertRaises(
+                            TypeError, setattr, actual, attribute_name, value
+                        )
+                    else:
+                        # act
+                        setattr(actual, attribute_name, value)
+                        # assert
+                        self.assertEqual(value, getattr(actual, attribute_name))
+            other = _random_int()
+
+            for attribute_name in tuple_value_attribute_names:
+                value, expected = row
+                with self.subTest(row=row, name=f"r.{attribute_name}[0]"):
+                    actual = Rect(0, 0, 0, 0)
+                    # act/ assert
+                    if expected:
+                        # act/ assert
+                        self.assertRaises(
+                            TypeError, setattr, actual, attribute_name, (value, other)
+                        )
+                    else:
+                        # act
+                        setattr(actual, attribute_name, (value, other))
+                        # assert
+                        self.assertEqual(
+                            (value, other), getattr(actual, attribute_name)
+                        )
+                with self.subTest(row=row, name=f"r.{attribute_name}[1]"):
+                    actual = Rect(0, 0, 0, 0)
+                    # act/ assert
+                    if expected:
+                        # act/ assert
+                        self.assertRaises(
+                            TypeError, setattr, actual, attribute_name, (other, value)
+                        )
+                    else:
+                        # act
+                        setattr(actual, attribute_name, (other, value))
+                        # assert
+                        self.assertEqual(
+                            (other, value), getattr(actual, attribute_name)
+                        )
 
     def test_update_XYWidthHeight(self):
         """Test update with 4 int values(x, y, w, h)"""
@@ -1359,16 +1766,6 @@ class RectTypeTest(unittest.TestCase):
         # Bug for an empty list. Would return a Rect instead of None.
         self.assertTrue(r1.unionall_ip([]) is None)
 
-    def test_unionall__invalid_rect_format(self):
-        """Ensures unionall_ip correctly handles invalid rect parameters."""
-        numbers = [0, 1.2, 2, 3.3]
-        strs = ["a", "b", "c"]
-        nones = [None, None]
-
-        for invalid_rects in (numbers, strs, nones):
-            with self.assertRaises(TypeError):
-                Rect(0, 0, 1, 1).unionall_ip(invalid_rects)
-
     def test_colliderect(self):
         r1 = Rect(1, 2, 3, 4)
         self.assertTrue(
@@ -1404,7 +1801,6 @@ class RectTypeTest(unittest.TestCase):
             "r1 collides with Rect(r1.right, r1.bottom, 1, 1)",
         )
 
-    @unittest.skipIf(IS_PYPY, "fails on pypy3 sometimes")
     def testEquals(self):
         """check to see how the rect uses __eq__"""
         r1 = Rect(1, 2, 3, 4)
@@ -1963,7 +2359,6 @@ class RectTypeTest(unittest.TestCase):
                 collide_items = rect.collidedictall(d, invalid_param)
 
     def test_collidelist(self):
-
         # __doc__ (as of 2008-08-02) for pygame.rect.Rect.collidelist:
 
         # Rect.collidelist(list): return index
@@ -1982,7 +2377,6 @@ class RectTypeTest(unittest.TestCase):
         self.assertEqual(r.collidelist(f), -1)
 
     def test_collidelistall(self):
-
         # __doc__ (as of 2008-08-02) for pygame.rect.Rect.collidelistall:
 
         # Rect.collidelistall(list): return indices
@@ -2005,8 +2399,453 @@ class RectTypeTest(unittest.TestCase):
         f = [Rect(50, 50, 1, 1), Rect(20, 20, 5, 5)]
         self.assertFalse(r.collidelistall(f))
 
-    def test_fit(self):
+    def test_collidelistall_returns_empty_list(self):
+        r = Rect(1, 1, 10, 10)
 
+        l = [
+            Rect(112, 1, 10, 10),
+            Rect(50, 5, 10, 10),
+            Rect(15, 15, 1, 1),
+            Rect(-20, 2, 1, 1),
+        ]
+        self.assertEqual(r.collidelistall(l), [])
+
+    def test_collidelistall_list_of_tuples(self):
+        r = Rect(1, 1, 10, 10)
+
+        l = [
+            (1, 1, 10, 10),
+            (5, 5, 10, 10),
+            (15, 15, 1, 1),
+            (2, 2, 1, 1),
+        ]
+        self.assertEqual(r.collidelistall(l), [0, 1, 3])
+
+        f = [(50, 50, 1, 1), (20, 20, 5, 5)]
+        self.assertFalse(r.collidelistall(f))
+
+    def test_collidelistall_list_of_two_tuples(self):
+        r = Rect(1, 1, 10, 10)
+
+        l = [
+            ((1, 1), (10, 10)),
+            ((5, 5), (10, 10)),
+            ((15, 15), (1, 1)),
+            ((2, 2), (1, 1)),
+        ]
+        self.assertEqual(r.collidelistall(l), [0, 1, 3])
+
+        f = [((50, 50), (1, 1)), ((20, 20), (5, 5))]
+        self.assertFalse(r.collidelistall(f))
+
+    def test_collidelistall_list_of_lists(self):
+        r = Rect(1, 1, 10, 10)
+
+        l = [
+            [1, 1, 10, 10],
+            [5, 5, 10, 10],
+            [15, 15, 1, 1],
+            [2, 2, 1, 1],
+        ]
+        self.assertEqual(r.collidelistall(l), [0, 1, 3])
+
+        f = [[50, 50, 1, 1], [20, 20, 5, 5]]
+        self.assertFalse(r.collidelistall(f))
+
+    class _ObjectWithRectAttribute:
+        def __init__(self, r):
+            self.rect = r
+
+    class _ObjectWithCallableRectAttribute:
+        def __init__(self, r):
+            self._rect = r
+
+        def rect(self):
+            return self._rect
+
+    class _ObjectWithRectProperty:
+        def __init__(self, r):
+            self._rect = r
+
+        @property
+        def rect(self):
+            return self._rect
+
+    class _ObjectWithMultipleRectAttribute:
+        def __init__(self, r1, r2, r3):
+            self.rect1 = r1
+            self.rect2 = r2
+            self.rect3 = r3
+
+    def test_collidelistall_list_of_object_with_rect_attribute(self):
+        r = Rect(1, 1, 10, 10)
+
+        l = [
+            self._ObjectWithRectAttribute(Rect(1, 1, 10, 10)),
+            self._ObjectWithRectAttribute(Rect(5, 5, 10, 10)),
+            self._ObjectWithRectAttribute(Rect(15, 15, 1, 1)),
+            self._ObjectWithRectAttribute(Rect(2, 2, 1, 1)),
+        ]
+        self.assertEqual(r.collidelistall(l), [0, 1, 3])
+
+        f = [
+            self._ObjectWithRectAttribute(Rect(50, 50, 1, 1)),
+            self._ObjectWithRectAttribute(Rect(20, 20, 5, 5)),
+        ]
+        self.assertFalse(r.collidelistall(f))
+
+    def test_collidelistall_list_of_object_with_callable_rect_attribute(self):
+        r = Rect(1, 1, 10, 10)
+
+        l = [
+            self._ObjectWithCallableRectAttribute(Rect(1, 1, 10, 10)),
+            self._ObjectWithCallableRectAttribute(Rect(5, 5, 10, 10)),
+            self._ObjectWithCallableRectAttribute(Rect(15, 15, 1, 1)),
+            self._ObjectWithCallableRectAttribute(Rect(2, 2, 1, 1)),
+        ]
+        self.assertEqual(r.collidelistall(l), [0, 1, 3])
+
+        f = [
+            self._ObjectWithCallableRectAttribute(Rect(50, 50, 1, 1)),
+            self._ObjectWithCallableRectAttribute(Rect(20, 20, 5, 5)),
+        ]
+        self.assertFalse(r.collidelistall(f))
+
+    def test_collidelistall_list_of_object_with_callable_rect_returning_object_with_rect_attribute(
+        self,
+    ):
+        r = Rect(1, 1, 10, 10)
+
+        l = [
+            self._ObjectWithCallableRectAttribute(
+                self._ObjectWithRectAttribute(Rect(1, 1, 10, 10))
+            ),
+            self._ObjectWithCallableRectAttribute(
+                self._ObjectWithRectAttribute(Rect(5, 5, 10, 10))
+            ),
+            self._ObjectWithCallableRectAttribute(
+                self._ObjectWithRectAttribute(Rect(15, 15, 1, 1))
+            ),
+            self._ObjectWithCallableRectAttribute(
+                self._ObjectWithRectAttribute(Rect(2, 2, 1, 1))
+            ),
+        ]
+        self.assertEqual(r.collidelistall(l), [0, 1, 3])
+
+        f = [
+            self._ObjectWithCallableRectAttribute(Rect(50, 50, 1, 1)),
+            self._ObjectWithCallableRectAttribute(Rect(20, 20, 5, 5)),
+        ]
+        self.assertFalse(r.collidelistall(f))
+
+    def test_collidelistall_list_of_object_with_rect_property(self):
+        r = Rect(1, 1, 10, 10)
+
+        l = [
+            self._ObjectWithRectProperty(Rect(1, 1, 10, 10)),
+            self._ObjectWithRectProperty(Rect(5, 5, 10, 10)),
+            self._ObjectWithRectProperty(Rect(15, 15, 1, 1)),
+            self._ObjectWithRectProperty(Rect(2, 2, 1, 1)),
+        ]
+        self.assertEqual(r.collidelistall(l), [0, 1, 3])
+
+        f = [
+            self._ObjectWithRectProperty(Rect(50, 50, 1, 1)),
+            self._ObjectWithRectProperty(Rect(20, 20, 5, 5)),
+        ]
+        self.assertFalse(r.collidelistall(f))
+
+    def test_collideobjects_call_variants(self):
+        # arrange
+        r = Rect(1, 1, 10, 10)
+        rects = [Rect(1, 2, 3, 4), Rect(10, 20, 30, 40)]
+        objects = [
+            self._ObjectWithMultipleRectAttribute(
+                Rect(1, 2, 3, 4), Rect(10, 20, 30, 40), Rect(100, 200, 300, 400)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(1, 2, 3, 4), Rect(10, 20, 30, 40), Rect(100, 200, 300, 400)
+            ),
+        ]
+
+        # act / verify
+        r.collideobjects(rects)
+        r.collideobjects(rects, key=None)
+        r.collideobjects(objects, key=lambda o: o.rect1)
+        self.assertRaises(TypeError, r.collideobjects, objects)
+
+    def test_collideobjects_without_key(self):
+        r = Rect(1, 1, 10, 10)
+        types_to_test = [
+            [Rect(50, 50, 1, 1), Rect(5, 5, 10, 10), Rect(4, 4, 1, 1)],
+            [
+                self._ObjectWithRectAttribute(Rect(50, 50, 1, 1)),
+                self._ObjectWithRectAttribute(Rect(5, 5, 10, 10)),
+                self._ObjectWithRectAttribute(Rect(4, 4, 1, 1)),
+            ],
+            [
+                self._ObjectWithRectProperty(Rect(50, 50, 1, 1)),
+                self._ObjectWithRectProperty(Rect(5, 5, 10, 10)),
+                self._ObjectWithRectProperty(Rect(4, 4, 1, 1)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(Rect(50, 50, 1, 1)),
+                self._ObjectWithCallableRectAttribute(Rect(5, 5, 10, 10)),
+                self._ObjectWithCallableRectAttribute(Rect(4, 4, 1, 1)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(50, 50, 1, 1))
+                ),
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(5, 5, 10, 10))
+                ),
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(4, 4, 1, 1))
+                ),
+            ],
+            [(50, 50, 1, 1), (5, 5, 10, 10), (4, 4, 1, 1)],
+            [((50, 50), (1, 1)), ((5, 5), (10, 10)), ((4, 4), (1, 1))],
+            [[50, 50, 1, 1], [5, 5, 10, 10], [4, 4, 1, 1]],
+            [
+                Rect(50, 50, 1, 1),
+                self._ObjectWithRectAttribute(Rect(5, 5, 10, 10)),
+                (4, 4, 1, 1),
+            ],  # mix
+        ]
+
+        for l in types_to_test:
+            with self.subTest(type=l[0].__class__.__name__):
+                # act
+                actual = r.collideobjects(l)
+                # assert
+                self.assertEqual(actual, l[1])
+
+        types_to_test = [
+            [Rect(50, 50, 1, 1), Rect(100, 100, 4, 4)],
+            [
+                self._ObjectWithRectAttribute(Rect(50, 50, 1, 1)),
+                self._ObjectWithRectAttribute(Rect(100, 100, 4, 4)),
+            ],
+            [
+                self._ObjectWithRectProperty(Rect(50, 50, 1, 1)),
+                self._ObjectWithRectProperty(Rect(100, 100, 4, 4)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(Rect(50, 50, 1, 1)),
+                self._ObjectWithCallableRectAttribute(Rect(100, 100, 4, 4)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(50, 50, 1, 1))
+                ),
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(100, 100, 4, 4))
+                ),
+            ],
+            [(50, 50, 1, 1), (100, 100, 4, 4)],
+            [((50, 50), (1, 1)), ((100, 100), (4, 4))],
+            [[50, 50, 1, 1], [100, 100, 4, 4]],
+            [Rect(50, 50, 1, 1), [100, 100, 4, 4]],  # mix
+        ]
+
+        for f in types_to_test:
+            with self.subTest(type=f[0].__class__.__name__, expected=None):
+                # act
+                actual = r.collideobjects(f)
+                # assert
+                self.assertEqual(actual, None)
+
+    def test_collideobjects_list_of_object_with_multiple_rect_attribute(self):
+        r = Rect(1, 1, 10, 10)
+
+        things = [
+            self._ObjectWithMultipleRectAttribute(
+                Rect(1, 1, 10, 10), Rect(5, 5, 1, 1), Rect(-73, 3, 3, 3)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(5, 5, 10, 10), Rect(-5, -5, 10, 10), Rect(3, 3, 3, 3)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(15, 15, 1, 1), Rect(100, 1, 1, 1), Rect(3, 83, 3, 3)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(2, 2, 1, 1), Rect(1, -81, 10, 10), Rect(3, 8, 3, 3)
+            ),
+        ]
+        self.assertEqual(r.collideobjects(things, key=lambda o: o.rect1), things[0])
+        self.assertEqual(r.collideobjects(things, key=lambda o: o.rect2), things[0])
+        self.assertEqual(r.collideobjects(things, key=lambda o: o.rect3), things[1])
+
+        f = [
+            self._ObjectWithMultipleRectAttribute(
+                Rect(50, 50, 1, 1), Rect(11, 1, 1, 1), Rect(2, -32, 2, 2)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(20, 20, 5, 5), Rect(1, 11, 1, 1), Rect(-20, 2, 2, 2)
+            ),
+        ]
+        self.assertFalse(r.collideobjectsall(f, key=lambda o: o.rect1))
+        self.assertFalse(r.collideobjectsall(f, key=lambda o: o.rect2))
+        self.assertFalse(r.collideobjectsall(f, key=lambda o: o.rect3))
+
+    def test_collideobjectsall_call_variants(self):
+        # arrange
+        r = Rect(1, 1, 10, 10)
+        rects = [Rect(1, 2, 3, 4), Rect(10, 20, 30, 40)]
+        objects = [
+            self._ObjectWithMultipleRectAttribute(
+                Rect(1, 2, 3, 4), Rect(10, 20, 30, 40), Rect(100, 200, 300, 400)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(1, 2, 3, 4), Rect(10, 20, 30, 40), Rect(100, 200, 300, 400)
+            ),
+        ]
+
+        # act / verify
+        r.collideobjectsall(rects)
+        r.collideobjectsall(rects, key=None)
+        r.collideobjectsall(objects, key=lambda o: o.rect1)
+        self.assertRaises(TypeError, r.collideobjectsall, objects)
+
+    def test_collideobjectsall(self):
+        r = Rect(1, 1, 10, 10)
+
+        types_to_test = [
+            [
+                Rect(1, 1, 10, 10),
+                Rect(5, 5, 10, 10),
+                Rect(15, 15, 1, 1),
+                Rect(2, 2, 1, 1),
+            ],
+            [
+                (1, 1, 10, 10),
+                (5, 5, 10, 10),
+                (15, 15, 1, 1),
+                (2, 2, 1, 1),
+            ],
+            [
+                ((1, 1), (10, 10)),
+                ((5, 5), (10, 10)),
+                ((15, 15), (1, 1)),
+                ((2, 2), (1, 1)),
+            ],
+            [
+                [1, 1, 10, 10],
+                [5, 5, 10, 10],
+                [15, 15, 1, 1],
+                [2, 2, 1, 1],
+            ],
+            [
+                self._ObjectWithRectAttribute(Rect(1, 1, 10, 10)),
+                self._ObjectWithRectAttribute(Rect(5, 5, 10, 10)),
+                self._ObjectWithRectAttribute(Rect(15, 15, 1, 1)),
+                self._ObjectWithRectAttribute(Rect(2, 2, 1, 1)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(Rect(1, 1, 10, 10)),
+                self._ObjectWithCallableRectAttribute(Rect(5, 5, 10, 10)),
+                self._ObjectWithCallableRectAttribute(Rect(15, 15, 1, 1)),
+                self._ObjectWithCallableRectAttribute(Rect(2, 2, 1, 1)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(1, 1, 10, 10))
+                ),
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(5, 5, 10, 10))
+                ),
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(15, 15, 1, 1))
+                ),
+                self._ObjectWithCallableRectAttribute(
+                    self._ObjectWithRectAttribute(Rect(2, 2, 1, 1))
+                ),
+            ],
+            [
+                self._ObjectWithRectProperty(Rect(1, 1, 10, 10)),
+                self._ObjectWithRectProperty(Rect(5, 5, 10, 10)),
+                self._ObjectWithRectProperty(Rect(15, 15, 1, 1)),
+                self._ObjectWithRectProperty(Rect(2, 2, 1, 1)),
+            ],
+        ]
+        for things in types_to_test:
+            with self.subTest(type=things[0].__class__.__name__):
+                # act
+                actual = r.collideobjectsall(things, key=None)
+                # assert
+                self.assertEqual(actual, [things[0], things[1], things[3]])
+
+        types_to_test = [
+            [Rect(50, 50, 1, 1), Rect(20, 20, 5, 5)],
+            [(50, 50, 1, 1), (20, 20, 5, 5)],
+            [((50, 50), (1, 1)), ((20, 20), (5, 5))],
+            [[50, 50, 1, 1], [20, 20, 5, 5]],
+            [
+                self._ObjectWithRectAttribute(Rect(50, 50, 1, 1)),
+                self._ObjectWithRectAttribute(Rect(20, 20, 5, 5)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(Rect(50, 50, 1, 1)),
+                self._ObjectWithCallableRectAttribute(Rect(20, 20, 5, 5)),
+            ],
+            [
+                self._ObjectWithCallableRectAttribute(Rect(50, 50, 1, 1)),
+                self._ObjectWithCallableRectAttribute(Rect(20, 20, 5, 5)),
+            ],
+            [
+                self._ObjectWithRectProperty(Rect(50, 50, 1, 1)),
+                self._ObjectWithRectProperty(Rect(20, 20, 5, 5)),
+            ],
+        ]
+        for f in types_to_test:
+            with self.subTest(type=f[0].__class__.__name__, expected=None):
+                # act
+                actual = r.collideobjectsall(f)
+                # assert
+                self.assertFalse(actual)
+
+    def test_collideobjectsall_list_of_object_with_multiple_rect_attribute(self):
+        r = Rect(1, 1, 10, 10)
+
+        things = [
+            self._ObjectWithMultipleRectAttribute(
+                Rect(1, 1, 10, 10), Rect(5, 5, 1, 1), Rect(-73, 3, 3, 3)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(5, 5, 10, 10), Rect(-5, -5, 10, 10), Rect(3, 3, 3, 3)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(15, 15, 1, 1), Rect(100, 1, 1, 1), Rect(3, 83, 3, 3)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(2, 2, 1, 1), Rect(1, -81, 10, 10), Rect(3, 8, 3, 3)
+            ),
+        ]
+        self.assertEqual(
+            r.collideobjectsall(things, key=lambda o: o.rect1),
+            [things[0], things[1], things[3]],
+        )
+        self.assertEqual(
+            r.collideobjectsall(things, key=lambda o: o.rect2), [things[0], things[1]]
+        )
+        self.assertEqual(
+            r.collideobjectsall(things, key=lambda o: o.rect3), [things[1], things[3]]
+        )
+
+        f = [
+            self._ObjectWithMultipleRectAttribute(
+                Rect(50, 50, 1, 1), Rect(11, 1, 1, 1), Rect(2, -32, 2, 2)
+            ),
+            self._ObjectWithMultipleRectAttribute(
+                Rect(20, 20, 5, 5), Rect(1, 11, 1, 1), Rect(-20, 2, 2, 2)
+            ),
+        ]
+        self.assertFalse(r.collideobjectsall(f, key=lambda o: o.rect1))
+        self.assertFalse(r.collideobjectsall(f, key=lambda o: o.rect2))
+        self.assertFalse(r.collideobjectsall(f, key=lambda o: o.rect3))
+
+    def test_fit(self):
         # __doc__ (as of 2008-08-02) for pygame.rect.Rect.fit:
 
         # Rect.fit(Rect): return Rect
@@ -2083,8 +2922,23 @@ class RectTypeTest(unittest.TestCase):
         r[::-1] = r
         self.assertEqual(r, [14, 13, 12, 11])
 
+    def test_ass_subscript_deletion(self):
+        r = Rect(0, 0, 0, 0)
+        with self.assertRaises(TypeError):
+            del r[0]
 
-@unittest.skipIf(IS_PYPY, "fails on pypy")
+        with self.assertRaises(TypeError):
+            del r[0:2]
+
+        with self.assertRaises(TypeError):
+            del r[...]
+
+    def test_collection_abc(self):
+        r = Rect(64, 70, 75, 30)
+        self.assertTrue(isinstance(r, Collection))
+        self.assertFalse(isinstance(r, Sequence))
+
+
 class SubclassTest(unittest.TestCase):
     class MyRect(Rect):
         def __init__(self, *args, **kwds):
@@ -2146,6 +3000,11 @@ class SubclassTest(unittest.TestCase):
         mr2 = mr1.fit(Rect(30, 30, 15, 10))
         self.assertTrue(isinstance(mr2, self.MyRect))
         self.assertRaises(AttributeError, getattr, mr2, "an_attribute")
+
+    def test_collection_abc(self):
+        mr1 = self.MyRect(64, 70, 75, 30)
+        self.assertTrue(isinstance(mr1, Collection))
+        self.assertFalse(isinstance(mr1, Sequence))
 
 
 if __name__ == "__main__":

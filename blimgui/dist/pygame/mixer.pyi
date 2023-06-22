@@ -1,11 +1,14 @@
-from typing import Any, Optional, Tuple, Union, overload
+from typing import Any, Dict, Optional, Tuple, Union, final, overload
 
 import numpy
 
 from pygame.event import Event
 
-from . import music as music
-from ._common import _FileArg
+from . import mixer_music
+from ._common import FileArg
+
+# export mixer_music as mixer.music
+music = mixer_music
 
 def init(
     frequency: int = 44100,
@@ -38,7 +41,7 @@ def get_sdl_mixer_version(linked: bool = True) -> Tuple[int, int, int]: ...
 
 class Sound:
     @overload
-    def __init__(self, file: _FileArg) -> None: ...
+    def __init__(self, file: FileArg) -> None: ...
     @overload
     def __init__(
         self, buffer: Any
@@ -53,6 +56,10 @@ class Sound:
         maxtime: int = 0,
         fade_ms: int = 0,
     ) -> Channel: ...
+    # possibly going to be deprecated/removed soon, in which case these
+    # typestubs must be removed too
+    __array_interface__: Dict[str, Any]
+    __array_struct__: Any
     def stop(self) -> None: ...
     def fadeout(self, time: int) -> None: ...
     def set_volume(self, value: float) -> None: ...
@@ -61,6 +68,7 @@ class Sound:
     def get_length(self) -> float: ...
     def get_raw(self) -> bytes: ...
 
+@final
 class Channel:
     def __init__(self, id: int) -> None: ...
     def play(
@@ -74,6 +82,7 @@ class Channel:
     def pause(self) -> None: ...
     def unpause(self) -> None: ...
     def fadeout(self, time: int) -> None: ...
+    def queue(self, sound: Sound) -> None: ...
     @overload
     def set_volume(self, value: float) -> None: ...
     @overload
@@ -84,3 +93,6 @@ class Channel:
     def get_queue(self) -> Sound: ...
     def set_endevent(self, type: Union[int, Event] = 0) -> None: ...
     def get_endevent(self) -> int: ...
+
+SoundType = Sound
+ChannelType = Channel

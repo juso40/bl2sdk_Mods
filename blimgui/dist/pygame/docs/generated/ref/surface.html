@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.Surface &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.Surface &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -106,11 +106,6 @@
 <div class="line"><span class="signature">Surface((width, height), flags=0, Surface) -&gt; Surface</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 28%" />
-<col style="width: 1%" />
-<col style="width: 71%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="surface.html#pygame.Surface.blit">pygame.Surface.blit</a></div>
 </td>
@@ -357,6 +352,11 @@
 <td>—</td>
 <td>pixel buffer address</td>
 </tr>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="surface.html#pygame.Surface.premul_alpha">pygame.Surface.premul_alpha</a></div>
+</td>
+<td>—</td>
+<td>returns a copy of the surface with the RGB channels pre-multiplied by the alpha channel.</td>
+</tr>
 </tbody>
 </table>
 <p>A pygame Surface is used to represent any image. The Surface has a fixed
@@ -474,7 +474,7 @@ slightly different colors than a non self-blit.</p>
 with each of the elements corresponding to the ones of <a class="reference internal" href="#pygame.Surface.blit" title="pygame.Surface.blit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blit()</span></code></a>.
 It needs at minimum a sequence of (source, dest).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>blit_sequence</strong> -- a sequence of surfaces and arguments to blit them,
 they correspond to the <a class="reference internal" href="#pygame.Surface.blit" title="pygame.Surface.blit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blit()</span></code></a> arguments</p></li>
@@ -482,11 +482,11 @@ they correspond to the <a class="reference internal" href="#pygame.Surface.blit"
 otherwise return <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a list of rects of the areas changed if <code class="docutils literal notranslate"><span class="pre">doreturn</span></code> is
 <code class="docutils literal notranslate"><span class="pre">True</span></code>, otherwise <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list or None</p>
 </dd>
 </dl>
@@ -777,6 +777,11 @@ will have no effect.</p>
 <p>Getting and setting pixels one at a time is generally too slow to be used
 in a game or realtime situation.</p>
 <p>This function will temporarily lock and unlock the Surface as needed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the surface is palettized, the pixel color will be set to the
+most similar color in the palette.</p>
+</div>
 </dd></dl>
 
 <dl class="py method definition">
@@ -1108,8 +1113,11 @@ have a larger pitch than their real width.</p>
 <p>This is not needed for normal pygame usage.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In SDL2, the masks are read-only and accordingly this method will raise
-an AttributeError if called.</p>
+<p>Starting in pygame 2.0, the masks are read-only and
+accordingly this method will raise a TypeError if called.</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since pygame 2.0.0.</span></p>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in pygame 1.8.1.</span></p>
@@ -1138,8 +1146,11 @@ integer.</p>
 <p>This is not needed for normal pygame usage.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In SDL2, the shifts are read-only and accordingly this method will raise
-an AttributeError if called.</p>
+<p>Starting in pygame 2.0, the shifts are read-only and
+accordingly this method will raise a TypeError if called.</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since pygame 2.0.0.</span></p>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in pygame 1.8.1.</span></p>
@@ -1249,6 +1260,41 @@ the returned <a class="tooltip reference internal" href="bufferproxy.html#pygame
 </div>
 </dd></dl>
 
+<dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.Surface.premul_alpha">
+<span class="sig-name descname"><span class="pre">premul_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.Surface.premul_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">returns a copy of the surface with the RGB channels pre-multiplied by the alpha channel.</span></div>
+<div class="line"><span class="signature">premul_alpha() -&gt; Surface</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/3276">Please leave premul_alpha feedback with authors</a></p>
+<p>Returns a copy of the initial surface with the red, green and blue color channels multiplied
+by the alpha channel. This is intended to make it easier to work with the BLEND_PREMULTIPLED
+blend mode flag of the blit() method. Surfaces which have called this method will only look
+correct after blitting if the BLEND_PREMULTIPLED special flag is used.</p>
+<p>It is worth noting that after calling this method, methods that return the colour of a pixel
+such as get_at() will return the alpha multiplied colour values. It is not possible to fully
+reverse an alpha multiplication of the colours in a surface as integer colour channel data
+is generally reduced by the operation (e.g. 255 x 0 = 0, from there it is not possible to reconstruct
+the original 255 from just the two remaining zeros in the colour and alpha channels).</p>
+<p>If you call this method, and then call it again, it will multiply the colour channels by the alpha channel
+twice. There are many possible ways to obtain a surface with the colour channels pre-multiplied by the
+alpha channel in pygame, and it is not possible to tell the difference just from the information in the pixels.
+It is completely possible to have two identical surfaces - one intended for pre-multiplied alpha blending and
+one intended for normal blending. For this reason we do not store state on surfaces intended for pre-multiplied
+alpha blending.</p>
+<p>Surfaces without an alpha channel cannot use this method and will return an error if you use
+it on them. It is best used on 32 bit surfaces (the default on most platforms) as the blitting
+on these surfaces can be accelerated by SIMD versions of the pre-multiplied blitter.</p>
+<p>In general pre-multiplied alpha blitting is faster then 'straight alpha' blitting and produces
+superior results when blitting an alpha surface onto another surface with alpha - assuming both
+surfaces contain pre-multiplied alpha colours.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.2.0.</span></p>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1277,14 +1323,14 @@ the returned <a class="tooltip reference internal" href="bufferproxy.html#pygame
         <li class="right" >
           <a href="sprite.html" title="pygame.sprite"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.Surface</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

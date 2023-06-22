@@ -1,4 +1,3 @@
-# coding: ascii
 # pygame - Python Game Library
 # Copyright (C) 2000-2001  Pete Shinners
 #
@@ -29,14 +28,26 @@ import os
 
 # Choose Windows display driver
 if os.name == "nt":
-    # pypy does not find the dlls, so we add package folder to PATH.
     pygame_dir = os.path.split(__file__)[0]
+
+    # pypy does not find the dlls, so we add package folder to PATH.
     os.environ["PATH"] = os.environ["PATH"] + ";" + pygame_dir
+
+    # windows store python does not find the dlls, so we run this
+    if sys.version_info > (3, 8):
+        os.add_dll_directory(pygame_dir)  # only available in 3.8+
+
+    # cleanup namespace
+    del pygame_dir
 
 # when running under X11, always set the SDL window WM_CLASS to make the
 #   window managers correctly match the pygame window.
 elif "DISPLAY" in os.environ and "SDL_VIDEO_X11_WMCLASS" not in os.environ:
     os.environ["SDL_VIDEO_X11_WMCLASS"] = os.path.basename(sys.argv[0])
+
+
+def _attribute_undefined(name):
+    raise RuntimeError(f"{name} is not available")
 
 
 class MissingModule:
@@ -58,10 +69,8 @@ class MissingModule:
         missing_msg = f"{self.name} module not available ({self.reason})"
         raise NotImplementedError(missing_msg)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return False
-
-    __bool__ = __nonzero__
 
     def warn(self):
         msg_type = "import" if self.urgent else "use"
@@ -105,150 +114,113 @@ if get_sdl_version() < (2, 0, 0):
     # cdrom only available for SDL 1.2.X
     try:
         import pygame.cdrom
-    except (ImportError, IOError):
+    except (ImportError, OSError):
         cdrom = MissingModule("cdrom", urgent=1)
 
 try:
     import pygame.display
-except (ImportError, IOError):
+except (ImportError, OSError):
     display = MissingModule("display", urgent=1)
 
 try:
     import pygame.draw
-except (ImportError, IOError):
+except (ImportError, OSError):
     draw = MissingModule("draw", urgent=1)
 
 try:
     import pygame.event
-except (ImportError, IOError):
+except (ImportError, OSError):
     event = MissingModule("event", urgent=1)
 
 try:
     import pygame.image
-except (ImportError, IOError):
+except (ImportError, OSError):
     image = MissingModule("image", urgent=1)
 
 try:
     import pygame.joystick
-except (ImportError, IOError):
+except (ImportError, OSError):
     joystick = MissingModule("joystick", urgent=1)
 
 try:
     import pygame.key
-except (ImportError, IOError):
+except (ImportError, OSError):
     key = MissingModule("key", urgent=1)
 
 try:
     import pygame.mouse
-except (ImportError, IOError):
+except (ImportError, OSError):
     mouse = MissingModule("mouse", urgent=1)
 
 try:
     import pygame.cursors
     from pygame.cursors import Cursor
-except (ImportError, IOError):
+except (ImportError, OSError):
     cursors = MissingModule("cursors", urgent=1)
-    Cursor = lambda: Missing_Function
+
+    def Cursor(*args):  # pylint: disable=unused-argument
+        _attribute_undefined("pygame.Cursor")
+
 
 try:
     import pygame.sprite
-except (ImportError, IOError):
+except (ImportError, OSError):
     sprite = MissingModule("sprite", urgent=1)
 
 try:
     import pygame.threads
-except (ImportError, IOError):
+except (ImportError, OSError):
     threads = MissingModule("threads", urgent=1)
 
 try:
     import pygame.pixelcopy
-except (ImportError, IOError):
+except (ImportError, OSError):
     pixelcopy = MissingModule("pixelcopy", urgent=1)
-
-
-def warn_unwanted_files():
-    """warn about unneeded old files"""
-
-    # a temporary hack to warn about camera.so and camera.pyd.
-    install_path = os.path.split(pygame.base.__file__)[0]
-    extension_ext = os.path.splitext(pygame.base.__file__)[1]
-
-    # here are the .so/.pyd files we need to ask to remove.
-    ext_to_remove = ["camera"]
-
-    # here are the .py/.pyo/.pyc files we need to ask to remove.
-    py_to_remove = ["color"]
-
-    # Don't warn on Symbian. The color.py is used as a wrapper.
-    if os.name == "e32":
-        py_to_remove = []
-
-    # See if any of the files are there.
-    extension_files = [f"{x}{extension_ext}" for x in ext_to_remove]
-
-    py_files = [
-        f"{x}{py_ext}" for py_ext in [".py", ".pyc", ".pyo"] for x in py_to_remove
-    ]
-
-    files = py_files + extension_files
-
-    unwanted_files = []
-    for f in files:
-        unwanted_files.append(os.path.join(install_path, f))
-
-    ask_remove = []
-    for f in unwanted_files:
-        if os.path.exists(f):
-            ask_remove.append(f)
-
-    if ask_remove:
-        message = "Detected old file(s).  Please remove the old files:\n"
-        message += " ".join(ask_remove)
-        message += "\nLeaving them there might break pygame.  Cheers!\n\n"
-
-        try:
-            import warnings
-
-            level = 4
-            warnings.warn(message, RuntimeWarning, level)
-        except ImportError:
-            print(message)
-
-
-# disable, because we hopefully don't need it.
-# warn_unwanted_files()
 
 
 try:
     from pygame.surface import Surface, SurfaceType
-except (ImportError, IOError):
-    Surface = lambda: Missing_Function
+except (ImportError, OSError):
+
+    def Surface(size, flags, depth, masks):  # pylint: disable=unused-argument
+        _attribute_undefined("pygame.Surface")
+
+    SurfaceType = Surface
 
 try:
     import pygame.mask
     from pygame.mask import Mask
-except (ImportError, IOError):
+except (ImportError, OSError):
     mask = MissingModule("mask", urgent=0)
-    Mask = lambda: Missing_Function
+
+    def Mask(size, fill):  # pylint: disable=unused-argument
+        _attribute_undefined("pygame.Mask")
+
 
 try:
     from pygame.pixelarray import PixelArray
-except (ImportError, IOError):
-    PixelArray = lambda: Missing_Function
+except (ImportError, OSError):
+
+    def PixelArray(surface):  # pylint: disable=unused-argument
+        _attribute_undefined("pygame.PixelArray")
+
 
 try:
     from pygame.overlay import Overlay
-except (ImportError, IOError):
-    Overlay = lambda: Missing_Function
+except (ImportError, OSError):
+
+    def Overlay(format, size):  # pylint: disable=unused-argument
+        _attribute_undefined("pygame.Overlay")
+
 
 try:
     import pygame.time
-except (ImportError, IOError):
+except (ImportError, OSError):
     time = MissingModule("time", urgent=1)
 
 try:
     import pygame.transform
-except (ImportError, IOError):
+except (ImportError, OSError):
     transform = MissingModule("transform", urgent=1)
 
 # lastly, the "optional" pygame modules
@@ -257,7 +229,7 @@ if "PYGAME_FREETYPE" in os.environ:
         import pygame.ftfont as font
 
         sys.modules["pygame.font"] = font
-    except (ImportError, IOError):
+    except (ImportError, OSError):
         pass
 try:
     import pygame.font
@@ -266,7 +238,7 @@ try:
     pygame.font.SysFont = pygame.sysfont.SysFont
     pygame.font.get_fonts = pygame.sysfont.get_fonts
     pygame.font.match_font = pygame.sysfont.match_font
-except (ImportError, IOError):
+except (ImportError, OSError):
     font = MissingModule("font", urgent=0)
 
 # try and load pygame.mixer_music before mixer, for py2app...
@@ -274,39 +246,33 @@ try:
     import pygame.mixer_music
 
     # del pygame.mixer_music
-    # print ("NOTE2: failed importing pygame.mixer_music in lib/__init__.py")
-except (ImportError, IOError):
+    # print("NOTE2: failed importing pygame.mixer_music in lib/__init__.py")
+except (ImportError, OSError):
     pass
 
 try:
     import pygame.mixer
-except (ImportError, IOError):
+except (ImportError, OSError):
     mixer = MissingModule("mixer", urgent=0)
-
-# always fails, but MissingModule needs an exception to process
-try:
-    import pygame.movie
-except (ImportError, IOError):
-    movie = MissingModule("movie", urgent=0)
 
 try:
     import pygame.scrap
-except (ImportError, IOError):
+except (ImportError, OSError):
     scrap = MissingModule("scrap", urgent=0)
 
 try:
     import pygame.surfarray
-except (ImportError, IOError):
+except (ImportError, OSError):
     surfarray = MissingModule("surfarray", urgent=0)
 
 try:
     import pygame.sndarray
-except (ImportError, IOError):
+except (ImportError, OSError):
     sndarray = MissingModule("sndarray", urgent=0)
 
 try:
     import pygame.fastevent
-except (ImportError, IOError):
+except (ImportError, OSError):
     fastevent = MissingModule("fastevent", urgent=0)
 
 # there's also a couple "internal" modules not needed
@@ -316,7 +282,15 @@ try:
     import pygame.imageext
 
     del pygame.imageext
-except (ImportError, IOError):
+except (ImportError, OSError):
+    pass
+
+# this internal module needs to be included for dependency
+# finders, but can't be deleted, as some tests need it
+try:
+    import pygame.pkgdata
+
+except (ImportError, OSError):
     pass
 
 
@@ -368,4 +342,4 @@ if "PYGAME_HIDE_SUPPORT_PROMPT" not in os.environ:
     print("Hello from the pygame community. https://www.pygame.org/contribute.html")
 
 # cleanup namespace
-del pygame, os, sys, MissingModule, copyreg
+del pygame, os, sys, MissingModule, copyreg, packager_imports

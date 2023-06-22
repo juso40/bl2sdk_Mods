@@ -55,7 +55,7 @@ def input_main(device_id=None):
     else:
         input_id = device_id
 
-    print("using input_id :%s:" % input_id)
+    print(f"using input_id :{input_id}:")
     i = pygame.midi.Input(input_id)
 
     pg.display.set_mode((1, 1))
@@ -173,7 +173,7 @@ def output_main(device_id=None):
     else:
         port = device_id
 
-    print("using output_id :%s:" % port)
+    print(f"using output_id :{port}:")
 
     midi_out = pygame.midi.Output(port, 0)
     try:
@@ -196,7 +196,7 @@ def output_main(device_id=None):
         pg.event.set_blocked(pg.MOUSEMOTION)
         mouse_note = 0
         on_notes = set()
-        while 1:
+        while True:
             e = pg.event.wait()
             if e.type == pg.MOUSEBUTTONDOWN:
                 mouse_note, velocity, __, __ = regions.get_at(e.pos)
@@ -253,7 +253,7 @@ def make_key_mapping(keys, start_note):
     return mapping
 
 
-class NullKey(object):
+class NullKey:
     """A dummy key that ignores events passed to it by other keys
 
     A NullKey instance is the left key instance used by default
@@ -342,8 +342,8 @@ def key_class(updates, image_strip, image_rects, is_white_key=True):
         key_color = "white"
     else:
         key_color = "black"
-    c_notify_down_method = "_right_%s_down" % key_color
-    c_notify_up_method = "_right_%s_up" % key_color
+    c_notify_down_method = f"_right_{key_color}_down"
+    c_notify_up_method = f"_right_{key_color}_up"
 
     # Images:
     #
@@ -424,7 +424,7 @@ def key_class(updates, image_strip, image_rects, is_white_key=True):
         )
         c_event_right_black_up[down_state_all] = (down_state_self_white, image_rects[2])
 
-    class Key(object):
+    class Key:
         """A key widget, maintains key state and draws the key's image
 
         Constructor arguments:
@@ -621,7 +621,7 @@ def key_images():
     return strip, rects
 
 
-class Keyboard(object):
+class Keyboard:
     """Musical keyboard widget
 
     Constructor arguments:
@@ -703,7 +703,7 @@ class Keyboard(object):
         """
 
         # Keys are entered in a list, where index is Midi note. Since there are
-        # only 128 possible Midi notes the list length is managable. Unassigned
+        # only 128 possible Midi notes the list length is manageable. Unassigned
         # note positions should never be accessed, so are set None to ensure
         # the bug is quickly detected.
         #
@@ -853,18 +853,16 @@ def main(mode="output", device_id=None):
     elif mode == "list":
         print_device_info()
     else:
-        raise ValueError("Unknown mode option '%s'" % mode)
+        raise ValueError(f"Unknown mode option '{mode}'")
 
 
 if __name__ == "__main__":
-
     try:
         device_id = int(sys.argv[-1])
     except ValueError:
         device_id = None
 
     if "--input" in sys.argv or "-i" in sys.argv:
-
         input_main(device_id)
 
     elif "--output" in sys.argv or "-o" in sys.argv:

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import array
 import binascii
 import io
@@ -11,6 +9,13 @@ import pathlib
 
 from pygame.tests.test_utils import example_path, png, tostring
 import pygame, pygame.image, pygame.pkgdata
+
+sdl_image_svg_jpeg_save_bug = False
+_sdl_image_ver = pygame.image.get_sdl_image_version()
+if _sdl_image_ver is not None:
+    sdl_image_svg_jpeg_save_bug = (
+        _sdl_image_ver <= (2, 0, 5) and pygame.get_sdl_byteorder() == pygame.BIG_ENDIAN
+    )
 
 
 def test_magic(f, magic_hexes):
@@ -94,6 +99,10 @@ class ImageModuleTest(unittest.TestCase):
                     img_file = io.BytesIO(img_bytes)
                     image = pygame.image.load(img_file)
 
+    @unittest.skipIf(
+        sdl_image_svg_jpeg_save_bug,
+        "SDL_image 2.0.5 and older has a big endian bug in jpeg saving",
+    )
     def testSaveJPG(self):
         """JPG equivalent to issue #211 - color channel swapping
 
@@ -222,8 +231,74 @@ class ImageModuleTest(unittest.TestCase):
             del reader
             os.remove(f_path)
 
-    def test_save(self):
+    def testSavePNG8(self):
+        """see if we can save an 8 bit png correctly"""
+        # Create an 8-bit PNG file with known colors
+        set_pixels = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (170, 146, 170)]
 
+        size = (1, len(set_pixels))
+        surf = pygame.Surface(size, depth=8)
+        for cnt, pix in enumerate(set_pixels):
+            surf.set_at((0, cnt), pix)
+
+        f_path = tempfile.mktemp(suffix=".png")
+        pygame.image.save(surf, f_path)
+
+        try:
+            # Read the PNG file and verify that pygame saved it correctly
+            reader = png.Reader(filename=f_path)
+            width, height, pixels, _ = reader.asRGB8()
+
+            self.assertEqual(size, (width, height))
+
+            # pixels is a generator
+            self.assertEqual(list(map(tuple, pixels)), set_pixels)
+
+        finally:
+            # Ensures proper clean up.
+            if not reader.file.closed:
+                reader.file.close()
+            del reader
+            os.remove(f_path)
+
+    def testSavePaletteAsPNG8(self):
+        """see if we can save a png with color values in the proper channels."""
+        # Create a PNG file with known colors
+        pygame.display.init()
+
+        reddish_pixel = (215, 0, 0)
+        greenish_pixel = (0, 225, 0)
+        bluish_pixel = (0, 0, 235)
+        greyish_pixel = (115, 125, 135)
+
+        surf = pygame.Surface((1, 4), 0, 8)
+        surf.set_palette_at(0, reddish_pixel)
+        surf.set_palette_at(1, greenish_pixel)
+        surf.set_palette_at(2, bluish_pixel)
+        surf.set_palette_at(3, greyish_pixel)
+
+        f_path = tempfile.mktemp(suffix=".png")
+        pygame.image.save(surf, f_path)
+        try:
+            # Read the PNG file and verify that pygame saved it correctly
+            reader = png.Reader(filename=f_path)
+            reader.read()
+            palette = reader.palette()
+
+            # pixels is a generator
+            self.assertEqual(tuple(next(palette)), reddish_pixel)
+            self.assertEqual(tuple(next(palette)), greenish_pixel)
+            self.assertEqual(tuple(next(palette)), bluish_pixel)
+            self.assertEqual(tuple(next(palette)), greyish_pixel)
+
+        finally:
+            # Ensures proper clean up.
+            if not reader.file.closed:
+                reader.file.close()
+            del reader
+            os.remove(f_path)
+
+    def test_save(self):
         s = pygame.Surface((10, 10))
         s.fill((23, 23, 23))
         magic_hex = {}
@@ -238,7 +313,7 @@ class ImageModuleTest(unittest.TestCase):
 
         for fmt in formats:
             try:
-                temp_filename = "%s.%s" % ("tmpimg", fmt)
+                temp_filename = f"tmpimg.{fmt}"
                 pygame.image.save(s, temp_filename)
 
                 # Using 'with' ensures the file is closed even if test fails.
@@ -316,7 +391,7 @@ class ImageModuleTest(unittest.TestCase):
             SDL_Im_version[0] * 10000 + SDL_Im_version[1] * 100 + SDL_Im_version[2]
         ) >= 20002
         for fmt in formats:
-            tmp_file, tmp_filename = tempfile.mkstemp(suffix=".%s" % fmt)
+            tmp_file, tmp_filename = tempfile.mkstemp(suffix=f".{fmt}")
             if not isAtLeastSDL_image_2_0_2 and fmt.lower() == "jpg":
                 with os.fdopen(tmp_file, "wb") as handle:
                     with self.assertRaises(pygame.error):
@@ -363,7 +438,7 @@ class ImageModuleTest(unittest.TestCase):
         import shutil
 
         orig = example_path("data/asprite.bmp")
-        temp = os.path.join(example_path("data"), u"你好.bmp")
+        temp = os.path.join(example_path("data"), "你好.bmp")
         shutil.copy(orig, temp)
         try:
             im = pygame.image.load(temp)
@@ -376,7 +451,7 @@ class ImageModuleTest(unittest.TestCase):
             with open(temp_file, "w") as f:
                 pass
             os.remove(temp_file)
-        except IOError:
+        except OSError:
             raise unittest.SkipTest("the path cannot be opened")
 
         self.assertFalse(os.path.exists(temp_file))
@@ -388,12 +463,12 @@ class ImageModuleTest(unittest.TestCase):
         finally:
             try:
                 os.remove(temp_file)
-            except EnvironmentError:
+            except OSError:
                 pass
 
     def test_save_unicode_path(self):
         """save unicode object with non-ASCII chars"""
-        self._unicode_save(u"你好.bmp")
+        self._unicode_save("你好.bmp")
 
     def assertPremultipliedAreEqual(self, string1, string2, source_string):
         self.assertEqual(len(string1), len(string2))
@@ -488,28 +563,27 @@ class ImageModuleTest(unittest.TestCase):
     def test_fromstring__and_tostring(self):
         """Ensure methods tostring() and fromstring() are symmetric."""
 
-        ####################################################################
-        def RotateRGBAtoARGB(str_buf):
-            byte_buf = array.array("B", str_buf)
-            num_quads = len(byte_buf) // 4
-            for i in range(num_quads):
-                alpha = byte_buf[i * 4 + 3]
-                byte_buf[i * 4 + 3] = byte_buf[i * 4 + 2]
-                byte_buf[i * 4 + 2] = byte_buf[i * 4 + 1]
-                byte_buf[i * 4 + 1] = byte_buf[i * 4 + 0]
-                byte_buf[i * 4 + 0] = alpha
-            return tostring(byte_buf)
+        import itertools
 
-        ####################################################################
-        def RotateARGBtoRGBA(str_buf):
+        fmts = ("RGBA", "ARGB", "BGRA")
+        fmt_permutations = itertools.permutations(fmts, 2)
+        fmt_combinations = itertools.combinations(fmts, 2)
+
+        def convert(fmt1, fmt2, str_buf):
+            pos_fmt1 = {k: v for v, k in enumerate(fmt1)}
+            pos_fmt2 = {k: v for v, k in enumerate(fmt2)}
             byte_buf = array.array("B", str_buf)
             num_quads = len(byte_buf) // 4
             for i in range(num_quads):
-                alpha = byte_buf[i * 4 + 0]
-                byte_buf[i * 4 + 0] = byte_buf[i * 4 + 1]
-                byte_buf[i * 4 + 1] = byte_buf[i * 4 + 2]
-                byte_buf[i * 4 + 2] = byte_buf[i * 4 + 3]
-                byte_buf[i * 4 + 3] = alpha
+                i4 = i * 4
+                R = byte_buf[i4 + pos_fmt1["R"]]
+                G = byte_buf[i4 + pos_fmt1["G"]]
+                B = byte_buf[i4 + pos_fmt1["B"]]
+                A = byte_buf[i4 + pos_fmt1["A"]]
+                byte_buf[i4 + pos_fmt2["R"]] = R
+                byte_buf[i4 + pos_fmt2["G"]] = G
+                byte_buf[i4 + pos_fmt2["B"]] = B
+                byte_buf[i4 + pos_fmt2["A"]] = A
             return tostring(byte_buf)
 
         ####################################################################
@@ -526,47 +600,45 @@ class ImageModuleTest(unittest.TestCase):
             test_surface, test_surface, "failing with identical surfaces"
         )
 
-        rgba_buf = pygame.image.tostring(test_surface, "RGBA")
-        rgba_buf = RotateARGBtoRGBA(RotateRGBAtoARGB(rgba_buf))
-        test_rotate_functions = pygame.image.fromstring(
-            rgba_buf, test_surface.get_size(), "RGBA"
-        )
+        for pair in fmt_combinations:
+            fmt1_buf = pygame.image.tostring(test_surface, pair[0])
+            fmt1_convert_buf = convert(
+                pair[1], pair[0], convert(pair[0], pair[1], fmt1_buf)
+            )
+            test_convert_two_way = pygame.image.fromstring(
+                fmt1_convert_buf, test_surface.get_size(), pair[0]
+            )
 
-        self._assertSurfaceEqual(
-            test_surface, test_rotate_functions, "rotate functions are not symmetric"
-        )
+            self._assertSurfaceEqual(
+                test_surface,
+                test_convert_two_way,
+                f"converting {pair[0]} to {pair[1]} and back is not symmetric",
+            )
 
-        rgba_buf = pygame.image.tostring(test_surface, "RGBA")
-        argb_buf = RotateRGBAtoARGB(rgba_buf)
-        test_from_argb_string = pygame.image.fromstring(
-            argb_buf, test_surface.get_size(), "ARGB"
-        )
+        for pair in fmt_permutations:
+            fmt1_buf = pygame.image.tostring(test_surface, pair[0])
+            fmt2_convert_buf = convert(pair[0], pair[1], fmt1_buf)
+            test_convert_one_way = pygame.image.fromstring(
+                fmt2_convert_buf, test_surface.get_size(), pair[1]
+            )
 
-        self._assertSurfaceEqual(
-            test_surface, test_from_argb_string, '"RGBA" rotated to "ARGB" failed'
-        )
+            self._assertSurfaceEqual(
+                test_surface,
+                test_convert_one_way,
+                f"converting {pair[0]} to {pair[1]} failed",
+            )
 
-        argb_buf = pygame.image.tostring(test_surface, "ARGB")
-        rgba_buf = RotateARGBtoRGBA(argb_buf)
-        test_to_argb_string = pygame.image.fromstring(
-            rgba_buf, test_surface.get_size(), "RGBA"
-        )
-
-        self._assertSurfaceEqual(
-            test_surface, test_to_argb_string, '"ARGB" rotated to "RGBA" failed'
-        )
-
-        for fmt in ("ARGB", "RGBA"):
-            fmt_buf = pygame.image.tostring(test_surface, fmt)
+        for fmt in fmts:
+            test_buf = pygame.image.tostring(test_surface, fmt)
             test_to_from_fmt_string = pygame.image.fromstring(
-                fmt_buf, test_surface.get_size(), fmt
+                test_buf, test_surface.get_size(), fmt
             )
 
             self._assertSurfaceEqual(
                 test_surface,
                 test_to_from_fmt_string,
                 "tostring/fromstring functions are not "
-                'symmetric with "{}" format'.format(fmt),
+                f"symmetric with '{fmt}' format",
             )
 
     def test_tostring_depth_24(self):
@@ -588,8 +660,7 @@ class ImageModuleTest(unittest.TestCase):
         self._assertSurfaceEqual(
             test_surface,
             test_to_from_fmt_string,
-            "tostring/fromstring functions are not "
-            'symmetric with "{}" format'.format(fmt),
+            f'tostring/fromstring functions are not symmetric with "{fmt}" format',
         )
 
     def test_frombuffer_8bit(self):
@@ -727,6 +798,82 @@ class ImageModuleTest(unittest.TestCase):
         self.assertEqual(bgr_surf.get_at((1, 1)), pygame.Color(255, 255, 255))
         self.assertEqual(bgr_surf.get_at((2, 2)), pygame.Color(0, 0, 0))
         self.assertEqual(bgr_surf.get_at((3, 3)), pygame.Color(50, 200, 20))
+
+    def test_frombuffer_BGRA(self):
+        bgra_buffer = bytearray(
+            [
+                255,
+                10,
+                20,
+                200,
+                255,
+                10,
+                20,
+                200,
+                255,
+                10,
+                20,
+                200,
+                255,
+                10,
+                20,
+                200,
+                255,
+                255,
+                255,
+                127,
+                255,
+                255,
+                255,
+                127,
+                255,
+                255,
+                255,
+                127,
+                255,
+                255,
+                255,
+                127,
+                0,
+                0,
+                0,
+                79,
+                0,
+                0,
+                0,
+                79,
+                0,
+                0,
+                0,
+                79,
+                0,
+                0,
+                0,
+                79,
+                50,
+                200,
+                20,
+                255,
+                50,
+                200,
+                20,
+                255,
+                50,
+                200,
+                20,
+                255,
+                50,
+                200,
+                20,
+                255,
+            ]
+        )
+
+        bgra_surf = pygame.image.frombuffer(bgra_buffer, (4, 4), "BGRA")
+        self.assertEqual(bgra_surf.get_at((0, 0)), pygame.Color(20, 10, 255, 200))
+        self.assertEqual(bgra_surf.get_at((1, 1)), pygame.Color(255, 255, 255, 127))
+        self.assertEqual(bgra_surf.get_at((2, 2)), pygame.Color(0, 0, 0, 79))
+        self.assertEqual(bgra_surf.get_at((3, 3)), pygame.Color(20, 200, 50, 255))
 
     def test_frombuffer_RGBX(self):
         rgbx_buffer = bytearray(
@@ -1042,8 +1189,13 @@ class ImageModuleTest(unittest.TestCase):
         ]
 
         for filename, expected_color in filename_expected_color:
+            if filename.endswith("svg") and sdl_image_svg_jpeg_save_bug:
+                # SDL_image 2.0.5 and older has an svg loading bug on big
+                # endian platforms
+                continue
+
             with self.subTest(
-                "Test loading a " + filename.split(".")[-1],
+                f'Test loading a {filename.split(".")[-1]}',
                 filename="examples/data/" + filename,
                 expected_color=expected_color,
             ):
@@ -1072,7 +1224,7 @@ class ImageModuleTest(unittest.TestCase):
 
         # check that .jpg and .png save
         for fmt in passing_formats:
-            temp_file_name = "temp_file.%s" % fmt
+            temp_file_name = f"temp_file.{fmt}"
             # save image as .jpg and .png
             pygame.image.save_extended(surf, temp_file_name)
             with open(temp_file_name, "rb") as file:
@@ -1087,7 +1239,7 @@ class ImageModuleTest(unittest.TestCase):
         # check that .bmp and .tga do not save
         for fmt in failing_formats:
             self.assertRaises(
-                pygame.error, pygame.image.save_extended, surf, "temp_file.%s" % fmt
+                pygame.error, pygame.image.save_extended, surf, f"temp_file.{fmt}"
             )
 
     def threads_load(self, images):
@@ -1109,6 +1261,10 @@ class ImageModuleTest(unittest.TestCase):
 
     def test_load_gif_threads(self):
         self.threads_load(glob.glob(example_path("data/*.gif")))
+
+    def test_from_to_bytes_exists(self):
+        getattr(pygame.image, "frombytes")
+        getattr(pygame.image, "tobytes")
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ __all__ = [
 
 from pygame._freetype import init, Font as _Font, get_default_resolution
 from pygame._freetype import quit, get_default_font, get_init as _get_init
-from pygame._freetype import __PYGAMEinit__
+from pygame._freetype import _internal_mod_init
 from pygame.sysfont import match_font, get_fonts, SysFont as _SysFont
 from pygame import encode_file_path
 
@@ -34,7 +34,7 @@ class Font(_Font):
     __unull = "\x00"
     __bnull = b"\x00"
 
-    def __init__(self, file, size=-1):
+    def __init__(self, file=None, size=-1):
         size = max(size, 1)
         if isinstance(file, str):
             try:
@@ -51,7 +51,7 @@ class Font(_Font):
                 resolution = 1
         else:
             resolution = 0
-        super(Font, self).__init__(file, size=size, resolution=resolution)
+        super().__init__(file, size=size, resolution=resolution)
         self.strength = 1.0 / 12.0
         self.kerning = False
         self.origin = True
@@ -74,7 +74,7 @@ class Font(_Font):
         )
         self.antialiased = bool(antialias)
         try:
-            s, _ = super(Font, self).render(text, color, background)
+            s, _ = super().render(text, color, background)
             return s
         finally:
             self.antialiased = save_antialiased

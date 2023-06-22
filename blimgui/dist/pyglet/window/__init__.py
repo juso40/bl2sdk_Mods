@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # pyglet
 # Copyright (c) 2006-2008 Alex Holkner
-# Copyright (c) 2008-2021 pyglet contributors
+# Copyright (c) 2008-2022 pyglet contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -129,6 +129,7 @@ import warnings
 
 import pyglet
 import pyglet.window.key
+import pyglet.window.mouse
 import pyglet.window.event
 
 from pyglet import gl

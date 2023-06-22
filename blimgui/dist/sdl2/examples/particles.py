@@ -100,35 +100,26 @@ class ParticleRenderSystem(sdl2.ext.System):
         # particle components; that said, we render all created
         # particles here.
 
-        # We deal with quite a set of items, so we create some shortcuts
-        # to save Python the time to look things up.
-        #
         # The SDL_Rect is used for the blit operation below and is used
         # as destination position for rendering the particle.
         r = sdl2.SDL_Rect()
 
-        # The SDL2 blit function to use. This will take an image
-        # (SDL_Texture) as source and copies it on the target.
-        dorender = sdl2.SDL_RenderCopy
-
-        # And some more shortcuts.
+        # Add a short alias for the SDL renderer
         sdlrenderer = self.renderer.sdlrenderer
-        images = self.images
         # Before rendering all particles, make sure the old ones are
         # removed from the window by filling it with a black color.
         self.renderer.clear(0x0)
 
         # Render all particles.
         for particle in components:
+            # Select the correct image for the particle.
+            img = self.images[particle.type]
             # Set the correct destination position for the particle
             r.x = int(particle.x)
             r.y = int(particle.y)
-
-            # Select the correct image for the particle.
-            img = images[particle.type]
             r.w, r.h = img.size
             # Render (or blit) the particle by using the designated image.
-            dorender(sdlrenderer, img.texture, None, r)
+            sdl2.SDL_RenderCopy(sdlrenderer, img.tx, None, r)
         self.renderer.present()
 
 
@@ -172,27 +163,23 @@ def run():
     window = sdl2.ext.Window("Particles", size=(800, 600))
     window.show()
 
-    # Create a hardware-accelerated sprite factory. The sprite factory requires
-    # a rendering context, which enables it to create the underlying textures
-    # that serve as the visual parts for the sprites.
+    # Create a hardware-accelerated renderer to use for drawing to the window.
     renderer = sdl2.ext.Renderer(window)
-    factory = sdl2.ext.SpriteFactory(sdl2.ext.TEXTURE, renderer=renderer)
 
     # Create a set of images to be used as particles on rendering. The
     # images are used by the ParticleRenderer created below.
-    images = (factory.from_image(RESOURCES.get_path("circle.png")),
-              factory.from_image(RESOURCES.get_path("square.png")),
-              factory.from_image(RESOURCES.get_path("star.png"))
-              )
+    images = []
+    for img in ("circle.png", "square.png", "star.png"):
+        fpath = RESOURCES.get_path(img)
+        tx = sdl2.ext.Texture(renderer, sdl2.ext.load_img(fpath))
+        images.append(tx)
 
-    # Center the mouse on the window. We use the SDL2 functions directly
-    # here. Since the SDL2 functions do not know anything about the
-    # sdl2.ext.Window class, we have to pass the window's SDL_Window to it.
-    sdl2.SDL_WarpMouseInWindow(window.window, world.mousex, world.mousey)
+    # Center the mouse on the window.
+    sdl2.ext.warp_mouse(world.mousex, world.mousey, window=window)
 
     # Hide the mouse cursor, so it does not show up - just show the
     # particles.
-    sdl2.SDL_ShowCursor(0)
+    sdl2.ext.hide_cursor()
 
     # Create the rendering system for the particles. This is somewhat
     # similar to the SoftSpriteRenderSystem, but since we only operate with
@@ -204,26 +191,18 @@ def run():
     # The almighty event loop. You already know several parts of it.
     running = True
     while running:
+
+        # Check for any quit events
         for event in sdl2.ext.get_events():
             if event.type == sdl2.SDL_QUIT:
                 running = False
                 break
 
-            if event.type == sdl2.SDL_MOUSEMOTION:
-                # Take care of the mouse motions here. Every time the
-                # mouse is moved, we will make that information globally
-                # available to our application environment by updating
-                # the world attributes created earlier.
-                world.mousex = event.motion.x
-                world.mousey = event.motion.y
-                # We updated the mouse coordinates once, ditch all the
-                # other ones. Since world.process() might take several
-                # milliseconds, new motion events can occur on the event
-                # queue (10ths to 100ths!), and we do not want to handle
-                # each of them. For this example, it is enough to handle
-                # one per update cycle.
-                sdl2.SDL_FlushEvent(sdl2.SDL_MOUSEMOTION)
-                break
+        # Once per loop, update the world with the current mouse position
+        x, y = sdl2.ext.mouse_coords()
+        world.mousex = x
+        world.mousey = y
+
         world.process()
         sdl2.SDL_Delay(1)
 

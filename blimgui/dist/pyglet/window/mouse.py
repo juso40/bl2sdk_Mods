@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # pyglet
 # Copyright (c) 2006-2008 Alex Holkner
-# Copyright (c) 2008-2021 pyglet contributors
+# Copyright (c) 2008-2022 pyglet contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -40,6 +40,8 @@
 class MouseStateHandler(dict):
     """Simple handler that tracks the state of buttons from the mouse. If a
     button is pressed then this handler holds a True value for it.
+    If the window loses focus, all buttons will be reset to False to avoid a
+    "sticky" button state.
 
     For example::
 
@@ -55,12 +57,16 @@ class MouseStateHandler(dict):
         False
 
     """
+
     def on_mouse_press(self, x, y, button, modifiers):
         self[button] = True
         
     def on_mouse_release(self, x, y, button, modifiers):
         self[button] = False
         
+    def on_deactivate(self):
+        self.clear()
+
     def __getitem__(self, key):
         return self.get(key, False)
 

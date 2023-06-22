@@ -169,7 +169,7 @@ class BufferProxyTest(unittest.TestCase):
         def after_callback(parent):
             return r[1]
 
-        class Obj(object):
+        class Obj:
             pass
 
         p = Obj()
@@ -245,7 +245,7 @@ class BufferProxyTest(unittest.TestCase):
     def test_subclassing(self):
         class MyBufferProxy(BufferProxy):
             def __repr__(self):
-                return "*%s*" % (BufferProxy.__repr__(self),)
+                return f"*{BufferProxy.__repr__(self)}*"
 
         kwds = dict(self.view_keywords)
         kwds["parent"] = 0
@@ -282,7 +282,7 @@ class BufferProxyTest(unittest.TestCase):
         d = b.__array_interface__
         try:
             lil_endian = pygame.get_sdl_byteorder() == pygame.LIL_ENDIAN
-            f = "{}i{}".format("<" if lil_endian else ">", exp.itemsize)
+            f = f"{'<' if lil_endian else '>'}i{exp.itemsize}"
             self.assertEqual(d["typestr"], f)
             self.assertEqual(d["shape"], exp.shape)
             self.assertEqual(d["strides"], exp.strides)
@@ -418,7 +418,6 @@ class BufferProxyLegacyTest(unittest.TestCase):
     data = (ctypes.addressof(buffer), True)
 
     def test_length(self):
-
         # __doc__ (as of 2008-08-02) for pygame.bufferproxy.BufferProxy.length:
 
         # The size of the buffer data in bytes.
@@ -432,7 +431,6 @@ class BufferProxyLegacyTest(unittest.TestCase):
         self.assertEqual(bf.length, 3 * 3 * 4)
 
     def test_raw(self):
-
         # __doc__ (as of 2008-08-02) for pygame.bufferproxy.BufferProxy.raw:
 
         # The raw buffer data as string. The string may contain NUL bytes.
@@ -451,7 +449,6 @@ class BufferProxyLegacyTest(unittest.TestCase):
         self.assertRaises(ValueError, getattr, bf, "raw")
 
     def test_write(self):
-
         # __doc__ (as of 2008-08-02) for pygame.bufferproxy.BufferProxy.write:
 
         # B.write (bufferproxy, buffer, offset) -> None
@@ -464,7 +461,7 @@ class BufferProxyLegacyTest(unittest.TestCase):
         # BufferProxy (reduced by the offset), an IndexError will be raised.
         from ctypes import c_byte, sizeof, addressof, string_at, memset
 
-        nullbyte = "\x00".encode("latin_1")
+        nullbyte = b"\x00"
         Buf = c_byte * 10
         data_buf = Buf(*range(1, 3 * sizeof(Buf) + 1, 3))
         data = string_at(data_buf, sizeof(data_buf))
@@ -496,7 +493,7 @@ class BufferProxyLegacyTest(unittest.TestCase):
                     "data": (addressof(buf), True),
                 }
             )
-            self.assertRaises(pygame.BufferError, bp.write, "123".encode("latin_1"))
+            self.assertRaises(pygame.BufferError, bp.write, b"123")
         finally:
             # Make sure bp is garbage collected before buf
             bp = None

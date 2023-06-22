@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.freetype &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.freetype &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">Enhanced pygame module for loading and rendering computer fonts</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 36%" />
-<col style="width: 1%" />
-<col style="width: 63%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="freetype.html#pygame.freetype.get_error">pygame.freetype.get_error</a></div>
 </td>
@@ -236,12 +231,17 @@ library, or <code class="docutils literal notranslate"><span class="pre">None</s
 <span class="sig-prename descclassname"><span class="pre">pygame.freetype.</span></span><span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.freetype.get_version" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">Return the FreeType version</span></div>
-<div class="line"><span class="signature">get_version() -&gt; (int, int, int)</span></div>
+<div class="line"><span class="signature">get_version(linked=True) -&gt; (int, int, int)</span></div>
 </div>
-<p>Returns the version of the FreeType library in use by this module.</p>
+<p>Returns the version of the FreeType library in use by this module. <code class="docutils literal notranslate"><span class="pre">linked=True</span></code>
+is the default behavior and returns the linked version of FreeType and <code class="docutils literal notranslate"><span class="pre">linked=False</span></code>
+returns the compiled version of FreeType.</p>
 <p>Note that the <code class="docutils literal notranslate"><span class="pre">freetype</span></code> module depends on the FreeType 2 library.
 It will not compile with the original FreeType 1.0. Hence, the first element
 of the tuple will always be &quot;2&quot;.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in pygame 2.2.0: </span><code class="docutils literal notranslate"><span class="pre">linked</span></code> keyword argument added and default behavior changed from returning compiled version to returning linked version</p>
+</div>
 </dd></dl>
 
 <dl class="py function definition">
@@ -375,11 +375,6 @@ but can also be bundled in a separate archive.</p>
 <div class="line"><span class="signature">Font(pathlib.Path) -&gt; Font</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 39%" />
-<col style="width: 1%" />
-<col style="width: 60%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="freetype.html#pygame.freetype.Font.name">pygame.freetype.Font.name</a></div>
 </td>
@@ -1257,14 +1252,14 @@ support.</p>
         <li class="right" >
           <a href="font.html" title="pygame.font"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.freetype</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

@@ -16,7 +16,7 @@ except:
 
 @pytest.fixture
 def testsurf(with_sdl):
-    sf = SDL_CreateRGBSurface(0, 10, 10, 32, 0, 0, 0, 0)
+    sf = _create_surface((10, 10), fmt="RGBA32")
     assert SDL_GetError() == b""
     yield sf
     SDL_FreeSurface(sf)
@@ -108,6 +108,13 @@ def test_line(testsurf):
     assert all(x == 255 for x in view[-1][0][:3])
     assert all(x == 255 for x in view[-1][-1][:3])
     assert all(x == 0 for x in view[1][5][:3])
+
+    # Test surfaces with nonstandard bpp values
+    fmts = ["RGB332", "RGBA4444"]
+    for f in fmts:
+        sf2 = _create_surface((10, 10), fmt=f)
+        sdl2ext.line(sf2.contents, WHITE, (1, 1, 9, 9))
+        SDL_FreeSurface(sf2)
 
     # Test exception on bad input
     with pytest.raises(ValueError):

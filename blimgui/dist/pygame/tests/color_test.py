@@ -1,11 +1,11 @@
-import unittest
 import math
 import operator
 import platform
+import unittest
+from collections.abc import Collection, Sequence
 
 import pygame
 from pygame.colordict import THECOLORS
-
 
 IS_PYPY = "PyPy" == platform.python_implementation()
 ################################### CONSTANTS ##################################
@@ -204,7 +204,7 @@ class ColorTypeTest(unittest.TestCase):
         self.assertTrue([255, 0, 0, 0] != Color(255, 0, 0, 0))
 
         # Comparison is not implemented for invalid color values.
-        class Test(object):
+        class Test:
             def __eq__(self, other):
                 return -1
 
@@ -267,6 +267,12 @@ class ColorTypeTest(unittest.TestCase):
         c.set_length(3)
         r, g, b = c
         self.assertEqual((1, 2, 3), (r, g, b))
+
+        # Checking if DeprecationWarning is triggered
+        # when function is called
+        for i in range(1, 5):
+            with self.assertWarns(DeprecationWarning):
+                c.set_length(i)
 
     def test_length(self):
         # should be able to unpack to r,g,b,a and r,g,b
@@ -985,7 +991,6 @@ class ColorTypeTest(unittest.TestCase):
 
     @unittest.skipIf(IS_PYPY, "PyPy has no ctypes")
     def test_arraystruct(self):
-
         import pygame.tests.test_utils.arrinter as ai
         import ctypes as ct
 
@@ -1013,23 +1018,20 @@ class ColorTypeTest(unittest.TestCase):
 
         class ColorImporter(buftools.Importer):
             def __init__(self, color, flags):
-                super(ColorImporter, self).__init__(color, flags)
+                super().__init__(color, flags)
                 self.items = cast(self.buf, POINTER(c_uint8))
 
             def __getitem__(self, index):
                 if 0 <= index < 4:
                     return self.items[index]
-                raise IndexError(
-                    "valid index values are between 0 and 3: " "got {}".format(index)
-                )
+                raise IndexError(f"valid index values are between 0 and 3: got {index}")
 
             def __setitem__(self, index, value):
                 if 0 <= index < 4:
                     self.items[index] = value
                 else:
                     raise IndexError(
-                        "valid index values are between 0 and 3: "
-                        "got {}".format(index)
+                        f"valid index values are between 0 and 3: got {index}"
                     )
 
         c = pygame.Color(50, 100, 150, 200)
@@ -1086,6 +1088,52 @@ class ColorTypeTest(unittest.TestCase):
             self.assertEqual(imp.len, i)
             self.assertEqual(imp.shape, (i,))
         self.assertRaises(BufferError, ColorImporter, c, buftools.PyBUF_WRITABLE)
+
+    def test_color_iter(self):
+        c = pygame.Color(50, 100, 150, 200)
+
+        # call __iter__ explicitly to test that it is defined
+        color_iterator = c.__iter__()
+        for i, val in enumerate(color_iterator):
+            self.assertEqual(c[i], val)
+
+    def test_color_contains(self):
+        c = pygame.Color(50, 60, 70)
+
+        # call __contains__ explicitly to test that it is defined
+        self.assertTrue(c.__contains__(50))
+        self.assertTrue(60 in c)
+        self.assertTrue(70 in c)
+        self.assertFalse(100 in c)
+        self.assertFalse(c.__contains__(10))
+
+        self.assertRaises(TypeError, lambda: "string" in c)
+        self.assertRaises(TypeError, lambda: 3.14159 in c)
+
+    def test_grayscale(self):
+        Color = pygame.color.Color
+
+        color = Color(255, 0, 0, 255)
+        self.assertEqual(color.grayscale(), Color(76, 76, 76, 255))
+        color = Color(3, 5, 7, 255)
+        self.assertEqual(color.grayscale(), Color(4, 4, 4, 255))
+        color = Color(3, 5, 70, 255)
+        self.assertEqual(color.grayscale(), Color(11, 11, 11, 255))
+        color = Color(3, 50, 70, 255)
+        self.assertEqual(color.grayscale(), Color(38, 38, 38, 255))
+        color = Color(30, 50, 70, 255)
+        self.assertEqual(color.grayscale(), Color(46, 46, 46, 255))
+
+        color = Color(255, 0, 0, 144)
+        self.assertEqual(color.grayscale(), Color(76, 76, 76, 144))
+        color = Color(3, 5, 7, 144)
+        self.assertEqual(color.grayscale(), Color(4, 4, 4, 144))
+        color = Color(3, 5, 70, 144)
+        self.assertEqual(color.grayscale(), Color(11, 11, 11, 144))
+        color = Color(3, 50, 70, 144)
+        self.assertEqual(color.grayscale(), Color(38, 38, 38, 144))
+        color = Color(30, 50, 70, 144)
+        self.assertEqual(color.grayscale(), Color(46, 46, 46, 144))
 
     def test_lerp(self):
         # setup
@@ -1224,6 +1272,11 @@ class ColorTypeTest(unittest.TestCase):
         c.update(1, 2, 3, 4)
         self.assertEqual(len(c), 4)
 
+    def test_collection_abc(self):
+        c = pygame.Color(64, 70, 75, 255)
+        self.assertTrue(isinstance(c, Collection))
+        self.assertFalse(isinstance(c, Sequence))
+
 
 class SubclassTest(unittest.TestCase):
     class MyColor(pygame.Color):
@@ -1294,6 +1347,11 @@ class SubclassTest(unittest.TestCase):
         mc2 = mc1.correct_gamma(0.03)
         self.assertTrue(isinstance(mc2, self.MyColor))
         self.assertRaises(AttributeError, getattr, mc2, "an_attribute")
+
+    def test_collection_abc(self):
+        mc1 = self.MyColor(64, 70, 75, 255)
+        self.assertTrue(isinstance(mc1, Collection))
+        self.assertFalse(isinstance(mc1, Sequence))
 
 
 ################################################################################

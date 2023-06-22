@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # pyglet
 # Copyright (c) 2006-2008 Alex Holkner
-# Copyright (c) 2008-2021 pyglet contributors
+# Copyright (c) 2008-2022 pyglet contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -92,6 +92,8 @@ __all__ = (
     'Player',
     'PlayerGroup',
     'SourceGroup',
+    'StaticSource',
+    'StreamingSource',
     'get_encoders',
     'get_decoders',
     'add_encoders',

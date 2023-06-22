@@ -47,7 +47,7 @@ def stopwatch(message=None):
         return
     now = pg.time.get_ticks()
     runtime = (now - timer) / 1000.0 + 0.001
-    print("%s %s %s" % (message, runtime, ("seconds\t(%.2ffps)" % (1.0 / runtime))))
+    print(f"{message} {runtime} seconds\t{(1.0 / runtime):.2f}fps")
     timer = now
 
 
@@ -88,7 +88,7 @@ def main():
     pg.event.set_blocked(pg.MOUSEMOTION)  # keep our queue cleaner
     pg.time.set_timer(pg.USEREVENT, 500)
 
-    while 1:
+    while True:
         event = pg.event.wait()
         if event.type in (pg.QUIT, pg.KEYDOWN, pg.MOUSEBUTTONDOWN):
             break

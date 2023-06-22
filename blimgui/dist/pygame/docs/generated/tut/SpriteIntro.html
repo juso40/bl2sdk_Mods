@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Pygame Tutorials - Sprite Module Introduction &#8212; pygame v2.1.2 documentation</title>
+    <title>Pygame Tutorials - Sprite Module Introduction &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,12 +98,12 @@
             
 <section id="pygame-tutorials-sprite-module-introduction">
 <section id="sprite-module-introduction">
-<h2>Sprite Module Introduction<a class="headerlink" href="#sprite-module-introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Sprite Module Introduction<a class="headerlink" href="#sprite-module-introduction" title="Permalink to this heading">¶</a></h2>
 <dl class="docinfo field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Pete Shinners</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:pete&#37;&#52;&#48;shinners&#46;org">pete<span>&#64;</span>shinners<span>&#46;</span>org</a></p>
 </dd>
 </dl>
@@ -129,7 +129,7 @@ creating a simple game.  In this tutorial the word &quot;reference&quot; is occa
 used.  This represents a python variable. Variables in python are references,
 so you can have several variables all pointing to the same object.</p>
 <section id="history-lesson">
-<h3>History Lesson<a class="headerlink" href="#history-lesson" title="Permalink to this headline">¶</a></h3>
+<h3>History Lesson<a class="headerlink" href="#history-lesson" title="Permalink to this heading">¶</a></h3>
 <p>The term &quot;sprite&quot; is a holdover from older computer and game machines.  These
 older boxes were unable to draw and erase normal graphics fast enough for them
 to work as games. These machines had special hardware to handle game like
@@ -141,7 +141,7 @@ without dedicated hardware. The term sprite is still used to represent just
 about anything in a 2D game that is animated.</p>
 </section>
 <section id="the-classes">
-<h3>The Classes<a class="headerlink" href="#the-classes" title="Permalink to this headline">¶</a></h3>
+<h3>The Classes<a class="headerlink" href="#the-classes" title="Permalink to this heading">¶</a></h3>
 <p>The sprite module comes with two main classes. The first is <a class="reference internal" href="../ref/sprite.html#pygame.sprite.Sprite" title="pygame.sprite.Sprite"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sprite</span></code></a>, which should be used as a base class for all your game
 objects. This class doesn't really do anything on its own, it just includes
 several functions to help manage the game object. The other type of class is
@@ -153,7 +153,7 @@ for example.</p>
 type of class does, and then discuss the proper ways to use these two classes.</p>
 </section>
 <section id="the-sprite-class">
-<h3>The Sprite Class<a class="headerlink" href="#the-sprite-class" title="Permalink to this headline">¶</a></h3>
+<h3>The Sprite Class<a class="headerlink" href="#the-sprite-class" title="Permalink to this heading">¶</a></h3>
 <p>As mentioned before, the Sprite class is designed to be a base class for all
 your game objects. You cannot really use it on its own, as it only has several
 methods to help it work with the different <code class="docutils literal notranslate"><span class="pre">Group</span></code> classes. The sprite keeps
@@ -175,7 +175,7 @@ be tricky. The sprite also comes with an <a class="reference internal" href="../
 member of any groups.</p>
 </section>
 <section id="the-group-class">
-<h3>The Group Class<a class="headerlink" href="#the-group-class" title="Permalink to this headline">¶</a></h3>
+<h3>The Group Class<a class="headerlink" href="#the-group-class" title="Permalink to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">Group</span></code> class is just a simple container. Similar to the sprite, it has
 an <a class="reference internal" href="../ref/sprite.html#pygame.sprite.Group.add" title="pygame.sprite.Group.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> and <a class="reference internal" href="../ref/sprite.html#pygame.sprite.Group.remove" title="pygame.sprite.Group.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a> method which can change which sprites belong to
 the group. You also can pass a sprite or list of sprites to the constructor
@@ -203,7 +203,7 @@ the &quot;truth&quot; operator, which allows you to do &quot;if mygroup:&quot; t
 group has any sprites.</p>
 </section>
 <section id="mixing-them-together">
-<h3>Mixing Them Together<a class="headerlink" href="#mixing-them-together" title="Permalink to this headline">¶</a></h3>
+<h3>Mixing Them Together<a class="headerlink" href="#mixing-them-together" title="Permalink to this heading">¶</a></h3>
 <p>At this point the two classes seem pretty basic. Not doing a lot more than you
 can do with a simple list and your own class of game objects. But there are
 some big advantages to using the <code class="docutils literal notranslate"><span class="pre">Sprite</span></code> and <code class="docutils literal notranslate"><span class="pre">Group</span></code> together. A sprite
@@ -225,7 +225,7 @@ separate group. Then when you need to access all the enemies that are near the
 player, you already have a list of them, instead of going through a list of all
 the enemies, checking for the &quot;close_to_player&quot; flag. Later on your game could
 add multiple players, and instead of adding more &quot;close_to_player2&quot;,
-&quot;close_to_player3&quot; attributes, you can easily add them to different groups or
+&quot;close_to_player3&quot; attributes, you can easily add them to different groups for
 each player.</p>
 <p>Another important benefit of using the <code class="docutils literal notranslate"><span class="pre">Sprites</span></code> and <code class="docutils literal notranslate"><span class="pre">Groups</span></code> is that the groups
 cleanly handle the deleting (or killing) of game objects. In a game where many
@@ -243,7 +243,7 @@ portions of the game, there isn't any penalties for managing your game like
 this.</p>
 </section>
 <section id="the-many-group-types">
-<h3>The Many Group Types<a class="headerlink" href="#the-many-group-types" title="Permalink to this headline">¶</a></h3>
+<h3>The Many Group Types<a class="headerlink" href="#the-many-group-types" title="Permalink to this heading">¶</a></h3>
 <p>The above examples and reasons to use <code class="docutils literal notranslate"><span class="pre">Sprites</span></code> and <code class="docutils literal notranslate"><span class="pre">Groups</span></code> are only a tip
 of the iceberg. Another advantage is that the sprite module comes with several
 different types of <code class="docutils literal notranslate"><span class="pre">Groups</span></code>. These groups all work just like a regular old
@@ -298,7 +298,7 @@ grabbing a copy of the screen before blitting). Who knows really, but in the
 future we can add more useful classes to this list.</p>
 </section>
 <section id="the-rendering-groups">
-<h3>The Rendering Groups<a class="headerlink" href="#the-rendering-groups" title="Permalink to this headline">¶</a></h3>
+<h3>The Rendering Groups<a class="headerlink" href="#the-rendering-groups" title="Permalink to this heading">¶</a></h3>
 <p>From above we can see there are three different rendering groups. We could
 probably just get away with the <code class="docutils literal notranslate"><span class="pre">RenderUpdates</span></code> one, but it adds overhead not
 really needed for something like a scrolling game. So we have a couple tools
@@ -331,7 +331,7 @@ into multiple sections, perhaps each section of the screen should use an
 appropriate render group?</p>
 </section>
 <section id="collision-detection">
-<h3>Collision Detection<a class="headerlink" href="#collision-detection" title="Permalink to this headline">¶</a></h3>
+<h3>Collision Detection<a class="headerlink" href="#collision-detection" title="Permalink to this heading">¶</a></h3>
 <p>The sprite module also comes with two very generic collision detection
 functions.  For more complex games, these really won't work for you, but you
 can easily grab the source code for them, and modify them as needed.</p>
@@ -356,7 +356,7 @@ Because of the &quot;dokill&quot; argument it deletes all the crashed bombs. For
 bomb that did collide, it plays a &quot;boom&quot; sound effect, and creates a new
 <code class="docutils literal notranslate"><span class="pre">Explosion</span></code> where the bomb was. (Note, the <code class="docutils literal notranslate"><span class="pre">Explosion</span></code> class here knows to
 add each instance to the appropriate class, so we don't need to store it in a
-variable, that last line might feel a little &quot;funny&quot; to you python programmers.</p>
+variable, that last line might feel a little &quot;funny&quot; to you python programmers.)</p>
 </div></blockquote>
 <p><a class="reference internal" href="../ref/sprite.html#pygame.sprite.groupcollide" title="pygame.sprite.groupcollide"><code class="xref py py-func docutils literal notranslate"><span class="pre">groupcollide(group1,</span> <span class="pre">group2,</span> <span class="pre">dokill1,</span> <span class="pre">dokill2)</span> <span class="pre">-&gt;</span> <span class="pre">dictionary</span></code></a></p>
 <blockquote>
@@ -392,7 +392,7 @@ The code in the sprite collision functions is very optimized, but you could
 speed it up slightly by taking out some functionality you don't need.</p>
 </section>
 <section id="common-problems">
-<h3>Common Problems<a class="headerlink" href="#common-problems" title="Permalink to this headline">¶</a></h3>
+<h3>Common Problems<a class="headerlink" href="#common-problems" title="Permalink to this heading">¶</a></h3>
 <p>Currently there is one main problem that catches new users. When you derive
 your new sprite class with the Sprite base, you <strong>must</strong> call the
 <code class="docutils literal notranslate"><span class="pre">Sprite.__init__()</span></code> method from your own class <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> method.  If you
@@ -403,7 +403,7 @@ this</p>
 </div>
 </section>
 <section id="extending-your-own-classes-advanced">
-<h3>Extending Your Own Classes <em>(Advanced)</em><a class="headerlink" href="#extending-your-own-classes-advanced" title="Permalink to this headline">¶</a></h3>
+<h3>Extending Your Own Classes <em>(Advanced)</em><a class="headerlink" href="#extending-your-own-classes-advanced" title="Permalink to this heading">¶</a></h3>
 <p>Because of speed concerns, the current <code class="docutils literal notranslate"><span class="pre">Group</span></code> classes try to only do exactly
 what they need, and not handle a lot of general situations. If you decide you
 need extra features, you may want to create your own <code class="docutils literal notranslate"><span class="pre">Group</span></code> class.</p>
@@ -417,7 +417,7 @@ create your own.</p>
 variable from it.  Since we want it to also handle updated areas, we will start
 with a copy of the original <code class="docutils literal notranslate"><span class="pre">RenderUpdates</span></code> group, here is the code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RenderUpdatesDraw</span><span class="p">(</span><span class="n">RenderClear</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;call sprite.draw(screen) to render sprites&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;call sprite.draw(screen) to render sprites&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
         <span class="n">dirty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lostsprites</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lostsprites</span> <span class="o">=</span> <span class="p">[]</span>
@@ -485,14 +485,14 @@ TODO section in the source if you feel like contributing.</p>
         <li class="right" >
           <a href="PygameIntro.html" title="Pygame Intro"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pygame Tutorials - Sprite Module Introduction</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

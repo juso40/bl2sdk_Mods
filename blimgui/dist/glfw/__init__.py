@@ -7,9 +7,9 @@ from __future__ import division
 from __future__ import unicode_literals
 
 __author__ = 'Florian Rhiem (florian.rhiem@gmail.com)'
-__copyright__ = 'Copyright (c) 2013-2021 Florian Rhiem'
+__copyright__ = 'Copyright (c) 2013-2023 Florian Rhiem'
 __license__ = 'MIT'
-__version__ = '2.5.1'
+__version__ = '2.5.9'
 
 # By default, GLFW errors will be handled by a pre-defined error callback.
 # Depending on the value of ERROR_REPORTING, this callback will:
@@ -330,8 +330,8 @@ PRESS = 1
 REPEAT = 2
 HAT_CENTERED = 0
 HAT_UP = 1
-HAT_DOWN = 2
-HAT_RIGHT = 4
+HAT_RIGHT = 2
+HAT_DOWN = 4
 HAT_LEFT = 8
 HAT_RIGHT_UP = HAT_RIGHT | HAT_UP
 HAT_RIGHT_DOWN = HAT_RIGHT | HAT_DOWN
@@ -645,6 +645,16 @@ if _PREVIEW:
     RESIZE_NWSE_CURSOR = 0x00036007
     WIN32_KEYBOARD_MENU = 0x00025001
     X11_XCB_VULKAN_SURFACE = 0x00052001
+
+    ANY_POSITION = 0x80000000
+    POSITION_X = 0x0002000E
+    POSITION_Y = 0x0002000F
+    WAYLAND_APP_ID = 0x00026001
+    CURSOR_CAPTURED = 0x00034004
+
+    WAYLAND_LIBDECOR = 0x00053001
+    WAYLAND_PREFER_LIBDECOR = 0x00038001
+    WAYLAND_DISABLE_LIBDECOR = 0x00038002
 
 _exc_info_from_callback = None
 def _callback_exception_decorator(func):
@@ -1087,8 +1097,10 @@ if hasattr(_glfw, 'glfwSetMonitorUserPointer') and hasattr(_glfw, 'glfwGetMonito
             pointer = ctypes.cast(ctypes.pointer(ctypes.py_object(pointer)),
                                   ctypes.c_void_p)
 
-        _monitor_user_data_repository[monitor] = data
-        _glfw.glfwSetWindowUserPointer(monitor, pointer)
+        monitor_addr = ctypes.cast(ctypes.pointer(monitor),
+                                  ctypes.POINTER(ctypes.c_long)).contents.value
+        _monitor_user_data_repository[monitor_addr] = data
+        _glfw.glfwSetMonitorUserPointer(monitor, pointer)
 
 
     _glfw.glfwGetMonitorUserPointer.restype = ctypes.c_void_p
@@ -1102,9 +1114,11 @@ if hasattr(_glfw, 'glfwSetMonitorUserPointer') and hasattr(_glfw, 'glfwGetMonito
         Wrapper for:
             void* glfwGetMonitorUserPointer(int jid);
         """
+        monitor_addr = ctypes.cast(ctypes.pointer(monitor),
+                                  ctypes.POINTER(ctypes.c_long)).contents.value
 
-        if monitor in _monitor_user_data_repository:
-            data = _monitor_user_data_repository[monitor]
+        if monitor_addr in _monitor_user_data_repository:
+            data = _monitor_user_data_repository[monitor_addr]
             is_wrapped_py_object = data[0]
             if is_wrapped_py_object:
                 return data[1]
@@ -2289,6 +2303,8 @@ def set_clipboard_string(window, string):
     Wrapper for:
         void glfwSetClipboardString(GLFWwindow* window, const char* string);
     """
+    if window is not None:
+        warnings.warn("The window parameter to glfwSetClipboardString is deprecated", DeprecationWarning, stacklevel=2)
     _glfw.glfwSetClipboardString(window, _to_char_p(string))
 
 _glfw.glfwGetClipboardString.restype = ctypes.c_char_p
@@ -2300,6 +2316,8 @@ def get_clipboard_string(window):
     Wrapper for:
         const char* glfwGetClipboardString(GLFWwindow* window);
     """
+    if window is not None:
+        warnings.warn("The window parameter to glfwSetClipboardString is deprecated", DeprecationWarning, stacklevel=2)
     return _glfw.glfwGetClipboardString(window)
 
 _glfw.glfwGetTime.restype = ctypes.c_double
@@ -2438,6 +2456,7 @@ if hasattr(_glfw, 'glfwSetCharModsCallback'):
         Wrapper for:
             GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* window, GLFWcharmodsfun cbfun);
         """
+        warnings.warn("glfwSetCharModsCallback is scheduled for removal in GLFW 4.0", DeprecationWarning, stacklevel=2)
         window_addr = ctypes.cast(ctypes.pointer(window),
                                   ctypes.POINTER(ctypes.c_long)).contents.value
         if window_addr in _window_char_mods_callback_repository:

@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Pygame Tutorials - Import and Initialize &#8212; pygame v2.1.2 documentation</title>
+    <title>Pygame Tutorials - Import and Initialize &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,12 +98,12 @@
             
 <section id="pygame-tutorials-import-and-initialize">
 <section id="import-and-initialize">
-<h2>Import and Initialize<a class="headerlink" href="#import-and-initialize" title="Permalink to this headline">¶</a></h2>
+<h2>Import and Initialize<a class="headerlink" href="#import-and-initialize" title="Permalink to this heading">¶</a></h2>
 <dl class="docinfo field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Pete Shinners</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:pete&#37;&#52;&#48;shinners&#46;org">pete<span>&#64;</span>shinners<span>&#46;</span>org</a></p>
 </dd>
 </dl>
@@ -115,7 +115,7 @@ are also optional, and might not always be present.</p>
 <p>This is just a quick introduction on what is going on when you import pygame.
 For a clearer explanation definitely see the pygame examples.</p>
 <section id="import">
-<h3>Import<a class="headerlink" href="#import" title="Permalink to this headline">¶</a></h3>
+<h3>Import<a class="headerlink" href="#import" title="Permalink to this heading">¶</a></h3>
 <p>First we must import the pygame package. Since pygame version 1.4 this
 has been updated to be much easier. Most games will import all of pygame like this.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pygame</span>
@@ -132,7 +132,7 @@ it will be imported as &quot;pygame.font&quot;. If the module is not available, 
 will be set to None. This makes it fairly easy to later on test if the font module is available.</p>
 </section>
 <section id="init">
-<h3>Init<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h3>
+<h3>Init<a class="headerlink" href="#init" title="Permalink to this heading">¶</a></h3>
 <p>Before you can do much with pygame, you will need to initialize it. The most common
 way to do this is just make one call.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
@@ -152,7 +152,7 @@ if the module has been initialized.</p>
 <p>It is safe to call the init() function for any module more than once.</p>
 </section>
 <section id="quit">
-<h3>Quit<a class="headerlink" href="#quit" title="Permalink to this headline">¶</a></h3>
+<h3>Quit<a class="headerlink" href="#quit" title="Permalink to this heading">¶</a></h3>
 <p>Modules that are initialized also usually have a quit() function that will clean up.
 There is no need to explicitly call these, as pygame will cleanly quit all the
 initialized modules when python finishes.</p>
@@ -184,14 +184,14 @@ initialized modules when python finishes.</p>
         <li class="right" >
           <a href="DisplayModes.html" title="Pygame Tutorials - Setting Display Modes"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pygame Tutorials - Import and Initialize</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

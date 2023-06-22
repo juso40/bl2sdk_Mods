@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame._sdl2.controller &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame._sdl2.controller &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">Pygame module to work with controllers.</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 32%" />
-<col style="width: 1%" />
-<col style="width: 67%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_controller.html#pygame._sdl2.controller.init">pygame._sdl2.controller.init</a></div>
 </td>
@@ -148,7 +143,7 @@
 <tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_controller.html#pygame._sdl2.controller.name_forindex">pygame._sdl2.controller.name_forindex</a></div>
 </td>
 <td>—</td>
-<td>Get the name of the contoller</td>
+<td>Get the name of the controller</td>
 </tr>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_controller.html#pygame._sdl2.controller.Controller">pygame._sdl2.controller.Controller</a></div>
 </td>
@@ -270,7 +265,7 @@ events will be posted.</p>
 <dt class="sig sig-object py title" id="pygame._sdl2.controller.name_forindex">
 <span class="sig-prename descclassname"><span class="pre">pygame._sdl2.controller.</span></span><span class="sig-name descname"><span class="pre">name_forindex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame._sdl2.controller.name_forindex" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
-<div class="line"><span class="summaryline">Get the name of the contoller</span></div>
+<div class="line"><span class="summaryline">Get the name of the controller</span></div>
 <div class="line"><span class="signature">name_forindex(index) -&gt; name or None</span></div>
 </div>
 <p>Returns the name of controller, or None if there's no name or the
@@ -286,17 +281,12 @@ index is invalid.</p>
 <div class="line"><span class="signature">Controller(index) -&gt; Controller</span></div>
 </div>
 <p>Create a new Controller object. Index should be integer between
-0 and <code class="docutils literal notranslate"><span class="pre">pygame._sdl2.contoller.get_count()</span></code>. Controllers also
+0 and <code class="docutils literal notranslate"><span class="pre">pygame._sdl2.controller.get_count()</span></code>. Controllers also
 can be created from a <code class="docutils literal notranslate"><span class="pre">pygame.joystick.Joystick</span></code> using
 <code class="docutils literal notranslate"><span class="pre">pygame._sdl2.controller.from_joystick</span></code>. Controllers are
 initialized on creation.</p>
 </div></blockquote>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 39%" />
-<col style="width: 1%" />
-<col style="width: 60%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_controller.html#pygame._sdl2.controller.Controller.quit">pygame._sdl2.controller.Controller.quit</a></div>
 </td>
@@ -556,14 +546,14 @@ controller does not support it or <a class="tooltip reference internal" href="py
         <li class="right" >
           <a href="scrap.html" title="pygame.scrap"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame._sdl2.controller</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Pygame Tutorials - Line By Line Chimp Example &#8212; pygame v2.1.2 documentation</title>
+    <title>Pygame Tutorials - Line By Line Chimp Example &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,19 +98,19 @@
             
 <section id="pygame-tutorials-line-by-line-chimp-example">
 <section id="line-by-line-chimp">
-<h2>Line By Line Chimp<a class="headerlink" href="#line-by-line-chimp" title="Permalink to this headline">¶</a></h2>
+<h2>Line By Line Chimp<a class="headerlink" href="#line-by-line-chimp" title="Permalink to this heading">¶</a></h2>
 <dl class="docinfo field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Pete Shinners</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:pete&#37;&#52;&#48;shinners&#46;org">pete<span>&#64;</span>shinners<span>&#46;</span>org</a></p>
 </dd>
 </dl>
 <div class="toctree-wrapper compound">
 </div>
 <section id="introduction">
-<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h3>
 <p>In the <em>pygame</em> examples there is a simple example named &quot;chimp&quot;.
 This example simulates a punchable monkey moving around the screen with
 promises of riches and reward. The example itself is very simple, and a
@@ -133,7 +133,7 @@ and run the chimp demo for yourself in the examples directory.</p>
 </div>
 </section>
 <section id="import-modules">
-<h3>Import Modules<a class="headerlink" href="#import-modules" title="Permalink to this headline">¶</a></h3>
+<h3>Import Modules<a class="headerlink" href="#import-modules" title="Permalink to this heading">¶</a></h3>
 <p>This is the code that imports all the needed modules into your program.
 It also checks for the availability of some of the optional pygame modules.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import Modules</span>
@@ -166,7 +166,7 @@ that path. It then prepares the variable <code class="docutils literal notransla
 loading functions exactly where to look.</p>
 </section>
 <section id="loading-resources">
-<h3>Loading Resources<a class="headerlink" href="#loading-resources" title="Permalink to this headline">¶</a></h3>
+<h3>Loading Resources<a class="headerlink" href="#loading-resources" title="Permalink to this heading">¶</a></h3>
 <p>Here we have two functions we can use to load images and sounds. We will
 look at each function individually in this section.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load_image</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">colorkey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -231,12 +231,12 @@ different problems. First we create a full path to the sound image, and
 load the sound file. Then we simply return the loaded Sound object.</p>
 </section>
 <section id="game-object-classes">
-<h3>Game Object Classes<a class="headerlink" href="#game-object-classes" title="Permalink to this headline">¶</a></h3>
+<h3>Game Object Classes<a class="headerlink" href="#game-object-classes" title="Permalink to this heading">¶</a></h3>
 <p>Here we create two classes to represent the objects in our game. Almost
 all the logic for the game goes into these two classes. We will look over
 them one at a time here.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Fist</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;moves a clenched fist on the screen, following the mouse&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;moves a clenched fist on the screen, following the mouse&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pg</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># call Sprite initializer</span>
@@ -245,7 +245,7 @@ them one at a time here.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">punching</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;move the fist based on the mouse position&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;move the fist based on the mouse position&quot;&quot;&quot;</span>
         <span class="n">pos</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">get_pos</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">topleft</span> <span class="o">=</span> <span class="n">pos</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">move_ip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fist_offset</span><span class="p">)</span>
@@ -253,14 +253,14 @@ them one at a time here.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">move_ip</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">punch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;returns true if the fist collides with the target&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns true if the fist collides with the target&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">punching</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">punching</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">hitbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">inflate</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">hitbox</span><span class="o">.</span><span class="n">colliderect</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">unpunch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;called to pull the fist back&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;called to pull the fist back&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">punching</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
@@ -282,11 +282,11 @@ slightly if the fist is in the &quot;punching&quot; state.</p>
 state for the fist. The <cite>punch()</cite> method also returns a true value if the fist
 is colliding with the given target sprite.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Chimp</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;moves a monkey critter across the screen. it can spin the</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;moves a monkey critter across the screen. it can spin the</span>
 <span class="sd">    monkey when it is punched.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">pg</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># call Sprite intializer</span>
+        <span class="n">pg</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># call Sprite initializer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="s2">&quot;chimp.png&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="n">screen</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">get_surface</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
@@ -295,14 +295,14 @@ is colliding with the given target sprite.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">dizzy</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;walk or spin, depending on the monkeys state&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;walk or spin, depending on the monkeys state&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dizzy</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_spin</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;move the monkey across the screen, and turn at the ends&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;move the monkey across the screen, and turn at the ends&quot;&quot;&quot;</span>
         <span class="n">newpos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">move</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">newpos</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">left</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
@@ -312,7 +312,7 @@ is colliding with the given target sprite.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">newpos</span>
 
     <span class="k">def</span> <span class="nf">_spin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;spin the monkey image&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;spin the monkey image&quot;&quot;&quot;</span>
         <span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dizzy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dizzy</span> <span class="o">+</span> <span class="mi">12</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dizzy</span> <span class="o">&gt;=</span> <span class="mi">360</span><span class="p">:</span>
@@ -324,7 +324,7 @@ is colliding with the given target sprite.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">punched</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;this will cause the monkey to start spinning&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;this will cause the monkey to start spinning&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dizzy</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dizzy</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">original</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span>
@@ -367,7 +367,7 @@ state.  This will cause the image to start spinning. It also makes a copy
 of the current image named &quot;original&quot;.</p>
 </section>
 <section id="initialize-everything">
-<h3>Initialize Everything<a class="headerlink" href="#initialize-everything" title="Permalink to this headline">¶</a></h3>
+<h3>Initialize Everything<a class="headerlink" href="#initialize-everything" title="Permalink to this heading">¶</a></h3>
 <p>Before we can do much with pygame, we need to make sure its modules
 are initialized. In this case we will also open a simple graphics window.
 Now we are in the <cite>main()</cite> function of the program, which actually runs everything.</p>
@@ -394,7 +394,7 @@ do our bidding. Usually the cursor defaults to visible, so there is no need
 to really set the state unless we want to hide it.</p>
 </section>
 <section id="create-the-background">
-<h3>Create The Background<a class="headerlink" href="#create-the-background" title="Permalink to this headline">¶</a></h3>
+<h3>Create The Background<a class="headerlink" href="#create-the-background" title="Permalink to this heading">¶</a></h3>
 <p>Our program is going to have text message in the background. It would
 be nice for us to create a single surface to represent the background and
 repeatedly use that. The first step is to create the surface.</p>
@@ -412,7 +412,7 @@ function usually takes an RGB triplet as arguments, but supports many
 input formats. See the <a class="tooltip reference internal" href="../ref/color.html#pygame.Color" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.Color</span></code><span class="tooltip-content">pygame object for color representations</span></a> for all the color formats.</p>
 </section>
 <section id="put-text-on-the-background-centered">
-<h3>Put Text On The Background, Centered<a class="headerlink" href="#put-text-on-the-background-centered" title="Permalink to this headline">¶</a></h3>
+<h3>Put Text On The Background, Centered<a class="headerlink" href="#put-text-on-the-background-centered" title="Permalink to this heading">¶</a></h3>
 <p>Now that we have a background surface, lets get the text rendered to it. We
 only do this if we see the <a class="tooltip reference internal" href="../ref/font.html#module-pygame.font" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.font</span></code><span class="tooltip-content">pygame module for loading and rendering fonts</span></a> module has imported properly.
 If not, we just skip this section.</p>
@@ -441,11 +441,11 @@ easily assign it to the screen center.</p>
 image.</p>
 </section>
 <section id="display-the-background-while-setup-finishes">
-<h3>Display The Background While Setup Finishes<a class="headerlink" href="#display-the-background-while-setup-finishes" title="Permalink to this headline">¶</a></h3>
+<h3>Display The Background While Setup Finishes<a class="headerlink" href="#display-the-background-while-setup-finishes" title="Permalink to this heading">¶</a></h3>
 <p>We still have a black window on the screen. Lets show our background
 while we wait for the other resources to load.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>This will blit our entire background onto the display window. The
@@ -456,7 +456,7 @@ to be visible to the user. In this case the <cite>flip()</cite> function works n
 because it simply handles the entire window area.</p>
 </section>
 <section id="prepare-game-object">
-<h3>Prepare Game Object<a class="headerlink" href="#prepare-game-object" title="Permalink to this headline">¶</a></h3>
+<h3>Prepare Game Object<a class="headerlink" href="#prepare-game-object" title="Permalink to this heading">¶</a></h3>
 <p>Here we create all the objects that the game is going to need.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">whiff_sound</span> <span class="o">=</span> <span class="n">load_sound</span><span class="p">(</span><span class="s2">&quot;whiff.wav&quot;</span><span class="p">)</span>
 <span class="n">punch_sound</span> <span class="o">=</span> <span class="n">load_sound</span><span class="p">(</span><span class="s2">&quot;punch.wav&quot;</span><span class="p">)</span>
@@ -480,7 +480,7 @@ group, but in this game we won't need to.</p>
 we will use it in the main loop of our game to make sure it doesn't run too fast.</p>
 </section>
 <section id="main-loop">
-<h3>Main Loop<a class="headerlink" href="#main-loop" title="Permalink to this headline">¶</a></h3>
+<h3>Main Loop<a class="headerlink" href="#main-loop" title="Permalink to this heading">¶</a></h3>
 <p>Nothing much here, just an infinite loop.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">going</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">while</span> <span class="n">going</span><span class="p">:</span>
@@ -495,7 +495,7 @@ that this example is no different.</p>
 doesn't run faster than 60 frames per second.</p>
 </section>
 <section id="handle-all-input-events">
-<h3>Handle All Input Events<a class="headerlink" href="#handle-all-input-events" title="Permalink to this headline">¶</a></h3>
+<h3>Handle All Input Events<a class="headerlink" href="#handle-all-input-events" title="Permalink to this heading">¶</a></h3>
 <p>This is an extremely simple case of working the event queue.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pg</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pg</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
@@ -522,7 +522,7 @@ the chimp. We play the appropriate sound effect, and if the monkey was hit,
 we tell him to start spinning (by calling his <cite>punched()</cite> method).</p>
 </section>
 <section id="update-the-sprites">
-<h3>Update the Sprites<a class="headerlink" href="#update-the-sprites" title="Permalink to this headline">¶</a></h3>
+<h3>Update the Sprites<a class="headerlink" href="#update-the-sprites" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">allsprites</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -532,23 +532,23 @@ on which state they are in. This is where the chimp will move one step side
 to side, or spin a little farther if he was recently punched.</p>
 </section>
 <section id="draw-the-entire-scene">
-<h3>Draw The Entire Scene<a class="headerlink" href="#draw-the-entire-scene" title="Permalink to this headline">¶</a></h3>
+<h3>Draw The Entire Scene<a class="headerlink" href="#draw-the-entire-scene" title="Permalink to this heading">¶</a></h3>
 <p>Now that all the objects are in the right place, time to draw them.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="n">allsprites</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
-<span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The first blit call will draw the background onto the entire screen. This
 erases everything we saw from the previous frame (slightly inefficient, but
 good enough for this game). Next we call the <cite>draw()</cite> method of the sprite
-container. Since this sprite container is really an instance of the &quot;DrawPlain&quot;
+container. Since this sprite container is really an instance of the &quot;RenderPlain&quot;
 sprite group, it knows how to draw our sprites. Lastly, we <cite>flip()</cite> the contents
 of pygame's software double buffer to the screen. This makes everything we've
 drawn visible all at once.</p>
 </section>
 <section id="game-over">
-<h3>Game Over<a class="headerlink" href="#game-over" title="Permalink to this headline">¶</a></h3>
+<h3>Game Over<a class="headerlink" href="#game-over" title="Permalink to this heading">¶</a></h3>
 <p>User has quit, time to clean up.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pg</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
 </pre></div>
@@ -584,14 +584,14 @@ anything, but calling <cite>pg.quit()</cite> explicitly cleans up pygame's inter
         <li class="right" >
           <a href="CameraIntro.html" title="Pygame Tutorials - Camera Module Introduction"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pygame Tutorials - Line By Line Chimp Example</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

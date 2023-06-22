@@ -53,7 +53,7 @@ _cursor_id_table = {
 }
 
 
-class Cursor(object):
+class Cursor:
     def __init__(self, *args):
         """Cursor(size, hotspot, xormasks, andmasks) -> Cursor
         Cursor(hotspot, Surface) -> Cursor
@@ -87,12 +87,15 @@ class Cursor(object):
             self.type = "bitmap"
             # pylint: disable=consider-using-generator
             # See https://github.com/pygame/pygame/pull/2509 for analysis
-            self.data = tuple([tuple(arg) for arg in args])
+            self.data = tuple(tuple(arg) for arg in args)
         else:
             raise TypeError("Arguments must match a cursor specification")
 
     def __len__(self):
         return len(self.data)
+
+    def __iter__(self):
+        return iter(self.data)
 
     def __getitem__(self, index):
         return self.data[index]
@@ -116,15 +119,15 @@ class Cursor(object):
     def __repr__(self):
         if self.type == "system":
             id_string = _cursor_id_table.get(self.data[0], "constant lookup error")
-            return "<Cursor(type: system, constant: " + id_string + ")>"
+            return f"<Cursor(type: system, constant: {id_string})>"
         if self.type == "bitmap":
-            size = "size: " + str(self.data[0])
-            hotspot = "hotspot: " + str(self.data[1])
-            return "<Cursor(type: bitmap, " + size + ", " + hotspot + ")>"
+            size = f"size: {self.data[0]}"
+            hotspot = f"hotspot: {self.data[1]}"
+            return f"<Cursor(type: bitmap, {size}, {hotspot})>"
         if self.type == "color":
-            hotspot = "hotspot: " + str(self.data[0])
+            hotspot = f"hotspot: {self.data[0]}"
             surf = repr(self.data[1])
-            return "<Cursor(type: color, " + hotspot + ", surf: " + surf + ")>"
+            return f"<Cursor(type: color, {hotspot}, surf: {surf})>"
         raise TypeError("Invalid Cursor")
 
 
@@ -138,6 +141,7 @@ def set_cursor(*args):
 
 pygame.mouse.set_cursor = set_cursor
 del set_cursor  # cleanup namespace
+
 
 # Python side of the get_cursor function: C side in mouse.c
 def get_cursor():

@@ -76,7 +76,7 @@ def threshold(
                     return_surf.set_at((x, y), c1)
                 similar += 1
             # else:
-            #    print c1, c2
+            #    print(c1, c2)
 
     return similar
 
@@ -133,6 +133,75 @@ class TransformModuleTest(unittest.TestCase):
         self.assertEqual(tmp_surface.get_size(), (0, 0))
         tmp_surface = pygame.transform.scale(tmp_surface, (128, 128))
         self.assertEqual(tmp_surface.get_size(), (128, 128))
+
+    def test_scale_by(self):
+        s = pygame.Surface((32, 32))
+
+        s2 = pygame.transform.scale_by(s, 2)
+        self.assertEqual((64, 64), s2.get_size())
+
+        s2 = pygame.transform.scale_by(s, factor=(2.0, 1.5))
+        self.assertEqual((64, 48), s2.get_size())
+
+        dest = pygame.Surface((64, 48))
+        pygame.transform.scale_by(s, (2.0, 1.5), dest_surface=dest)
+
+    def test_smoothscale_by(self):
+        s = pygame.Surface((32, 32))
+
+        s2 = pygame.transform.smoothscale_by(s, 2)
+        self.assertEqual((64, 64), s2.get_size())
+
+        s2 = pygame.transform.smoothscale_by(s, factor=(2.0, 1.5))
+        self.assertEqual((64, 48), s2.get_size())
+
+        dest = pygame.Surface((64, 48))
+        pygame.transform.smoothscale_by(s, (2.0, 1.5), dest_surface=dest)
+
+    def test_grayscale(self):
+        s = pygame.Surface((32, 32))
+        s.fill((255, 0, 0))
+
+        s2 = pygame.transform.grayscale(s)
+        self.assertEqual(pygame.transform.average_color(s2)[0], 76)
+        self.assertEqual(pygame.transform.average_color(s2)[1], 76)
+        self.assertEqual(pygame.transform.average_color(s2)[2], 76)
+
+        dest = pygame.Surface((32, 32), depth=32)
+        pygame.transform.grayscale(s, dest)
+        self.assertEqual(pygame.transform.average_color(dest)[0], 76)
+        self.assertEqual(pygame.transform.average_color(dest)[1], 76)
+        self.assertEqual(pygame.transform.average_color(dest)[2], 76)
+
+        dest = pygame.Surface((32, 32), depth=32)
+        s.fill((34, 12, 65))
+        pygame.transform.grayscale(s, dest)
+        self.assertEqual(pygame.transform.average_color(dest)[0], 24)
+        self.assertEqual(pygame.transform.average_color(dest)[1], 24)
+        self.assertEqual(pygame.transform.average_color(dest)[2], 24)
+
+        dest = pygame.Surface((32, 32), depth=32)
+        s.fill((123, 123, 123))
+        pygame.transform.grayscale(s, dest)
+        self.assertIn(pygame.transform.average_color(dest)[0], [123, 122])
+        self.assertIn(pygame.transform.average_color(dest)[1], [123, 122])
+        self.assertIn(pygame.transform.average_color(dest)[2], [123, 122])
+
+        s = pygame.Surface((32, 32), depth=24)
+        s.fill((255, 0, 0))
+        dest = pygame.Surface((32, 32), depth=24)
+        pygame.transform.grayscale(s, dest)
+        self.assertEqual(pygame.transform.average_color(dest)[0], 76)
+        self.assertEqual(pygame.transform.average_color(dest)[1], 76)
+        self.assertEqual(pygame.transform.average_color(dest)[2], 76)
+
+        s = pygame.Surface((32, 32), depth=16)
+        s.fill((255, 0, 0))
+        dest = pygame.Surface((32, 32), depth=16)
+        pygame.transform.grayscale(s, dest)
+        self.assertEqual(pygame.transform.average_color(dest)[0], 72)
+        self.assertEqual(pygame.transform.average_color(dest)[1], 76)
+        self.assertEqual(pygame.transform.average_color(dest)[2], 72)
 
     def test_threshold__honors_third_surface(self):
         # __doc__ for threshold as of Tue 07/15/2008
@@ -454,7 +523,6 @@ class TransformModuleTest(unittest.TestCase):
 
     # XXX
     def test_threshold_non_src_alpha(self):
-
         result = pygame.Surface((10, 10))
         s1 = pygame.Surface((10, 10))
         s2 = pygame.Surface((10, 10))
@@ -842,7 +910,6 @@ class TransformModuleTest(unittest.TestCase):
         )
 
     def test_average_surfaces__24(self):
-
         SIZE = 32
         depth = 24
         s1 = pygame.Surface((SIZE, SIZE), 0, depth)
@@ -956,6 +1023,42 @@ class TransformModuleTest(unittest.TestCase):
                 )
                 self.assertEqual(avg_color, (0, 100, 200, 0))
 
+    def test_average_color_considering_alpha_all_pixels_opaque(self):
+        """ """
+        s = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
+        s.fill((0, 100, 200, 255))
+        s.fill((10, 50, 100, 255), (0, 0, 16, 32))
+
+        self.assertEqual(
+            pygame.transform.average_color(s, consider_alpha=True), (5, 75, 150, 255)
+        )
+
+        # Also validate keyword arguments
+        avg_color = pygame.transform.average_color(
+            surface=s, rect=(16, 0, 16, 32), consider_alpha=True
+        )
+        self.assertEqual(avg_color, (0, 100, 200, 255))
+
+    def test_average_color_considering_alpha(self):
+        """ """
+        s = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
+        s.fill((0, 100, 200, 255))
+        s.fill((10, 50, 100, 128), (0, 0, 16, 32))
+
+        # formula for this example of half filled square
+        # n = number of pixels, e.g. 32 * 32
+        # rgb = (n/2 * ( a_left * rgb_left) + n/2 (a_right * rgb_right) ) / (n/2 * a_left + n/2 * a_right)
+        # a = (n/2 * a_left + n/2 * a_right) / n
+        self.assertEqual(
+            pygame.transform.average_color(s, consider_alpha=True), (3, 83, 166, 191)
+        )
+
+        # Also validate keyword arguments
+        avg_color = pygame.transform.average_color(
+            surface=s, rect=(0, 0, 16, 32), consider_alpha=True
+        )
+        self.assertEqual(avg_color, (10, 50, 100, 128))
+
     def test_rotate(self):
         # setting colors and canvas
         blue = (0, 0, 255, 255)
@@ -1008,7 +1111,6 @@ class TransformModuleTest(unittest.TestCase):
             self.assertTrue(s.get_at(pt) == color)
 
     def test_scale2x(self):
-
         # __doc__ (as of 2008-06-25) for pygame.transform.scale2x:
 
         # pygame.transform.scale2x(Surface, DestSurface = None): Surface
@@ -1056,16 +1158,19 @@ class TransformModuleTest(unittest.TestCase):
         # All machines should allow returning to original value.
         # Also check that keyword argument works.
         pygame.transform.set_smoothscale_backend(backend=original_type)
+
         # Something invalid.
         def change():
             pygame.transform.set_smoothscale_backend("mmx")
 
         self.assertRaises(ValueError, change)
+
         # Invalid argument keyword.
         def change():
             pygame.transform.set_smoothscale_backend(t="GENERIC")
 
         self.assertRaises(TypeError, change)
+
         # Invalid argument type.
         def change():
             pygame.transform.set_smoothscale_backend(1)
@@ -1145,7 +1250,6 @@ class TransformModuleTest(unittest.TestCase):
         self.assertEqual(test_surface.get_size(), (20, 20))
 
     def test_rotozoom(self):
-
         # __doc__ (as of 2008-08-02) for pygame.transform.rotozoom:
 
         # pygame.transform.rotozoom(Surface, angle, scale): return Surface
@@ -1216,7 +1320,7 @@ class TransformModuleTest(unittest.TestCase):
         two_pixel_surface = pygame.Surface((2, 1), depth=32)
         two_pixel_surface.fill(pygame.Color(0, 0, 0), pygame.Rect(0, 0, 1, 1))
         two_pixel_surface.fill(pygame.Color(255, 255, 255), pygame.Rect(1, 0, 1, 1))
-        for k in [2 ** x for x in range(5, 8)]:  # Enlarge to targets 32, 64...256
+        for k in [2**x for x in range(5, 8)]:  # Enlarge to targets 32, 64...256
             bigger_surface = pygame.transform.smoothscale(two_pixel_surface, (k, 1))
             self.assertEqual(
                 bigger_surface.get_at((k // 2, 0)), pygame.Color(127, 127, 127)

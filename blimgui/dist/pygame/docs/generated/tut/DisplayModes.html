@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Pygame Tutorials - Setting Display Modes &#8212; pygame v2.1.2 documentation</title>
+    <title>Pygame Tutorials - Setting Display Modes &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,17 +98,17 @@
             
 <section id="pygame-tutorials-setting-display-modes">
 <section id="setting-display-modes">
-<h2>Setting Display Modes<a class="headerlink" href="#setting-display-modes" title="Permalink to this headline">¶</a></h2>
+<h2>Setting Display Modes<a class="headerlink" href="#setting-display-modes" title="Permalink to this heading">¶</a></h2>
 <dl class="docinfo field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Pete Shinners</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:pete&#37;&#52;&#48;shinners&#46;org">pete<span>&#64;</span>shinners<span>&#46;</span>org</a></p>
 </dd>
 </dl>
 <section id="introduction">
-<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h3>
 <p>Setting the display mode in <em>pygame</em> creates a visible image surface
 on the monitor.
 This surface can either cover the full screen, or be windowed
@@ -138,7 +138,7 @@ This tutorial will help you understand the different methods for querying
 the platforms display capabilities, and setting the display mode for your game.</p>
 </section>
 <section id="setting-basics">
-<h3>Setting Basics<a class="headerlink" href="#setting-basics" title="Permalink to this headline">¶</a></h3>
+<h3>Setting Basics<a class="headerlink" href="#setting-basics" title="Permalink to this heading">¶</a></h3>
 <p>The first thing to learn about is how to actually set the current display mode.
 The display mode may be set at any time after the <a class="tooltip reference internal" href="../ref/display.html#module-pygame.display" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.display</span></code><span class="tooltip-content">pygame module to control the display window and screen</span></a>
 module has been initialized.
@@ -160,7 +160,7 @@ The flags argument lets you control extra features for the display mode.
 Again, more information about this is found in the <em>pygame</em> reference documents.</p>
 </section>
 <section id="how-to-decide">
-<h3>How to Decide<a class="headerlink" href="#how-to-decide" title="Permalink to this headline">¶</a></h3>
+<h3>How to Decide<a class="headerlink" href="#how-to-decide" title="Permalink to this heading">¶</a></h3>
 <p>So how do you select a display mode that is going to work best with your
 graphic resources and the platform your game is running on?
 There are several methods for gathering information about the display device.
@@ -202,7 +202,7 @@ you can find out information about its settings by getting a VidInfo object,
 or by calling any of the Surface.get* methods on the display surface.</p>
 </section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h3>
 <p>These are the routines you can use to determine the most appropriate
 display mode.
 You can find more information about these functions in the display module
@@ -252,13 +252,13 @@ members and values for this object.</p>
 <p>You can test all these flags as simply members of the VidInfo object.</p>
 </section>
 <section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h3>
 <p>Here are some examples of different methods to init the graphics display.
 They should help you get an idea of how to go about setting your display mode.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#give me the best depth with a 640 x 480 windowed display</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># give me the best depth with a 640 x 480 windowed display</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">))</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#give me the biggest 16-bit display available</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># give me the biggest 16-bit display available</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">modes</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">list_modes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="ow">not</span> <span class="n">modes</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;16-bit not supported&#39;</span><span class="p">)</span>
@@ -266,7 +266,7 @@ They should help you get an idea of how to go about setting your display mode.</
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Found Resolution:&#39;</span><span class="p">,</span> <span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">FULLSCREEN</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#need an 8-bit surface, nothing else will do</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># need an 8-bit surface, nothing else will do</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">mode_ok</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">8</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Can only work with an 8-bit display, sorry&#39;</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">else</span><span class="p">:</span>
@@ -301,14 +301,14 @@ They should help you get an idea of how to go about setting your display mode.</
         <li class="right" >
           <a href="chimp.py.html" title="pygame/examples/chimp.py"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pygame Tutorials - Setting Display Modes</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

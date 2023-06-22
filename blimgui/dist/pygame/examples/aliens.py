@@ -51,7 +51,7 @@ def load_image(file):
     try:
         surface = pg.image.load(file)
     except pg.error:
-        raise SystemExit('Could not load image "%s" %s' % (file, pg.get_error()))
+        raise SystemExit(f'Could not load image "{file}" {pg.get_error()}')
     return surface.convert()
 
 
@@ -64,7 +64,7 @@ def load_sound(file):
         sound = pg.mixer.Sound(file)
         return sound
     except pg.error:
-        print("Warning, unable to load, %s" % file)
+        print(f"Warning, unable to load, {file}")
     return None
 
 
@@ -304,7 +304,6 @@ def main(winstyle=0):
 
     # Run our main loop whilst the player is alive.
     while player.alive():
-
         # get input
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -375,7 +374,7 @@ def main(winstyle=0):
             Explosion(alien)
             SCORE = SCORE + 1
 
-        # See if alien boms hit the player.
+        # See if alien bombs hit the player.
         for bomb in pg.sprite.spritecollide(player, bombs, 1):
             if pg.mixer:
                 boom_sound.play()

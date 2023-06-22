@@ -1,14 +1,10 @@
-import sys
-import platform
-
-try:
-    reduce
-except NameError:
-    from functools import reduce
-import operator
-import weakref
 import gc
+import operator
+import platform
+import sys
 import unittest
+import weakref
+from functools import reduce
 
 from pygame.tests.test_utils import SurfaceSubclass
 
@@ -23,22 +19,22 @@ import pygame
 IS_PYPY = "PyPy" == platform.python_implementation()
 
 
-class TestMixin(object):
+class TestMixin:
     def assert_surfaces_equal(self, s1, s2, msg=None):
         """Checks if two surfaces are equal in size and color."""
         w, h = s1.get_size()
 
         self.assertTupleEqual((w, h), s2.get_size(), msg)
 
-        msg = "" if msg is None else "{}, ".format(msg)
-        msg += "size: ({}, {})".format(w, h)
+        msg = "" if msg is None else f"{msg}, "
+        msg += f"size: ({w}, {h})"
 
         for x in range(w):
             for y in range(h):
                 self.assertEqual(
                     s1.get_at((x, y)),
                     s2.get_at((x, y)),
-                    "{}, position: ({}, {})".format(msg, x, y),
+                    f"{msg}, position: ({x}, {y})",
                 )
 
     def assert_surface_filled(self, surface, expected_color, msg=None):
@@ -242,32 +238,57 @@ class PixelArrayTypeTest(unittest.TestCase, TestMixin):
         a = pygame.PixelArray(s)
         a.close()
 
-        def do_operation():
+        def access_after():
             a[:]
 
-        self.assertRaises(ValueError, do_operation)
+        self.assertRaises(ValueError, access_after)
 
-        def do_operation2():
+        def assign_all_after():
             a[:] = 1
 
-        self.assertRaises(ValueError, do_operation2)
+        self.assertRaises(ValueError, assign_all_after)
 
-        def do_operation3():
+        def make_surface_after():
             a.make_surface()
 
-        self.assertRaises(ValueError, do_operation3)
+        self.assertRaises(ValueError, make_surface_after)
 
-        def do_operation4():
+        def iter_after():
             for x in a:
                 pass
 
-        self.assertRaises(ValueError, do_operation4)
+        self.assertRaises(ValueError, iter_after)
+
+        def close_after():
+            a.close()
+
+        self.assertRaises(ValueError, close_after)
+
+        def surface_after():
+            a.surface
+
+        self.assertRaises(ValueError, surface_after)
+
+        def itemsize_after():
+            a.itemsize
+
+        self.assertRaises(ValueError, itemsize_after)
+
+        def transpose_after():
+            a.transpose()
+
+        self.assertRaises(ValueError, transpose_after)
 
     def test_context_manager(self):
         """closes properly."""
         s = pygame.Surface((10, 10))
         with pygame.PixelArray(s) as a:
             a[:]
+
+        # Test pixel array write... will also catch refcount issues and
+        # segfault
+        with pygame.PixelArray(s) as a:
+            a[:] = pygame.Color("deepskyblue")
 
     def test_pixel_array(self):
         for bpp in (8, 16, 24, 32):
@@ -677,35 +698,25 @@ class PixelArrayTypeTest(unittest.TestCase, TestMixin):
             # Test simple slicing
             self.assertEqual(len(ar[:, :]), 6)
             self.assertEqual(
-                len(
-                    ar[
-                        :,
-                    ]
-                ),
+                len(ar[:,]),
                 6,
             )
             self.assertEqual(len(ar[1, :]), 8)
             self.assertEqual(len(ar[:, 2]), 6)
             # Empty slices
             self.assertEqual(
-                ar[
-                    4:4,
-                ],
+                ar[4:4,],
                 None,
             )
             self.assertEqual(ar[4:4, ...], None)
             self.assertEqual(ar[4:4, 2:2], None)
             self.assertEqual(ar[4:4, 1:4], None)
             self.assertEqual(
-                ar[
-                    4:4:2,
-                ],
+                ar[4:4:2,],
                 None,
             )
             self.assertEqual(
-                ar[
-                    4:4:-2,
-                ],
+                ar[4:4:-2,],
                 None,
             )
             self.assertEqual(ar[4:4:1, ...], None)
@@ -836,9 +847,7 @@ class PixelArrayTypeTest(unittest.TestCase, TestMixin):
             self.assertEqual(ar[0, 0], 0)
             self.assertEqual(ar[1, 0], 0)
             self.assertEqual(ar[-1, -1], 0)
-            ar[
-                ...,
-            ] = (0, 0, 255)
+            ar[...,] = (0, 0, 255)
             self.assertEqual(ar[0, 0], sf.map_rgb((0, 0, 255)))
             self.assertEqual(ar[1, 0], sf.map_rgb((0, 0, 255)))
             self.assertEqual(ar[-1, -1], sf.map_rgb((0, 0, 255)))
@@ -1011,7 +1020,7 @@ class PixelArrayTypeTest(unittest.TestCase, TestMixin):
             self.assertEqual(iterations, 5)
 
     def test_replace(self):
-        # print "replace start"
+        # print("replace start")
         for bpp in (8, 16, 24, 32):
             sf = pygame.Surface((10, 10), 0, bpp)
             sf.fill((255, 0, 0))
@@ -1032,10 +1041,10 @@ class PixelArrayTypeTest(unittest.TestCase, TestMixin):
             self.assertEqual(ar[3][6], oval)
             self.assertEqual(ar[8][9], oval)
             self.assertEqual(ar[9][9], oval)
-        # print "replace end"
+        # print("replace end")
 
     def test_extract(self):
-        # print "extract start"
+        # print("extract start")
         for bpp in (8, 16, 24, 32):
             sf = pygame.Surface((10, 10), 0, bpp)
             sf.fill((0, 0, 255))
@@ -1061,7 +1070,7 @@ class PixelArrayTypeTest(unittest.TestCase, TestMixin):
             self.assertEqual(newar[3][6], white)
             self.assertEqual(newar[8][9], black)
             self.assertEqual(newar[9][9], black)
-        # print "extract end"
+        # print("extract end")
 
     def test_2dslice_assignment(self):
         w = 2 * 5 * 8
@@ -1317,7 +1326,6 @@ class PixelArrayArrayInterfaceTest(unittest.TestCase, TestMixin):
 
     @unittest.skipIf(IS_PYPY, "skipping for PyPy (why?)")
     def test_shape(self):
-
         for shape in [[4, 16], [5, 13]]:
             w, h = shape
             sf = pygame.Surface(shape, 0, 32)
@@ -1435,7 +1443,6 @@ class PixelArrayArrayInterfaceTest(unittest.TestCase, TestMixin):
 @unittest.skipIf(not pygame.HAVE_NEWBUF, "newbuf not implemented")
 @unittest.skipIf(IS_PYPY, "pypy having issues")
 class PixelArrayNewBufferTest(unittest.TestCase, TestMixin):
-
     if pygame.HAVE_NEWBUF:
         from pygame.tests.test_utils import buftools
 

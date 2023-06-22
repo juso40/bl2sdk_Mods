@@ -4,7 +4,7 @@ from .. import blendmode, surface, rect, video, render, error, dll, hints
 from ..stdinc import Uint8, Uint32
 
 from .color import convert_to_color
-from .common import raise_sdl_err
+from .err import raise_sdl_err
 from .compat import deprecated, stringify, byteify, isiterable
 from .sprite import SoftwareSprite, TextureSprite
 from .surface import _get_target_surface
@@ -18,9 +18,22 @@ __all__ = ["set_texture_scale_quality", "Renderer", "Texture"]
 def is_numeric(x):
     try:
         return float(x) == x
-    except TypeError:
+    except (TypeError, ValueError):
         return False
 
+def _is_point(x):
+    if isiterable(x):
+        return len(x) == 2
+    if isinstance(x, rect.SDL_Point) or isinstance(x, rect.SDL_FPoint):
+        return True
+    return False
+
+def _is_rect(x):
+    if isiterable(x):
+        return len(x) == 4
+    if isinstance(x, rect.SDL_Rect) or isinstance(x, rect.SDL_FRect):
+        return True
+    return False
 
 def _sanitize_points(points):
     # If first item is numeric, assume flat list of points
@@ -60,7 +73,7 @@ def _sanitize_rects(rects):
         "SDL_Rect objects (Got unsupported format '{0}')"
     )
     out = []
-    if not isiterable(rects) or not isiterable(rects[0]):
+    if not (isiterable(rects) and _is_rect(rects[0])):
         rects = [rects]
     for r in rects:
         if isinstance(r, rect.SDL_Rect) or isinstance(r, rect.SDL_FRect):
@@ -154,6 +167,8 @@ class Texture(object):
         self._tx = render.SDL_CreateTextureFromSurface(self._renderer, surface)
         if not self._tx:
             raise_sdl_err("creating the texture")
+        # Cache the size of the texture for future use
+        self._size = _get_texture_size(self.tx)
 
     def __del__(self):
         if hasattr(self, "_tx"):
@@ -190,7 +205,8 @@ class Texture(object):
     @property
     def size(self):
         """tuple: The width and height (in pixels) of the texture."""
-        return _get_texture_size(self.tx)
+        tx = self.tx # Makes sure texture is still usable
+        return self._size
 
     def destroy(self):
         """Deletes the texture and frees its associated memory.
@@ -383,7 +399,7 @@ class Renderer(object):
         for x in range(drivers):
             info = render.SDL_RendererInfo()
             ret = render.SDL_GetRenderDriverInfo(x, info)
-            if ret != 0:
+            if ret == 0:
                 renderers.append(stringify(info.name))
             error.SDL_ClearError()
         return renderers
@@ -597,14 +613,17 @@ class Renderer(object):
             srcrect = rect.SDL_Rect(int(x), int(y), int(w), int(h))
 
         if dstrect:
-            if len(dstrect) == 2:
-                x, y = _sanitize_points([dstrect])[0]
+            if _is_point(dstrect):
+                x, y = dstrect
                 if srcrect:
                     w, h = (srcrect.w, srcrect.h)
                 else:
                     w, h = _get_texture_size(texture)
-            elif len(dstrect) == 4:
-                x, y, w, h = _sanitize_rects([dstrect])[0]
+            elif _is_rect(dstrect):
+                x, y, w, h = dstrect
+            else:
+                err = "'dstrect' must be a valid point or rectangle."
+                raise ValueError(err)
             dstrect = Rect(x, y, w, h)
 
         if center:

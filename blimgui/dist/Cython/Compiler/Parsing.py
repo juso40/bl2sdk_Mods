@@ -1795,6 +1795,8 @@ def p_imported_name(s, is_cimport):
     kind = None
     if is_cimport and s.systring in imported_name_kinds:
         kind = s.systring
+        warning(pos, 'the "from module cimport %s name" syntax is deprecated and '
+                'will be removed in Cython 3.0' % kind, 2)
         s.next()
     name = p_ident(s)
     as_name = p_as_name(s)
@@ -2820,6 +2822,8 @@ def p_c_func_declarator(s, pos, ctx, base, cmethod_flag):
     s.expect(')')
     nogil = p_nogil(s)
     exc_val, exc_check = p_exception_value_clause(s)
+    # TODO - warning to enforce preferred exception specification order
+    nogil = nogil or p_nogil(s)
     with_gil = p_with_gil(s)
     return Nodes.CFuncDeclaratorNode(pos,
         base = base, args = args, has_varargs = ellipsis,
@@ -2938,18 +2942,29 @@ def p_with_gil(s):
 def p_exception_value_clause(s):
     exc_val = None
     exc_check = 0
-    if s.sy == 'except':
+
+    if s.sy == 'IDENT' and s.systring == 'noexcept':
+        s.next()
+        exc_check = False  # No-op in Cython 0.29.x
+    elif s.sy == 'except':
         s.next()
         if s.sy == '*':
             exc_check = 1
             s.next()
         elif s.sy == '+':
             exc_check = '+'
+            plus_char_pos = s.position()[2]
             s.next()
             if s.sy == 'IDENT':
                 name = s.systring
-                s.next()
-                exc_val = p_name(s, name)
+                if name == 'nogil':
+                    if s.position()[2] == plus_char_pos + 1:
+                        error(s.position(),
+                              "'except +nogil' defines an exception handling function. Use 'except + nogil' for the 'nogil' modifier.")
+                    # 'except + nogil' is parsed outside
+                else:
+                    exc_val = p_name(s, name)
+                    s.next()
             elif s.sy == '*':
                 exc_val = ExprNodes.CharNode(s.position(), value=u'*')
                 s.next()

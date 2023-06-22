@@ -2637,8 +2637,11 @@ class CFuncDefNode(FuncDefNode):
         def put_into_closure(entry):
             if entry.in_closure and not arg.default:
                 code.putln('%s = %s;' % (entry.cname, entry.original_cname))
-                code.put_var_incref(entry)
-                code.put_var_giveref(entry)
+                if entry.type.is_memoryviewslice:
+                    code.put_incref_memoryviewslice(entry.cname, have_gil=True)
+                else:
+                    code.put_var_incref(entry)
+                    code.put_var_giveref(entry)
         for arg in self.args:
             put_into_closure(scope.lookup_here(arg.name))
 
@@ -3461,7 +3464,7 @@ class DefNodeWrapper(FuncDefNode):
                     docstr.as_c_string_literal()))
 
             if entry.is_special:
-                code.putln('#if CYTHON_COMPILING_IN_CPYTHON')
+                code.putln('#if CYTHON_UPDATE_DESCRIPTOR_DOC')
                 code.putln(
                     "struct wrapperbase %s;" % entry.wrapperbase_cname)
                 code.putln('#endif')
@@ -4956,7 +4959,7 @@ class CClassDefNode(ClassDefNode):
                     preprocessor_guard = slot.preprocessor_guard_code() if slot else None
                     if preprocessor_guard:
                         code.putln(preprocessor_guard)
-                    code.putln('#if CYTHON_COMPILING_IN_CPYTHON')
+                    code.putln('#if CYTHON_UPDATE_DESCRIPTOR_DOC')
                     code.putln("{")
                     code.putln(
                         'PyObject *wrapper = PyObject_GetAttrString((PyObject *)&%s, "%s"); %s' % (
@@ -6720,23 +6723,28 @@ class _ForInStatNode(LoopNode, StatNode):
         code.set_loop_labels(old_loop_labels)
 
         if self.else_clause:
-            # in nested loops, the 'else' block can contain a
-            # 'continue' statement for the outer loop, but we may need
-            # to generate cleanup code before taking that path, so we
-            # intercept it here
-            orig_continue_label = code.continue_label
+            # In nested loops, the 'else' block can contain 'continue' or 'break'
+            # statements for the outer loop, but we may need to generate cleanup code
+            # before taking those paths, so we intercept them here.
+            orig_exit_labels = (code.continue_label, code.break_label)
             code.continue_label = code.new_label('outer_continue')
+            code.break_label = code.new_label('outer_break')
 
             code.putln("/*else*/ {")
             self.else_clause.generate_execution_code(code)
             code.putln("}")
 
-            if code.label_used(code.continue_label):
-                code.put_goto(break_label)
+            needs_goto_end = not self.else_clause.is_terminator
+            for exit_label, orig_exit_label in zip([code.continue_label, code.break_label], orig_exit_labels):
+                if not code.label_used(exit_label):
+                    continue
+                if needs_goto_end:
+                    code.put_goto(break_label)
+                    needs_goto_end = False
                 code.mark_pos(self.pos)
-                code.put_label(code.continue_label)
+                code.put_label(exit_label)
                 self.iterator.generate_disposal_code(code)
-                code.put_goto(orig_continue_label)
+                code.put_goto(orig_exit_label)
             code.set_loop_labels(old_loop_labels)
 
         code.mark_pos(self.pos)
@@ -7702,6 +7710,8 @@ class TryFinallyStatNode(StatNode):
     def generate_function_definitions(self, env, code):
         self.body.generate_function_definitions(env, code)
         self.finally_clause.generate_function_definitions(env, code)
+        if self.finally_except_clause:
+            self.finally_except_clause.generate_function_definitions(env, code)
 
     def put_error_catcher(self, code, temps_to_clean_up, exc_vars,
                           exc_lineno_cnames=None, exc_filename_cname=None):

@@ -1,10 +1,22 @@
 """Window routines to manage on-screen windows."""
 from ctypes import c_int, byref
 from .compat import stringify, utf8
-from .common import SDLError
+from .err import SDLError, raise_sdl_err
+from .displays import _check_video_init
 from .. import video
 
 __all__ = ["Window"]
+
+
+def _get_sdl_window(w, argname="window"):
+    if isinstance(w, Window):
+        w = w.window
+    elif hasattr(w, "contents"):
+        w = w.contents
+    if not isinstance(w, video.SDL_Window):
+        err = "'{0}' is not a valid SDL window.".format(argname)
+        raise ValueError(err)
+    return w
 
 
 class Window(object):
@@ -88,17 +100,18 @@ class Window(object):
                   video.SDL_WINDOWPOS_UNDEFINED)
 
     def __init__(self, title, size, position=None, flags=None):
+        _check_video_init("creating a window")
         if position is None:
             position = self.DEFAULTPOS
         if flags is None:
             flags = self.DEFAULTFLAGS
 
+        self.window = None
         self._title = title
         self._position = position
         self._flags = flags
         self._size = size
 
-        self.window = None
         self.create()
 
     def __del__(self):
@@ -106,64 +119,75 @@ class Window(object):
         underlying SDL2 window."""
         self.close()
 
+    def _ensure_window(self, action):
+        if not self.window:
+            raise RuntimeError("Cannot {0} a closed window.".format(action))
+
     @property
     def position(self):
         """tuple: The (x, y) pixel coordinates of the top-left corner of the
         window.
 
         """
+        if not self.window:
+            return self._position
         x, y = c_int(), c_int()
         video.SDL_GetWindowPosition(self.window, byref(x), byref(y))
         return x.value, y.value
 
     @position.setter
     def position(self, value):
-        if not self.window:
-            raise SDLError("The window is not available")
-        video.SDL_SetWindowPosition(self.window, value[0], value[1])
+        if self.window:
+            video.SDL_SetWindowPosition(self.window, value[0], value[1])
         self._position = value[0], value[1]
 
     @property
     def title(self):
         """str: The title of the window."""
+        if not self.window:
+            return stringify(self._title, "utf-8")
         return stringify(video.SDL_GetWindowTitle(self.window), "utf-8")
 
     @title.setter
     def title(self, value):
-        title_bytes = utf8(value).encode('utf-8')
-        video.SDL_SetWindowTitle(self.window, title_bytes)
+        if self.window:
+            title_bytes = utf8(value).encode('utf-8')
+            video.SDL_SetWindowTitle(self.window, title_bytes)
         self._title = value
 
     @property
     def size(self):
-        """tuple: The dimensions of the window (in pixels) in the form
-        (width, height).
+        """tuple: The current dimensions of the window (in pixels) in the form
+        ``(width, height)``.
         
         """
+        if not self.window:
+            return self._size
         w, h = c_int(), c_int()
         video.SDL_GetWindowSize(self.window, byref(w), byref(h))
         return w.value, h.value
 
     @size.setter
     def size(self, value):
-        video.SDL_SetWindowSize(self.window, value[0], value[1])
         self._size = value[0], value[1]
+        if self.window:
+            video.SDL_SetWindowSize(self.window, value[0], value[1])
 
     def create(self):
         """Creates the window if it does not already exist."""
-        if self.window != None:
+        if self.window:
             return
         window = video.SDL_CreateWindow(utf8(self._title).encode('utf-8'),
                                         self._position[0], self._position[1],
                                         self._size[0], self._size[1],
                                         self._flags)
         if not window:
-            raise SDLError()
+            raise_sdl_err("creating the window")
         self.window = window.contents
 
     def open(self):
         """Creates and shows the window."""
-        if self.window is None:
+        if not self.window:
             self.create()
         self.show()
 
@@ -175,7 +199,7 @@ class Window(object):
         :meth:`create` method.
 
         """
-        if hasattr(self, "window") and self.window != None:
+        if self.window:
             video.SDL_DestroyWindow(self.window)
             self.window = None
 
@@ -185,6 +209,7 @@ class Window(object):
         If the window is already visible, this method does nothing.
 
         """
+        self._ensure_window("show")
         video.SDL_ShowWindow(self.window)
 
     def hide(self):
@@ -193,14 +218,17 @@ class Window(object):
         If the window is already hidden, this method does nothing.
         
         """
+        self._ensure_window("hide")
         video.SDL_HideWindow(self.window)
 
     def maximize(self):
         """Maximizes the window."""
+        self._ensure_window("maximize")
         video.SDL_MaximizeWindow(self.window)
 
     def minimize(self):
         """Minimizes the window into the system's dock or task bar."""
+        self._ensure_window("minimize")
         video.SDL_MinimizeWindow(self.window)
 
     def restore(self):
@@ -210,6 +238,7 @@ class Window(object):
         nothing.
 
         """
+        self._ensure_window("restore")
         video.SDL_RestoreWindow(self.window)
 
     def refresh(self):
@@ -220,6 +249,7 @@ class Window(object):
            modified using :meth:`get_surface`.
 
         """
+        self._ensure_window("refresh")
         video.SDL_UpdateWindowSurface(self.window)
 
     def get_surface(self):
@@ -243,7 +273,8 @@ class Window(object):
             :obj:`~sdl2.SDL_Surface`: The surface associated with the window.
 
         """
+        self._ensure_window("get the surface of")
         sf = video.SDL_GetWindowSurface(self.window)
         if not sf:
-            raise SDLError()
+            raise_sdl_err("getting the window surface")
         return sf.contents

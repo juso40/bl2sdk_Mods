@@ -1,0 +1,16 @@
+Wheel-Version: 1.0
+Generator: bdist_wheel (0.37.1)
+Root-Is-Purelib: true
+Tag: py2-none-win32
+Tag: py27-none-win32
+Tag: py3-none-win32
+Tag: py30-none-win32
+Tag: py31-none-win32
+Tag: py32-none-win32
+Tag: py33-none-win32
+Tag: py34-none-win32
+Tag: py35-none-win32
+Tag: py36-none-win32
+Tag: py37-none-win32
+Tag: py38-none-win32
+

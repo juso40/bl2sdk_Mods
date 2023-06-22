@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # pyglet
 # Copyright (c) 2006-2008 Alex Holkner
-# Copyright (c) 2008-2021 pyglet contributors
+# Copyright (c) 2008-2022 pyglet contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -121,6 +121,10 @@ class XAudio2AudioPlayer(AbstractAudioPlayer):
         """Called from Player. Docs says to cleanup resources, but other drivers wait for GC to do it?"""
         if self._xa2_source_voice:
             self._deleted = True
+
+            if not self._buffers:
+                self._xa2_driver.return_voice(self._xa2_source_voice)
+
 
     def play(self):
         assert _debug('XAudio2 play')

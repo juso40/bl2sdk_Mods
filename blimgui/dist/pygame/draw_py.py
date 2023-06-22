@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Pygame Drawing algorithms written in Python. (Work in Progress)
 
 Implement Pygame's Drawing Algorithms in a Python version for testing
@@ -470,7 +469,6 @@ def _multi_lines(
 
     rect = surf.get_clip()
     for loop in range(1, len(points)):
-
         line[0] = xlist[loop - 1]
         line[1] = ylist[loop - 1]
         line[2] = xlist[loop]

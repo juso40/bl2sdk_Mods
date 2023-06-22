@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.math &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.math &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,12 +104,17 @@
 <div class="line"><span class="summaryline">pygame module for vector classes</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 39%" />
-<col style="width: 2%" />
-<col style="width: 59%" />
-</colgroup>
 <tbody>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.clamp">pygame.math.clamp</a></div>
+</td>
+<td>—</td>
+<td>returns value clamped to min and max.</td>
+</tr>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.lerp">pygame.math.lerp</a></div>
+</td>
+<td>—</td>
+<td>interpolates between two values by a weight.</td>
+</tr>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2">pygame.math.Vector2</a></div>
 </td>
 <td>—</td>
@@ -124,11 +129,11 @@
 </table>
 <p>The pygame math module currently provides Vector classes in two and three
 dimensions, <code class="docutils literal notranslate"><span class="pre">Vector2</span></code> and <code class="docutils literal notranslate"><span class="pre">Vector3</span></code> respectively.</p>
-<p>They support the following numerical operations: <code class="docutils literal notranslate"><span class="pre">vec+vec</span></code>, <code class="docutils literal notranslate"><span class="pre">vec-vec</span></code>,
-<code class="docutils literal notranslate"><span class="pre">vec*number</span></code>, <code class="docutils literal notranslate"><span class="pre">number*vec</span></code>, <code class="docutils literal notranslate"><span class="pre">vec/number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec//number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec+=vec</span></code>,
-<code class="docutils literal notranslate"><span class="pre">vec-=vec</span></code>, <code class="docutils literal notranslate"><span class="pre">vec*=number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec/=number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec//=number</span></code>.</p>
+<p>They support the following numerical operations: <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">+</span> <span class="pre">vec</span></code>, <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">-</span> <span class="pre">vec</span></code>,
+<code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">*</span> <span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">number</span> <span class="pre">*</span> <span class="pre">vec</span></code>, <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">/</span> <span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">//</span> <span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">+=</span> <span class="pre">vec</span></code>,
+<code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">-=</span> <span class="pre">vec</span></code>, <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">*=</span> <span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">/=</span> <span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">//=</span> <span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">round(vec,</span> <span class="pre">ndigits=0)</span></code>.</p>
 <p>All these operations will be performed elementwise.
-In addition <code class="docutils literal notranslate"><span class="pre">vec*vec</span></code> will perform a scalar-product (a.k.a. dot-product).
+In addition <code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">*</span> <span class="pre">vec</span></code> will perform a scalar-product (a.k.a. dot-product).
 If you want to multiply every element from vector v with every element from
 vector w you can use the elementwise method: <code class="docutils literal notranslate"><span class="pre">v.elementwise()</span> <span class="pre">*</span> <span class="pre">w</span></code></p>
 <p>The coordinates of a vector can be retrieved or set using attributes or
@@ -160,14 +165,64 @@ subscripts</p>
 <p><span class="versionmodified changed">Changed in pygame 1.9.4: </span>Allow scalar construction like GLSL Vector2(2) == Vector2(2.0, 2.0)</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in pygame 1.9.4: </span><a class="tooltip reference internal" href="#module-pygame.math" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.math</span></code><span class="tooltip-content">pygame module for vector classes</span></a> required import. More convenient <code class="docutils literal notranslate"><span class="pre">pygame.Vector2</span></code> and <code class="docutils literal notranslate"><span class="pre">pygame.Vector3</span></code>.</p>
+<p><span class="versionmodified changed">Changed in pygame 1.9.4: </span><a class="tooltip reference internal" href="#module-pygame.math" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.math</span></code><span class="tooltip-content">pygame module for vector classes</span></a> import not required. More convenient <code class="docutils literal notranslate"><span class="pre">pygame.Vector2</span></code> and <code class="docutils literal notranslate"><span class="pre">pygame.Vector3</span></code>.</p>
 </div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in pygame 2.2.0: </span><cite>round</cite> returns a new vector with components rounded to the specified digits.</p>
+</div>
+<dl class="py function definition">
+<dt class="sig sig-object py title" id="pygame.math.clamp">
+<span class="sig-prename descclassname"><span class="pre">pygame.math.</span></span><span class="sig-name descname"><span class="pre">clamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.clamp" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">returns value clamped to min and max.</span></div>
+<div class="line"><span class="signature">clamp(value, min, max) -&gt; float</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/3326">Please leave clamp feedback with authors</a></p>
+<p>Clamps a numeric <code class="docutils literal notranslate"><span class="pre">value</span></code> so that it's no lower than <code class="docutils literal notranslate"><span class="pre">min</span></code>, and no higher
+than <code class="docutils literal notranslate"><span class="pre">max</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function definition">
+<dt class="sig sig-object py title" id="pygame.math.lerp">
+<span class="sig-prename descclassname"><span class="pre">pygame.math.</span></span><span class="sig-name descname"><span class="pre">lerp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.lerp" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">interpolates between two values by a weight.</span></div>
+<div class="line"><span class="signature">lerp(a, b, weight) -&gt; float</span></div>
+</div>
+<p>Linearly interpolates between <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> by <code class="docutils literal notranslate"><span class="pre">weight</span></code> using the formula <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">(b-a)</span> <span class="pre">*</span> <span class="pre">weight</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">weight</span></code> is <code class="docutils literal notranslate"><span class="pre">0.5</span></code>, <code class="docutils literal notranslate"><span class="pre">lerp</span></code> will return the value half-way between <code class="docutils literal notranslate"><span class="pre">a</span></code>
+and <code class="docutils literal notranslate"><span class="pre">b</span></code>. When <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">10</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">20</span></code>, <code class="docutils literal notranslate"><span class="pre">lerp(a,</span> <span class="pre">b,</span> <span class="pre">0.5)</span></code> will return <code class="docutils literal notranslate"><span class="pre">15</span></code>. You
+can think of weight as the percentage of interpolation from <code class="docutils literal notranslate"><span class="pre">a</span></code> to <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">0.0</span></code>
+being 0% and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> being 100%.</p>
+<p><code class="docutils literal notranslate"><span class="pre">lerp</span></code> can be used for many things. You could rotate a sprite by a weight with
+<code class="docutils literal notranslate"><span class="pre">angle</span> <span class="pre">=</span> <span class="pre">lerp(0,</span> <span class="pre">360,</span> <span class="pre">weight)</span></code>. You could even scale an enemy's attack value
+based on the level you're playing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FINAL_LEVEL</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">current_level</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">attack</span> <span class="o">=</span> <span class="n">lerp</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">current_level</span><span class="o">/</span><span class="n">MAX_LEVEL</span><span class="p">)</span> <span class="c1"># 18</span>
+</pre></div>
+</div>
+<p>If you're on level 0, <code class="docutils literal notranslate"><span class="pre">attack</span></code> will be <code class="docutils literal notranslate"><span class="pre">10</span></code>, if you're on level 10,
+<code class="docutils literal notranslate"><span class="pre">attack</span></code> will be <code class="docutils literal notranslate"><span class="pre">50</span></code>. If you're on level 5, the
+result of <code class="docutils literal notranslate"><span class="pre">current_level/MAX_LEVEL</span></code> will be <code class="docutils literal notranslate"><span class="pre">0.5</span></code>
+which represents 50%, therefore <code class="docutils literal notranslate"><span class="pre">attack</span></code> will be <code class="docutils literal notranslate"><span class="pre">30</span></code>, which is the midpoint of <code class="docutils literal notranslate"><span class="pre">10</span></code> and <code class="docutils literal notranslate"><span class="pre">50</span></code>.</p>
+<p>Raises a ValueError if <code class="docutils literal notranslate"><span class="pre">weight</span></code> is outside the range of <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
 <dl class="py class definition">
 <dt class="sig sig-object py title" id="pygame.math.Vector2">
 <span class="sig-prename descclassname"><span class="pre">pygame.math.</span></span><span class="sig-name descname"><span class="pre">Vector2</span></span><a class="headerlink" href="#pygame.math.Vector2" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">a 2-Dimensional Vector</span></div>
-<div class="line"><span class="signature">Vector2() -&gt; Vector2</span></div>
+<div class="line"><span class="signature">Vector2() -&gt; Vector2(0, 0)</span></div>
 <div class="line"><span class="signature">Vector2(int) -&gt; Vector2</span></div>
 <div class="line"><span class="signature">Vector2(float) -&gt; Vector2</span></div>
 <div class="line"><span class="signature">Vector2(Vector2) -&gt; Vector2</span></div>
@@ -175,11 +230,6 @@ subscripts</p>
 <div class="line"><span class="signature">Vector2((x, y)) -&gt; Vector2</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 37%" />
-<col style="width: 1%" />
-<col style="width: 63%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.dot">pygame.math.Vector2.dot</a></div>
 </td>
@@ -251,6 +301,16 @@ subscripts</p>
 <td>—</td>
 <td>calculates the squared Euclidean distance to a given vector.</td>
 </tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.move_towards">pygame.math.Vector2.move_towards</a></div>
+</td>
+<td>—</td>
+<td>returns a vector moved toward the target by a given distance.</td>
+</tr>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.move_towards_ip">pygame.math.Vector2.move_towards_ip</a></div>
+</td>
+<td>—</td>
+<td>moves the vector toward its target at a given distance.</td>
+</tr>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.lerp">pygame.math.Vector2.lerp</a></div>
 </td>
 <td>—</td>
@@ -304,7 +364,7 @@ subscripts</p>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.from_polar">pygame.math.Vector2.from_polar</a></div>
 </td>
 <td>—</td>
-<td>Sets x and y from a polar coordinates tuple.</td>
+<td>Creates a Vector2(x, y) or sets x and y from a polar coordinates tuple.</td>
 </tr>
 <tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.project">pygame.math.Vector2.project</a></div>
 </td>
@@ -316,14 +376,33 @@ subscripts</p>
 <td>—</td>
 <td>Returns a copy of itself.</td>
 </tr>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.clamp_magnitude">pygame.math.Vector2.clamp_magnitude</a></div>
+</td>
+<td>—</td>
+<td>Returns a copy of a vector with the magnitude clamped between max_length and min_length.</td>
+</tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.clamp_magnitude_ip">pygame.math.Vector2.clamp_magnitude_ip</a></div>
+</td>
+<td>—</td>
+<td>Clamps the vector's magnitude between max_length and min_length</td>
+</tr>
 <tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.update">pygame.math.Vector2.update</a></div>
 </td>
 <td>—</td>
 <td>Sets the coordinates of the vector.</td>
 </tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector2.epsilon">pygame.math.Vector2.epsilon</a></div>
+</td>
+<td>—</td>
+<td>Determines the tolerance of vector calculations.</td>
+</tr>
 </tbody>
 </table>
 <p>Some general information about the <code class="docutils literal notranslate"><span class="pre">Vector2</span></code> class.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in pygame 2.1.3: </span>Inherited methods of vector subclasses now correctly return an instance of the
+subclass instead of the superclass</p>
+</div>
 <dl class="py method definition">
 <dt class="sig sig-object py title" id="pygame.math.Vector2.dot">
 <span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.dot" title="Permalink to this definition">¶</a></dt>
@@ -338,7 +417,7 @@ subscripts</p>
 <span class="sig-name descname"><span class="pre">cross</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.cross" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">calculates the cross- or vector-product</span></div>
-<div class="line"><span class="signature">cross(Vector2) -&gt; Vector2</span></div>
+<div class="line"><span class="signature">cross(Vector2) -&gt; float</span></div>
 </div>
 <p>calculates the third component of the cross-product.</p>
 </dd></dl>
@@ -477,6 +556,44 @@ surface with the given surface normal.</p>
 </dd></dl>
 
 <dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector2.move_towards">
+<span class="sig-name descname"><span class="pre">move_towards</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.move_towards" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">returns a vector moved toward the target by a given distance.</span></div>
+<div class="line"><span class="signature">move_towards(Vector2, float) -&gt; Vector2</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2929">Please leave move_towards feedback with authors</a></p>
+<p>Returns a Vector which is moved towards the given Vector by a given
+distance and does not overshoot past its target Vector.
+The first parameter determines the target Vector, while the second
+parameter determines the delta distance. If the distance is in the
+negatives, then it will move away from the target Vector.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector2.move_towards_ip">
+<span class="sig-name descname"><span class="pre">move_towards_ip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.move_towards_ip" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">moves the vector toward its target at a given distance.</span></div>
+<div class="line"><span class="signature">move_towards_ip(Vector2, float) -&gt; None</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2929">Please leave move_towards_ip feedback with authors</a></p>
+<p>Moves itself toward the given Vector at a given distance and does not
+overshoot past its target Vector.
+The first parameter determines the target Vector, while the second
+parameter determines the delta distance. If the distance is in the
+negatives, then it will move away from the target Vector.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
 <dt class="sig sig-object py title" id="pygame.math.Vector2.lerp">
 <span class="sig-name descname"><span class="pre">lerp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.lerp" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -594,7 +711,15 @@ will look clockwise if displayed).</p>
 <div class="line"><span class="summaryline">calculates the angle to a given vector in degrees.</span></div>
 <div class="line"><span class="signature">angle_to(Vector2) -&gt; float</span></div>
 </div>
-<p>Returns the angle between self and the given vector.</p>
+<p>Returns the angle from self to the passed <code class="docutils literal notranslate"><span class="pre">Vector2</span></code> that would rotate self
+to be aligned with the passed <code class="docutils literal notranslate"><span class="pre">Vector2</span></code> without crossing over the negative
+x-axis.</p>
+<figure class="align-default" id="id6">
+<img alt="angle_to image" src="../_images/angle_to.png" />
+<figcaption>
+<p><span class="caption-text">Example demonstrating the angle returned</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 </dd></dl>
 
 <dl class="py method definition">
@@ -612,11 +737,13 @@ is the azimuthal angle.</p>
 <dt class="sig sig-object py title" id="pygame.math.Vector2.from_polar">
 <span class="sig-name descname"><span class="pre">from_polar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.from_polar" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
-<div class="line"><span class="summaryline">Sets x and y from a polar coordinates tuple.</span></div>
-<div class="line"><span class="signature">from_polar((r, phi)) -&gt; None</span></div>
+<div class="line"><span class="summaryline">Creates a Vector2(x, y) or sets x and y from a polar coordinates tuple.</span></div>
+<div class="line"><span class="signature">Vector2.from_polar((r, phi)) -&gt; Vector2</span></div>
+<div class="line"><span class="signature">Vector2().from_polar((r, phi)) -&gt; None</span></div>
 </div>
-<p>Sets x and y from a tuple (r, phi) where r is the radial distance, and
-phi is the azimuthal angle.</p>
+<p>If used from the class creates a Vector2(x,y), else sets x and y.
+The values of x and y are defined from a tuple <code class="docutils literal notranslate"><span class="pre">(r,</span> <span class="pre">phi)</span></code> where r
+is the radial distance, and phi is the azimuthal angle.</p>
 </dd></dl>
 
 <dl class="py method definition">
@@ -647,6 +774,45 @@ For a more detailed explanation see <a class="reference external" href="https://
 </dd></dl>
 
 <dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector2.clamp_magnitude">
+<span class="sig-name descname"><span class="pre">clamp_magnitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.clamp_magnitude" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">Returns a copy of a vector with the magnitude clamped between max_length and min_length.</span></div>
+<div class="line"><span class="signature">clamp_magnitude(max_length) -&gt; Vector2</span></div>
+<div class="line"><span class="signature">clamp_magnitude(min_length, max_length) -&gt; Vector2</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2990">Please leave clamp_magnitude feedback with authors</a></p>
+<p>Returns a new copy of a vector with the magnitude clamped between
+<code class="docutils literal notranslate"><span class="pre">max_length</span></code> and <code class="docutils literal notranslate"><span class="pre">min_length</span></code>. If only one argument is passed, it is
+taken to be the <code class="docutils literal notranslate"><span class="pre">max_length</span></code></p>
+<p>This function raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">min_length</span></code> is greater than
+<code class="docutils literal notranslate"><span class="pre">max_length</span></code>, or if either of these values are negative.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector2.clamp_magnitude_ip">
+<span class="sig-name descname"><span class="pre">clamp_magnitude_ip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.clamp_magnitude_ip" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">Clamps the vector's magnitude between max_length and min_length</span></div>
+<div class="line"><span class="signature">clamp_magnitude_ip(max_length) -&gt; None</span></div>
+<div class="line"><span class="signature">clamp_magnitude_ip(min_length, max_length) -&gt; None</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2990">Please leave clamp_magnitude_ip feedback with authors</a></p>
+<p>Clamps the vector's magnitude between <code class="docutils literal notranslate"><span class="pre">max_length</span></code> and <code class="docutils literal notranslate"><span class="pre">min_length</span></code>.
+If only one argument is passed, it is taken to be the <code class="docutils literal notranslate"><span class="pre">max_length</span></code></p>
+<p>This function raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">min_length</span></code> is greater than
+<code class="docutils literal notranslate"><span class="pre">max_length</span></code>, or if either of these values are negative.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
 <dt class="sig sig-object py title" id="pygame.math.Vector2.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector2.update" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -664,6 +830,41 @@ For a more detailed explanation see <a class="reference external" href="https://
 </div>
 </dd></dl>
 
+<dl class="py attribute definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector2.epsilon">
+<span class="sig-name descname"><span class="pre">epsilon</span></span><a class="headerlink" href="#pygame.math.Vector2.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">Determines the tolerance of vector calculations.</span></div>
+</div>
+<p>Both Vector classes have a value named <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> that defaults to <code class="docutils literal notranslate"><span class="pre">1e-6</span></code>.
+This value acts as a numerical margin in various methods to account for floating point
+arithmetic errors. Specifically, <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> is used in the following places:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>comparing Vectors (<code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">!=</span></code>)</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">is_normalized</span></code> method (if the square of the length is within <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> of 1, it's normalized)</p></li>
+<li><p>slerping (a Vector with a length of <code class="docutils literal notranslate"><span class="pre">&lt;epsilon</span></code> is considered a zero vector, and can't slerp with that)</p></li>
+<li><p>reflection (can't reflect over the zero vector)</p></li>
+<li><p>projection (can't project onto the zero vector)</p></li>
+<li><p>rotation (only used when rotating by a multiple of 90 degrees)</p></li>
+</ul>
+</div></blockquote>
+<p>While it's possible to change <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> for a specific instance of a Vector, all the other Vectors
+will retain the default value. Changing <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> on a specific instance however could lead to some
+asymmetric behavior where symmetry would be expected, such as</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="n">u</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># don&#39;t set it nearly this large</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="n">v</span><span class="p">)</span> <span class="c1"># &gt;&gt; True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="n">u</span><span class="p">)</span> <span class="c1"># &gt;&gt; False</span>
+</pre></div>
+</div>
+<p>You'll probably never have to change <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> from the default value, but in rare situations you might
+find that either the margin is too large or too small, in which case changing <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> slightly
+might help you out.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class definition">
@@ -671,7 +872,7 @@ For a more detailed explanation see <a class="reference external" href="https://
 <span class="sig-prename descclassname"><span class="pre">pygame.math.</span></span><span class="sig-name descname"><span class="pre">Vector3</span></span><a class="headerlink" href="#pygame.math.Vector3" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">a 3-Dimensional Vector</span></div>
-<div class="line"><span class="signature">Vector3() -&gt; Vector3</span></div>
+<div class="line"><span class="signature">Vector3() -&gt; Vector3(0, 0, 0)</span></div>
 <div class="line"><span class="signature">Vector3(int) -&gt; Vector3</span></div>
 <div class="line"><span class="signature">Vector3(float) -&gt; Vector3</span></div>
 <div class="line"><span class="signature">Vector3(Vector3) -&gt; Vector3</span></div>
@@ -679,11 +880,6 @@ For a more detailed explanation see <a class="reference external" href="https://
 <div class="line"><span class="signature">Vector3((x, y, z)) -&gt; Vector3</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 34%" />
-<col style="width: 1%" />
-<col style="width: 66%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.dot">pygame.math.Vector3.dot</a></div>
 </td>
@@ -754,6 +950,16 @@ For a more detailed explanation see <a class="reference external" href="https://
 </td>
 <td>—</td>
 <td>calculates the squared Euclidean distance to a given vector.</td>
+</tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.move_towards">pygame.math.Vector3.move_towards</a></div>
+</td>
+<td>—</td>
+<td>returns a vector moved toward the target by a given distance.</td>
+</tr>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.move_towards_ip">pygame.math.Vector3.move_towards_ip</a></div>
+</td>
+<td>—</td>
+<td>moves the vector toward its target at a given distance.</td>
 </tr>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.lerp">pygame.math.Vector3.lerp</a></div>
 </td>
@@ -883,7 +1089,7 @@ For a more detailed explanation see <a class="reference external" href="https://
 <tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.from_spherical">pygame.math.Vector3.from_spherical</a></div>
 </td>
 <td>—</td>
-<td>Sets x, y and z from a spherical coordinates 3-tuple.</td>
+<td>Creates a Vector3(x, y, z) or sets x, y and z from a spherical coordinates 3-tuple.</td>
 </tr>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.project">pygame.math.Vector3.project</a></div>
 </td>
@@ -895,14 +1101,33 @@ For a more detailed explanation see <a class="reference external" href="https://
 <td>—</td>
 <td>Returns a copy of itself.</td>
 </tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.clamp_magnitude">pygame.math.Vector3.clamp_magnitude</a></div>
+</td>
+<td>—</td>
+<td>Returns a copy of a vector with the magnitude clamped between max_length and min_length.</td>
+</tr>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.clamp_magnitude_ip">pygame.math.Vector3.clamp_magnitude_ip</a></div>
+</td>
+<td>—</td>
+<td>Clamps the vector's magnitude between max_length and min_length</td>
+</tr>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.update">pygame.math.Vector3.update</a></div>
 </td>
 <td>—</td>
 <td>Sets the coordinates of the vector.</td>
 </tr>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="math.html#pygame.math.Vector3.epsilon">pygame.math.Vector3.epsilon</a></div>
+</td>
+<td>—</td>
+<td>Determines the tolerance of vector calculations.</td>
+</tr>
 </tbody>
 </table>
 <p>Some general information about the Vector3 class.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in pygame 2.1.3: </span>Inherited methods of vector subclasses now correctly return an instance of the
+subclass instead of the superclass</p>
+</div>
 <dl class="py method definition">
 <dt class="sig sig-object py title" id="pygame.math.Vector3.dot">
 <span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector3.dot" title="Permalink to this definition">¶</a></dt>
@@ -1056,6 +1281,44 @@ surface with the given surface normal.</p>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">calculates the squared Euclidean distance to a given vector.</span></div>
 <div class="line"><span class="signature">distance_squared_to(Vector3) -&gt; float</span></div>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector3.move_towards">
+<span class="sig-name descname"><span class="pre">move_towards</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector3.move_towards" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">returns a vector moved toward the target by a given distance.</span></div>
+<div class="line"><span class="signature">move_towards(Vector3, float) -&gt; Vector3</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2929">Please leave move_towards feedback with authors</a></p>
+<p>Returns a Vector which is moved towards the given Vector by a given
+distance and does not overshoot past its target Vector.
+The first parameter determines the target Vector, while the second
+parameter determines the delta distance. If the distance is in the
+negatives, then it will move away from the target Vector.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector3.move_towards_ip">
+<span class="sig-name descname"><span class="pre">move_towards_ip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector3.move_towards_ip" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">moves the vector toward its target at a given distance.</span></div>
+<div class="line"><span class="signature">move_towards_ip(Vector3, float) -&gt; None</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2929">Please leave move_towards_ip feedback with authors</a></p>
+<p>Moves itself toward the given Vector at a given distance and does not
+overshoot past its target Vector.
+The first parameter determines the target Vector, while the second
+parameter determines the delta distance. If the distance is in the
+negatives, then it will move away from the target Vector.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
 </div>
 </dd></dl>
 
@@ -1414,10 +1677,12 @@ the inclination angle and phi is the azimuthal angle.</p>
 <dt class="sig sig-object py title" id="pygame.math.Vector3.from_spherical">
 <span class="sig-name descname"><span class="pre">from_spherical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector3.from_spherical" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
-<div class="line"><span class="summaryline">Sets x, y and z from a spherical coordinates 3-tuple.</span></div>
-<div class="line"><span class="signature">from_spherical((r, theta, phi)) -&gt; None</span></div>
+<div class="line"><span class="summaryline">Creates a Vector3(x, y, z) or sets x, y and z from a spherical coordinates 3-tuple.</span></div>
+<div class="line"><span class="signature">Vector3.from_spherical((r, theta, phi)) -&gt; Vector3</span></div>
+<div class="line"><span class="signature">Vector3().from_spherical((r, theta, phi)) -&gt; None</span></div>
 </div>
-<p>Sets x, y and z from a tuple <code class="docutils literal notranslate"><span class="pre">(r,</span> <span class="pre">theta,</span> <span class="pre">phi)</span></code> where r is the radial
+<p>If used from the class creates a Vector3(x, y, z), else sets x, y, and z.
+The values of x, y, and z are from a tuple <code class="docutils literal notranslate"><span class="pre">(r,</span> <span class="pre">theta,</span> <span class="pre">phi)</span></code> where r is the radial
 distance, theta is the inclination angle and phi is the azimuthal angle.</p>
 </dd></dl>
 
@@ -1449,6 +1714,45 @@ For a more detailed explanation see <a class="reference external" href="https://
 </dd></dl>
 
 <dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector3.clamp_magnitude">
+<span class="sig-name descname"><span class="pre">clamp_magnitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector3.clamp_magnitude" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">Returns a copy of a vector with the magnitude clamped between max_length and min_length.</span></div>
+<div class="line"><span class="signature">clamp_magnitude(max_length) -&gt; Vector3</span></div>
+<div class="line"><span class="signature">clamp_magnitude(min_length, max_length) -&gt; Vector3</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2990">Please leave clamp_magnitude feedback with authors</a></p>
+<p>Returns a new copy of a vector with the magnitude clamped between
+<code class="docutils literal notranslate"><span class="pre">max_length</span></code> and <code class="docutils literal notranslate"><span class="pre">min_length</span></code>. If only one argument is passed, it is
+taken to be the <code class="docutils literal notranslate"><span class="pre">max_length</span></code></p>
+<p>This function raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">min_length</span></code> is greater than
+<code class="docutils literal notranslate"><span class="pre">max_length</span></code>, or if either of these values are negative.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector3.clamp_magnitude_ip">
+<span class="sig-name descname"><span class="pre">clamp_magnitude_ip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector3.clamp_magnitude_ip" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">Clamps the vector's magnitude between max_length and min_length</span></div>
+<div class="line"><span class="signature">clamp_magnitude_ip(max_length) -&gt; None</span></div>
+<div class="line"><span class="signature">clamp_magnitude_ip(min_length, max_length) -&gt; None</span></div>
+</div>
+<p><strong>Experimental:</strong> feature still in development available for testing and feedback. It may change.
+<a class="reference external" href="https://github.com/pygame/pygame/pull/2990">Please leave clamp_magnitude_ip feedback with authors</a></p>
+<p>Clamps the vector's magnitude between <code class="docutils literal notranslate"><span class="pre">max_length</span></code> and <code class="docutils literal notranslate"><span class="pre">min_length</span></code>.
+If only one argument is passed, it is taken to be the <code class="docutils literal notranslate"><span class="pre">max_length</span></code></p>
+<p>This function raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">min_length</span></code> is greater than
+<code class="docutils literal notranslate"><span class="pre">max_length</span></code>, or if either of these values are negative.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in pygame 2.1.3.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
 <dt class="sig sig-object py title" id="pygame.math.Vector3.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.math.Vector3.update" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -1464,6 +1768,15 @@ For a more detailed explanation see <a class="reference external" href="https://
 <div class="versionadded">
 <p><span class="versionmodified added">New in pygame 1.9.5.</span></p>
 </div>
+</dd></dl>
+
+<dl class="py attribute definition">
+<dt class="sig sig-object py title" id="pygame.math.Vector3.epsilon">
+<span class="sig-name descname"><span class="pre">epsilon</span></span><a class="headerlink" href="#pygame.math.Vector3.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">Determines the tolerance of vector calculations.</span></div>
+</div>
+<p>With lengths within this number, vectors are considered equal. For more information see <a class="tooltip reference internal" href="#pygame.math.Vector2.epsilon" title=""><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygame.math.Vector2.epsilon</span></code><span class="tooltip-content">Determines the tolerance of vector calculations.</span></a></p>
 </dd></dl>
 
 </dd></dl>
@@ -1496,14 +1809,14 @@ For a more detailed explanation see <a class="reference external" href="https://
         <li class="right" >
           <a href="mask.html" title="pygame.mask"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.math</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

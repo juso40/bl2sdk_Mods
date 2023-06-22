@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Pygame Tutorials - Surfarray Introduction &#8212; pygame v2.1.2 documentation</title>
+    <title>Pygame Tutorials - Surfarray Introduction &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="../ref/touch.html">touch</a> | 
 	    <a href="../ref/pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -98,17 +98,17 @@
             
 <section id="pygame-tutorials-surfarray-introduction">
 <section id="surfarray-introduction">
-<h2>Surfarray Introduction<a class="headerlink" href="#surfarray-introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Surfarray Introduction<a class="headerlink" href="#surfarray-introduction" title="Permalink to this heading">¶</a></h2>
 <dl class="docinfo field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Pete Shinners</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:pete&#37;&#52;&#48;shinners&#46;org">pete<span>&#64;</span>shinners<span>&#46;</span>org</a></p>
 </dd>
 </dl>
 <section id="introduction">
-<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h3>
 <p>This tutorial will attempt to introduce users to both NumPy and the pygame
 surfarray module. To beginners, the code that uses surfarray can be quite
 intimidating. But actually there are only a few concepts to understand and
@@ -127,11 +127,10 @@ After finishing the tutorial you should have a basic handle on how the surfarray
 works.</p>
 </section>
 <section id="numeric-python">
-<h3>Numeric Python<a class="headerlink" href="#numeric-python" title="Permalink to this headline">¶</a></h3>
+<h3>Numeric Python<a class="headerlink" href="#numeric-python" title="Permalink to this heading">¶</a></h3>
 <p>If you do not have the python NumPy package installed,
-you will need to do that now.
-You can download the package from the
-<a class="reference external" href="http://www.scipy.org/scipylib/download.html">NumPy Downloads Page</a>
+you will need to do that now, by following the
+<a class="reference external" href="https://numpy.org/install/">NumPy Installation Guide</a>.
 To make sure NumPy is working for you,
 you should get something like this from the interactive python prompt.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>                    <span class="c1">#import numeric</span>
@@ -169,7 +168,7 @@ Here are some more examples of working with arrays.</p>
 <span class="gr">ValueError</span>: <span class="n">operands could not be broadcast together with shapes (3,) (2,)</span>
 </pre></div>
 </div>
-<p>We get an error on the last commend, because we try add together two arrays
+<p>We get an error on the last command, because we try add together two arrays
 that are different sizes. In order for two arrays two operate with each other,
 including comparisons and assignment, they must have the same dimensions. It is
 very important to know that the new arrays created from slicing the original all
@@ -254,7 +253,7 @@ this is only an introduction. Besides, we want to get on to the fun stuff,
 correct?</p>
 </section>
 <section id="import-surfarray">
-<h3>Import Surfarray<a class="headerlink" href="#import-surfarray" title="Permalink to this headline">¶</a></h3>
+<h3>Import Surfarray<a class="headerlink" href="#import-surfarray" title="Permalink to this heading">¶</a></h3>
 <p>In order to use the surfarray module we need to import it. Since both surfarray
 and NumPy are optional components for pygame, it is nice to make sure they
 import correctly before using them. In these examples I'm going to import
@@ -270,7 +269,7 @@ I'm using are from the NumPy package.
 </div>
 </section>
 <section id="id1">
-<h3>Surfarray Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>Surfarray Introduction<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <p>There are two main types of functions in surfarray. One set of functions for
 creating an array that is a copy of a surface pixel data. The other functions
 create a referenced copy of the array pixel data, so that changes to the array
@@ -322,13 +321,13 @@ This will only work on 24-bit and 32-bit surfaces that have RGB or BGR formattin
 <p>Here is a small chart that might better illustrate what types of functions
 should be used on which surfaces. As you can see, both the arrayXD functions
 will work with any type of surface.</p>
-<table class="colwidths-given matrix docutils align-default">
+<table class="matrix docutils align-default">
 <colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head stub"></th>
@@ -367,7 +366,7 @@ will work with any type of surface.</p>
 </table>
 </section>
 <section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h3>
 <p>With this information, we are equipped to start trying things with surface
 arrays. The following are short little demonstrations that create a NumPy
 array and display them in pygame. These different tests are found in the
@@ -524,7 +523,7 @@ Surface.get_at() type operations very quickly. But don't think you are finished
 yet, there is still much to learn.</p>
 </section>
 <section id="surface-locking">
-<h3>Surface Locking<a class="headerlink" href="#surface-locking" title="Permalink to this headline">¶</a></h3>
+<h3>Surface Locking<a class="headerlink" href="#surface-locking" title="Permalink to this heading">¶</a></h3>
 <p>Like the rest of pygame, surfarray will lock any Surfaces it needs to
 automatically when accessing pixel data. There is one extra thing to be aware
 of though. When creating the <em>pixel</em> arrays, the original surface will
@@ -537,7 +536,7 @@ the actual surface data lives on the graphics card, and transferring pixel
 changes over the PCI/AGP bus is not fast.</p>
 </section>
 <section id="transparency">
-<h3>Transparency<a class="headerlink" href="#transparency" title="Permalink to this headline">¶</a></h3>
+<h3>Transparency<a class="headerlink" href="#transparency" title="Permalink to this heading">¶</a></h3>
 <p>The surfarray module has several methods for accessing a Surface's alpha/colorkey
 values. None of the alpha functions are affected by overall transparency of a
 Surface, just the pixel alpha values. Here's the list of those functions.</p>
@@ -567,7 +566,7 @@ the array will be fully opaque values <em>(255)</em>.</p>
 
 </section>
 <section id="other-surfarray-functions">
-<h3>Other Surfarray Functions<a class="headerlink" href="#other-surfarray-functions" title="Permalink to this headline">¶</a></h3>
+<h3>Other Surfarray Functions<a class="headerlink" href="#other-surfarray-functions" title="Permalink to this heading">¶</a></h3>
 <p>There are only a few other functions available in surfarray. You can get a better
 list with more documentation on the
 <a class="reference internal" href="../ref/surfarray.html#module-pygame.surfarray" title="pygame.surfarray: pygame module for accessing surface pixel data using array interfaces"><code class="xref py py-mod docutils literal notranslate"><span class="pre">surfarray</span> <span class="pre">reference</span> <span class="pre">page</span></code></a>.
@@ -585,7 +584,7 @@ since those are very optimized.</p>
 
 </section>
 <section id="more-advanced-numpy">
-<h3>More Advanced NumPy<a class="headerlink" href="#more-advanced-numpy" title="Permalink to this headline">¶</a></h3>
+<h3>More Advanced NumPy<a class="headerlink" href="#more-advanced-numpy" title="Permalink to this heading">¶</a></h3>
 <p>There's a couple last things you should know about NumPy arrays. When dealing
 with very large arrays, like the kind that are 640x480 big, there are some extra
 things you should be careful about. Mainly, while using the operators like + and
@@ -611,7 +610,7 @@ precision would be ruined, it will raise an exception.</p>
 between 0 and 255, or you will get some undefined truncating.</p>
 </section>
 <section id="graduation">
-<h3>Graduation<a class="headerlink" href="#graduation" title="Permalink to this headline">¶</a></h3>
+<h3>Graduation<a class="headerlink" href="#graduation" title="Permalink to this heading">¶</a></h3>
 <p>Well there you have it. My quick primer on Numeric Python and surfarray.
 Hopefully now you see what is possible, and even if you never use them for
 yourself, you do not have to be afraid when you see code that does. Look into
@@ -648,14 +647,14 @@ more. Good Luck.</p>
         <li class="right" >
           <a href="SpriteIntro.html" title="Pygame Tutorials - Sprite Module Introduction"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pygame Tutorials - Surfarray Introduction</a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

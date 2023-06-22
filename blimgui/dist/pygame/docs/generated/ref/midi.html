@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.midi &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.midi &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">pygame module for interacting with midi input and output.</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 30%" />
-<col style="width: 1%" />
-<col style="width: 69%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="midi.html#pygame.midi.init">pygame.midi.init</a></div>
 </td>
@@ -247,10 +242,10 @@ be called automatically when your program exits.</p>
 </div>
 <p>Gets the initialization state of the <a class="tooltip reference internal" href="#module-pygame.midi" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.midi</span></code><span class="tooltip-content">pygame module for interacting with midi input and output.</span></a> module.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the <a class="tooltip reference internal" href="#module-pygame.midi" title=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.midi</span></code><span class="tooltip-content">pygame module for interacting with midi input and output.</span></a> module is currently initialized.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
 </dd>
 </dl>
@@ -268,11 +263,6 @@ be called automatically when your program exits.</p>
 <div class="line"><span class="signature">Input(device_id, buffer_size) -&gt; None</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 1%" />
-<col style="width: 70%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="midi.html#pygame.midi.Input.close">pygame.midi.Input.close</a></div>
 </td>
@@ -292,7 +282,7 @@ be called automatically when your program exits.</p>
 </tbody>
 </table>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>device_id</strong> (<em>int</em>) -- midi device id</p></li>
 <li><p><strong>buffer_size</strong> (<em>int</em>) -- (optional) the number of input events to be buffered</p></li>
@@ -322,13 +312,13 @@ be called automatically when your program exits.</p>
 </div>
 <p>Used to indicate if any data exists.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if there is data, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pygame.midi.MidiException" title="pygame.midi.MidiException"><strong>MidiException</strong></a> -- on error</p>
 </dd>
 </dl>
@@ -343,14 +333,14 @@ be called automatically when your program exits.</p>
 </div>
 <p>Reads from the input buffer and gives back midi events.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>num_events</strong> (<em>int</em>) -- number of input events to read</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the format for midi_event_list is
 <code class="docutils literal notranslate"><span class="pre">[[[status,</span> <span class="pre">data1,</span> <span class="pre">data2,</span> <span class="pre">data3],</span> <span class="pre">timestamp],</span> <span class="pre">...]</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
 </dd>
 </dl>
@@ -369,11 +359,6 @@ be called automatically when your program exits.</p>
 <div class="line"><span class="signature">Output(device_id, latency, buffer_size) -&gt; None</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 36%" />
-<col style="width: 1%" />
-<col style="width: 63%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="midi.html#pygame.midi.Output.abort">pygame.midi.Output.abort</a></div>
 </td>
@@ -525,12 +510,12 @@ changed in some synthesizers).</p>
 </div>
 <p>Writes series of MIDI information in the form of a list.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>list</em>) -- data to write, the expected format is
 <code class="docutils literal notranslate"><span class="pre">[[[status,</span> <span class="pre">data1=0,</span> <span class="pre">data2=0,</span> <span class="pre">...],</span> <span class="pre">timestamp],</span> <span class="pre">...]</span></code>
 with the <code class="docutils literal notranslate"><span class="pre">data#</span></code> fields being optional</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>IndexError</strong> -- if more than 1024 elements in the data list</p>
 </dd>
 </dl>
@@ -584,7 +569,7 @@ optional and assumed to be 0 if omitted.</p>
 </div>
 <p>Writes a timestamped system-exclusive midi message.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>msg</strong> (<em>list</em><em>[</em><em>int</em><em>] or </em><em>str</em>) -- midi message</p></li>
 <li><p><strong>when</strong> -- timestamp in milliseconds</p></li>
@@ -693,10 +678,10 @@ input or output device with the lowest PmDeviceID).</p>
 </div>
 <p>Gets the device info for a given id.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>an_id</strong> (<em>int</em>) -- id of the midi device being queried</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>if the id is out of range <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned, otherwise
 a tuple of (interf, name, input, output, opened) is returned.</p>
 <blockquote>
@@ -710,7 +695,7 @@ a tuple of (interf, name, input, output, opened) is returned.</p>
 </div></blockquote>
 </p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple or None</p>
 </dd>
 </dl>
@@ -728,10 +713,10 @@ a tuple of (interf, name, input, output, opened) is returned.</p>
 <code class="docutils literal notranslate"><span class="pre">((status,</span> <span class="pre">data1,</span> <span class="pre">data2,</span> <span class="pre">data3),</span> <span class="pre">timestamp)</span></code> midi events (all values
 required).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a list of pygame events of event type <code class="docutils literal notranslate"><span class="pre">MIDIIN</span></code></p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list</p>
 </dd>
 </dl>
@@ -832,14 +817,14 @@ required).</p>
         <li class="right" >
           <a href="math.html" title="pygame.math"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.midi</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

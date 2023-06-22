@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.sdl2_video &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.sdl2_video &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -107,11 +107,6 @@ These docs are primarily meant to help the pygame developers and super-early ado
 who are in communication with the developers. This API will change.</p>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 24%" />
-<col style="width: 1%" />
-<col style="width: 76%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window">pygame._sdl2.video.Window</a></div>
 </td>
@@ -146,116 +141,111 @@ who are in communication with the developers. This API will change.</p>
 <div class="line"><span class="signature">Window(title=&quot;pygame&quot;, size=(640, 480), position=None, fullscreen=False, fullscreen_desktop=False, keywords) -&gt; Window</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 27%" />
-<col style="width: 1%" />
-<col style="width: 72%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.from_display_module">pygame._sdl2.video.Window.from_display_module</a></div>
 </td>
 <td>—</td>
 <td>Creates window using window created by pygame.display.set_mode().</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.grab">pygame._sdl2.video.Window.grab</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.from_window">pygame._sdl2.video.Window.from_window</a></div>
+</td>
+<td>—</td>
+<td>Create Window from another window. Could be from another UI toolkit.</td>
+</tr>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.grab">pygame._sdl2.video.Window.grab</a></div>
 </td>
 <td>—</td>
 <td>Gets or sets whether the mouse is confined to the window.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.relative_mouse">pygame._sdl2.video.Window.relative_mouse</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.relative_mouse">pygame._sdl2.video.Window.relative_mouse</a></div>
 </td>
 <td>—</td>
 <td>Gets or sets the window's relative mouse motion state.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.set_windowed">pygame._sdl2.video.Window.set_windowed</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.set_windowed">pygame._sdl2.video.Window.set_windowed</a></div>
 </td>
 <td>—</td>
 <td>Enable windowed mode (exit fullscreen).</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.set_fullscreen">pygame._sdl2.video.Window.set_fullscreen</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.set_fullscreen">pygame._sdl2.video.Window.set_fullscreen</a></div>
 </td>
 <td>—</td>
 <td>Enter fullscreen.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.title">pygame._sdl2.video.Window.title</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.title">pygame._sdl2.video.Window.title</a></div>
 </td>
 <td>—</td>
 <td>Gets or sets whether the window title.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.destroy">pygame._sdl2.video.Window.destroy</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.destroy">pygame._sdl2.video.Window.destroy</a></div>
 </td>
 <td>—</td>
 <td>Destroys the window.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.hide">pygame._sdl2.video.Window.hide</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.hide">pygame._sdl2.video.Window.hide</a></div>
 </td>
 <td>—</td>
 <td>Hide the window.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.show">pygame._sdl2.video.Window.show</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.show">pygame._sdl2.video.Window.show</a></div>
 </td>
 <td>—</td>
 <td>Show the window.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.focus">pygame._sdl2.video.Window.focus</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.focus">pygame._sdl2.video.Window.focus</a></div>
 </td>
 <td>—</td>
 <td>Raise the window above other windows and set the input focus. The &quot;input_only&quot; argument is only supported on X11.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.restore">pygame._sdl2.video.Window.restore</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.restore">pygame._sdl2.video.Window.restore</a></div>
 </td>
 <td>—</td>
 <td>Restore the size and position of a minimized or maximized window.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.maximize">pygame._sdl2.video.Window.maximize</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.maximize">pygame._sdl2.video.Window.maximize</a></div>
 </td>
 <td>—</td>
 <td>Maximize the window.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.minimize">pygame._sdl2.video.Window.minimize</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.minimize">pygame._sdl2.video.Window.minimize</a></div>
 </td>
 <td>—</td>
 <td>Minimize the window.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.resizable">pygame._sdl2.video.Window.resizable</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.resizable">pygame._sdl2.video.Window.resizable</a></div>
 </td>
 <td>—</td>
 <td>Gets and sets whether the window is resizable.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.borderless">pygame._sdl2.video.Window.borderless</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.borderless">pygame._sdl2.video.Window.borderless</a></div>
 </td>
 <td>—</td>
 <td>Add or remove the border from the window.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.set_icon">pygame._sdl2.video.Window.set_icon</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.set_icon">pygame._sdl2.video.Window.set_icon</a></div>
 </td>
 <td>—</td>
 <td>Set the icon for the window.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.id">pygame._sdl2.video.Window.id</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.id">pygame._sdl2.video.Window.id</a></div>
 </td>
 <td>—</td>
 <td>Get the unique window ID. *Read-only*</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.size">pygame._sdl2.video.Window.size</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.size">pygame._sdl2.video.Window.size</a></div>
 </td>
 <td>—</td>
 <td>Gets and sets the window size.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.position">pygame._sdl2.video.Window.position</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.position">pygame._sdl2.video.Window.position</a></div>
 </td>
 <td>—</td>
 <td>Gets and sets the window position.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.opacity">pygame._sdl2.video.Window.opacity</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.opacity">pygame._sdl2.video.Window.opacity</a></div>
 </td>
 <td>—</td>
 <td>Gets and sets the window opacity. Between 0.0 (fully transparent) and 1.0 (fully opaque).</td>
-</tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.brightness">pygame._sdl2.video.Window.brightness</a></div>
-</td>
-<td>—</td>
-<td>Gets and sets the brightness (gamma multiplier) for the display that owns the window.</td>
 </tr>
 <tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Window.display_index">pygame._sdl2.video.Window.display_index</a></div>
 </td>
@@ -275,6 +265,15 @@ who are in communication with the developers. This API will change.</p>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">Creates window using window created by pygame.display.set_mode().</span></div>
 <div class="line"><span class="signature">from_display_module() -&gt; Window</span></div>
+</div>
+</dd></dl>
+
+<dl class="py method definition">
+<dt class="sig sig-object py title" id="pygame._sdl2.video.Window.from_window">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame._sdl2.video.Window.from_window" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">Create Window from another window. Could be from another UI toolkit.</span></div>
+<div class="line"><span class="signature">from_window(other) -&gt; Window</span></div>
 </div>
 </dd></dl>
 
@@ -450,15 +449,6 @@ who are in communication with the developers. This API will change.</p>
 </dd></dl>
 
 <dl class="py attribute definition">
-<dt class="sig sig-object py title" id="pygame._sdl2.video.Window.brightness">
-<span class="sig-name descname"><span class="pre">brightness</span></span><a class="headerlink" href="#pygame._sdl2.video.Window.brightness" title="Permalink to this definition">¶</a></dt>
-<dd><div class="line-block">
-<div class="line"><span class="summaryline">Gets and sets the brightness (gamma multiplier) for the display that owns the window.</span></div>
-<div class="line"><span class="signature">brightness -&gt; float</span></div>
-</div>
-</dd></dl>
-
-<dl class="py attribute definition">
 <dt class="sig sig-object py title" id="pygame._sdl2.video.Window.display_index">
 <span class="sig-name descname"><span class="pre">display_index</span></span><a class="headerlink" href="#pygame._sdl2.video.Window.display_index" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
@@ -486,11 +476,6 @@ who are in communication with the developers. This API will change.</p>
 <div class="line"><span class="signature">Texture(renderer, size, depth=0, static=False, streaming=False, target=False) -&gt; Texture</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 31%" />
-<col style="width: 1%" />
-<col style="width: 68%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Texture.from_surface">pygame._sdl2.video.Texture.from_surface</a></div>
 </td>
@@ -621,7 +606,7 @@ who are in communication with the developers. This API will change.</p>
 <span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame._sdl2.video.Texture.draw" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">Copy a portion of the texture to the rendering target.</span></div>
-<div class="line"><span class="signature">draw(srcrect=None, dstrect=None, angle=0, origin=None, flipX=False, flipY=False) -&gt; None</span></div>
+<div class="line"><span class="signature">draw(srcrect=None, dstrect=None, angle=0, origin=None, flip_x=False, flip_y=False) -&gt; None</span></div>
 </div>
 </dd></dl>
 
@@ -644,11 +629,6 @@ who are in communication with the developers. This API will change.</p>
 <div class="line"><span class="signature">Image(textureOrImage, srcrect=None) -&gt; Image</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 27%" />
-<col style="width: 1%" />
-<col style="width: 72%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Image.get_rect">pygame._sdl2.video.Image.get_rect</a></div>
 </td>
@@ -670,12 +650,12 @@ who are in communication with the developers. This API will change.</p>
 <td>—</td>
 <td>Gets and sets the origin. Origin=None means the Image will be rotated around its center.</td>
 </tr>
-<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Image.flipX">pygame._sdl2.video.Image.flipX</a></div>
+<tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Image.flip_x">pygame._sdl2.video.Image.flip_x</a></div>
 </td>
 <td>—</td>
 <td>Gets and sets whether the Image is flipped on the x axis.</td>
 </tr>
-<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Image.flipY">pygame._sdl2.video.Image.flipY</a></div>
+<tr class="row-even"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Image.flip_y">pygame._sdl2.video.Image.flip_y</a></div>
 </td>
 <td>—</td>
 <td>Gets and sets whether the Image is flipped on the y axis.</td>
@@ -744,20 +724,20 @@ who are in communication with the developers. This API will change.</p>
 </dd></dl>
 
 <dl class="py attribute definition">
-<dt class="sig sig-object py title" id="pygame._sdl2.video.Image.flipX">
-<span class="sig-name descname"><span class="pre">flipX</span></span><a class="headerlink" href="#pygame._sdl2.video.Image.flipX" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py title" id="pygame._sdl2.video.Image.flip_x">
+<span class="sig-name descname"><span class="pre">flip_x</span></span><a class="headerlink" href="#pygame._sdl2.video.Image.flip_x" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">Gets and sets whether the Image is flipped on the x axis.</span></div>
-<div class="line"><span class="signature">flipX -&gt; bool</span></div>
+<div class="line"><span class="signature">flip_x -&gt; bool</span></div>
 </div>
 </dd></dl>
 
 <dl class="py attribute definition">
-<dt class="sig sig-object py title" id="pygame._sdl2.video.Image.flipY">
-<span class="sig-name descname"><span class="pre">flipY</span></span><a class="headerlink" href="#pygame._sdl2.video.Image.flipY" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py title" id="pygame._sdl2.video.Image.flip_y">
+<span class="sig-name descname"><span class="pre">flip_y</span></span><a class="headerlink" href="#pygame._sdl2.video.Image.flip_y" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">Gets and sets whether the Image is flipped on the y axis.</span></div>
-<div class="line"><span class="signature">flipY -&gt; bool</span></div>
+<div class="line"><span class="signature">flip_y -&gt; bool</span></div>
 </div>
 </dd></dl>
 
@@ -816,11 +796,6 @@ who are in communication with the developers. This API will change.</p>
 <div class="line"><span class="signature">Renderer(window, index=-1, accelerated=-1, vsync=False, target_texture=False) -&gt; Renderer</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 28%" />
-<col style="width: 1%" />
-<col style="width: 72%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="sdl2_video.html#pygame._sdl2.video.Renderer.from_window">pygame._sdl2.video.Renderer.from_window</a></div>
 </td>
@@ -999,7 +974,7 @@ who are in communication with the developers. This API will change.</p>
 <span class="sig-name descname"><span class="pre">blit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame._sdl2.video.Renderer.blit" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
 <div class="line"><span class="summaryline">For compatibility purposes. Textures created by different Renderers cannot be shared!</span></div>
-<div class="line"><span class="signature">blit(soure, dest, area=None, special_flags=0)-&gt; Rect</span></div>
+<div class="line"><span class="signature">blit(source, dest, area=None, special_flags=0)-&gt; Rect</span></div>
 </div>
 </dd></dl>
 
@@ -1078,14 +1053,14 @@ who are in communication with the developers. This API will change.</p>
         <li class="right" >
           <a href="sdl2_controller.html" title="pygame._sdl2.controller"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.sdl2_video</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

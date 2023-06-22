@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import sys
 import platform
@@ -41,7 +39,7 @@ class MixerMusicModuleTest(unittest.TestCase):
     def music_load(self, format):
         data_fname = example_path("data")
 
-        path = os.path.join(data_fname, "house_lo.%s" % format)
+        path = os.path.join(data_fname, f"house_lo.{format}")
         if os.sep == "\\":
             path = path.replace("\\", "\\\\")
         umusfn = str(path)
@@ -55,7 +53,7 @@ class MixerMusicModuleTest(unittest.TestCase):
         formats = ["ogg", "wav"]
         data_fname = example_path("data")
         for f in formats:
-            path = os.path.join(data_fname, "house_lo.%s" % f)
+            path = os.path.join(data_fname, f"house_lo.{f}")
             if os.sep == "\\":
                 path = path.replace("\\", "\\\\")
             bmusfn = path.encode()
@@ -68,7 +66,7 @@ class MixerMusicModuleTest(unittest.TestCase):
         formats = ["wav", "ogg"]
         data_fname = example_path("data")
         for f in formats:
-            path = os.path.join(data_fname, "house_lo.%s" % f)
+            path = os.path.join(data_fname, f"house_lo.{f}")
             if os.sep == "\\":
                 path = path.replace("\\", "\\\\")
             bmusfn = path.encode()
@@ -91,13 +89,13 @@ class MixerMusicModuleTest(unittest.TestCase):
         import shutil
 
         ep = example_path("data")
-        temp_file = os.path.join(ep, u"你好.wav")
-        org_file = os.path.join(ep, u"house_lo.wav")
+        temp_file = os.path.join(ep, "你好.wav")
+        org_file = os.path.join(ep, "house_lo.wav")
         try:
             with open(temp_file, "w") as f:
                 pass
             os.remove(temp_file)
-        except IOError:
+        except OSError:
             raise unittest.SkipTest("the path cannot be opened")
         shutil.copy(org_file, temp_file)
         try:
@@ -111,7 +109,7 @@ class MixerMusicModuleTest(unittest.TestCase):
         import tempfile
 
         ep = example_path("data")
-        org_file = os.path.join(ep, u"house_lo.wav")
+        org_file = os.path.join(ep, "house_lo.wav")
         tmpfd, tmppath = tempfile.mkstemp(".wav")
         os.close(tmpfd)
         shutil.copy(org_file, tmppath)
@@ -200,7 +198,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.assertEqual(before_unpause, after_unpause)
 
     def todo_test_stop(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.stop:
 
         # Stops the music playback if it is currently playing.
@@ -208,7 +205,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_rewind(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.rewind:
 
         # Resets playback of the current music to the beginning.
@@ -216,7 +212,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_get_pos(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.get_pos:
 
         # This gets the number of milliseconds that the music has been playing
@@ -228,7 +223,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_fadeout(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.fadeout:
 
         # This will stop the music playback after it has been faded out over
@@ -243,7 +237,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         'disk audio driver "playback" writing to disk is slow',
     )
     def test_play__start_time(self):
-
         pygame.display.init()
 
         # music file is 7 seconds long
@@ -267,7 +260,6 @@ class MixerMusicModuleTest(unittest.TestCase):
                 running = False
 
     def todo_test_play(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.play:
 
         # This will play the loaded music stream. If the music is already
@@ -288,7 +280,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_load(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.load:
 
         # This will load a music file and prepare it for playback. If a music
@@ -302,7 +293,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_get_volume(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.get_volume:
 
         # Returns the current volume for the mixer. The value will be between
@@ -312,7 +302,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_set_endevent(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.set_endevent:
 
         # This causes Pygame to signal (by means of the event queue) when the
@@ -327,7 +316,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_pause(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.pause:
 
         # Temporarily stop playback of the music stream. It can be resumed
@@ -337,7 +325,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def test_get_busy(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.get_busy:
 
         # Returns True when the music stream is actively playing. When the
@@ -352,7 +339,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.assertFalse(pygame.mixer.music.get_busy())
 
     def todo_test_get_endevent(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.get_endevent:
 
         # Returns the event type to be sent every time the music finishes
@@ -363,7 +349,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_unpause(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.unpause:
 
         # This will resume the playback of a music stream after it has been paused.
@@ -371,7 +356,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_set_volume(self):
-
         # __doc__ (as of 2008-08-02) for pygame.mixer_music.set_volume:
 
         # Set the volume of the music playback. The value argument is between
@@ -381,7 +365,6 @@ class MixerMusicModuleTest(unittest.TestCase):
         self.fail()
 
     def todo_test_set_pos(self):
-
         # __doc__ (as of 2010-24-05) for pygame.mixer_music.set_pos:
 
         # This sets the position in the music file where playback will start. The

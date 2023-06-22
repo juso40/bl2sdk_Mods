@@ -1,16 +1,31 @@
-from typing import Any, Dict, List, Optional, SupportsInt, Tuple, Union, overload
+from typing import (
+    Any,
+    Dict,
+    List,
+    Optional,
+    Sequence,
+    SupportsInt,
+    Tuple,
+    Union,
+    final,
+    overload,
+)
 
+@final
 class Event:
     type: int
+    dict: Dict[str, Any]
     __dict__: Dict[str, Any]
     __hash__: None  # type: ignore
-    @overload
-    def __init__(self, type: int, dict: Dict[str, Any]) -> None: ...
-    @overload
-    def __init__(self, type: int, **attributes: Any) -> None: ...
-    def __getattr__(self, name: str) -> Any: ...
+    def __init__(
+        self, type: int, dict: Dict[str, Any] = ..., **kwargs: Any
+    ) -> None: ...
+    def __getattribute__(self, name: str) -> Any: ...
+    def __setattr__(self, name: str, value: Any) -> None: ...
+    def __delattr__(self, name: str) -> None: ...
+    def __bool__(self) -> bool: ...
 
-_EventTypes = Union[SupportsInt, Tuple[SupportsInt, ...], List[SupportsInt]]
+_EventTypes = Union[SupportsInt, Tuple[SupportsInt, ...], Sequence[SupportsInt]]
 
 def pump() -> None: ...
 def get(
@@ -30,3 +45,5 @@ def set_grab(grab: bool) -> None: ...
 def get_grab() -> bool: ...
 def post(event: Event) -> bool: ...
 def custom_type() -> int: ...
+
+EventType = Event

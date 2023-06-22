@@ -5,7 +5,6 @@ import pygame
 
 class CursorsModuleTest(unittest.TestCase):
     def test_compile(self):
-
         # __doc__ (as of 2008-06-25) for pygame.cursors.compile:
 
         # pygame.cursors.compile(strings, black, white,xor) -> data, mask
@@ -51,7 +50,7 @@ class CursorsModuleTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             pygame.cursors.compile(test_cursor3)
 
-        # Test that checks whether the byte data from compile funtion is equal to actual byte data
+        # Test that checks whether the byte data from compile function is equal to actual byte data
         actual_byte_data = (
             192,
             0,

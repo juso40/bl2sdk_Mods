@@ -1,4 +1,3 @@
-# coding: ascii
 # pygame - Python Game Library
 # Copyright (C) 2000-2003  Pete Shinners
 #
@@ -22,27 +21,22 @@
 
 import os
 import sys
+import warnings
 from os.path import basename, dirname, exists, join, splitext
 
 from pygame.font import Font
+
+if sys.platform != "emscripten":
+    if os.name == "nt":
+        import winreg as _winreg
+    import subprocess
 
 
 OpenType_extensions = frozenset((".ttf", ".ttc", ".otf"))
 Sysfonts = {}
 Sysalias = {}
 
-# Python 3 compatibility
-
-
-def toascii(raw):
-    """convert bytes to ASCII-only string"""
-    return raw.decode("ascii", "ignore")
-
-
-if os.name == "nt":
-    import winreg as _winreg
-else:
-    import subprocess
+is_init = False
 
 
 def _simplename(name):
@@ -62,56 +56,38 @@ def initsysfonts_win32():
     """initialize fonts dictionary on Windows"""
 
     fontdir = join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts")
-
     fonts = {}
 
     # add fonts entered in the registry
+    microsoft_font_dirs = [
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Fonts",
+    ]
 
-    # find valid registry keys containing font information.
-    # http://docs.python.org/lib/module-sys.html
-    # 0 (VER_PLATFORM_WIN32s)          Win32s on Windows 3.1
-    # 1 (VER_PLATFORM_WIN32_WINDOWS)   Windows 95/98/ME
-    # 2 (VER_PLATFORM_WIN32_NT)        Windows NT/2000/XP
-    # 3 (VER_PLATFORM_WIN32_CE)        Windows CE
-    if sys.getwindowsversion()[0] == 1:
-        key_name = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Fonts"
-    else:
-        key_name = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"
-    key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, key_name)
-
-    for i in range(_winreg.QueryInfoKey(key)[1]):
-        try:
-            # name is the font's name e.g. Times New Roman (TrueType)
-            # font is the font's filename e.g. times.ttf
-            name, font = _winreg.EnumValue(key, i)[0:2]
-        except EnvironmentError:
-            break
-
-        # try to handle windows unicode strings for file names with
-        # international characters
-
-        # here are two documents with some information about it:
-        # http://www.python.org/peps/pep-0277.html
-        # https://www.microsoft.com/technet/archive/interopmigration/linux/mvc/lintowin.mspx#ECAA
-        try:
-            font = str(font)
-        except UnicodeEncodeError:
-            # MBCS is the windows encoding for unicode file names.
+    for domain in [_winreg.HKEY_LOCAL_MACHINE, _winreg.HKEY_CURRENT_USER]:
+        for font_dir in microsoft_font_dirs:
             try:
-                font = font.encode("MBCS")
-            except UnicodeEncodeError:
-                # no success with str or MBCS encoding... skip this font.
+                key = _winreg.OpenKey(domain, font_dir)
+            except FileNotFoundError:
                 continue
 
-        if splitext(font)[1].lower() not in OpenType_extensions:
-            continue
-        if not dirname(font):
-            font = join(fontdir, font)
+            for i in range(_winreg.QueryInfoKey(key)[1]):
+                try:
+                    # name is the font's name e.g. Times New Roman (TrueType)
+                    # font is the font's filename e.g. times.ttf
+                    name, font, _ = _winreg.EnumValue(key, i)
+                except OSError:
+                    break
 
-        # Some are named A & B, both names should be processed separately
-        # Ex: the main Cambria file is marked as "Cambria & Cambria Math"
-        for name in name.split("&"):
-            _parse_font_entry_win(name, font, fonts)
+                if splitext(font)[1].lower() not in OpenType_extensions:
+                    continue
+                if not dirname(font):
+                    font = join(fontdir, font)
+
+                # Some are named A & B, both names should be processed separately
+                # Ex: the main Cambria file is marked as "Cambria & Cambria Math"
+                for name in name.split("&"):
+                    _parse_font_entry_win(name, font, fonts)
 
     return fonts
 
@@ -123,8 +99,6 @@ def _parse_font_entry_win(name, font, fonts):
     :param name: The font name
     :param font: The font file path
     :param fonts: The pygame font dictionary
-
-    :return: Tuple of (bold, italic, name)
     """
     true_type_suffix = "(TrueType)"
     mods = ("demibold", "narrow", "light", "unicode", "bt", "mt")
@@ -185,13 +159,13 @@ def _font_finder_darwin():
 
     username = os.getenv("USER")
     if username:
-        locations.append("/Users/" + username + "/Library/Fonts")
+        locations.append(f"/Users/{username}/Library/Fonts")
 
     strange_root = "/System/Library/Assets/com_apple_MobileAsset_Font3"
     if exists(strange_root):
         strange_locations = os.listdir(strange_root)
         for loc in strange_locations:
-            locations.append(strange_root + "/" + loc + "/AssetData")
+            locations.append(f"{strange_root}/{loc}/AssetData")
 
     fonts = {}
 
@@ -210,16 +184,19 @@ def _font_finder_darwin():
 
 def initsysfonts_darwin():
     """Read the fonts on MacOS, and OS X."""
-    # if the X11 binary exists... try and use that.
-    #  Not likely to be there on pre 10.4.x ... or MacOS 10.10+
-    if exists("/usr/X11/bin/fc-list"):
-        fonts = initsysfonts_unix("/usr/X11/bin/fc-list")
-    # This fc-list path will work with the X11 from the OS X 10.3 installation
-    # disc
-    elif exists("/usr/X11R6/bin/fc-list"):
-        fonts = initsysfonts_unix("/usr/X11R6/bin/fc-list")
-    else:
-        # eventually this should probably be the preferred solution
+    #  fc-list is not likely to be there on pre 10.4.x, or MacOS 10.10+
+    fonts = {}
+
+    fclist_locations = [
+        "/usr/X11/bin/fc-list",  # apple x11
+        "/usr/X11R6/bin/fc-list",  # apple x11
+    ]
+    for bin_location in fclist_locations:
+        if exists(bin_location):
+            fonts = initsysfonts_unix(bin_location)
+            break
+
+    if len(fonts) == 0:
         fonts = _font_finder_darwin()
 
     return fonts
@@ -230,35 +207,42 @@ def initsysfonts_unix(path="fc-list"):
     """use the fc-list from fontconfig to get a list of fonts"""
     fonts = {}
 
-    try:
-        # pylint: disable=consider-using-with
-        # subprocess.Popen is not a context manager in all of
-        # pygame's supported python versions.
-
-        # note, we capture stderr so if fc-list isn't there to stop stderr
-        # printing.
-        flout, _ = subprocess.Popen(
-            f"{path} : file family style",
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            close_fds=True,
-        ).communicate()
-    except (OSError, ValueError):
+    if sys.platform == "emscripten":
         return fonts
 
-    entries = toascii(flout)
     try:
-        for entry in entries.split("\n"):
+        proc = subprocess.run(
+            [path, ":", "file", "family", "style"],
+            stdout=subprocess.PIPE,  # capture stdout
+            stderr=subprocess.PIPE,  # capture stderr
+            check=True,  # so that errors raise python exception which is handled below
+            timeout=1,  # so that we don't hang the program waiting
+        )
 
+    except FileNotFoundError:
+        warnings.warn(
+            f"'{path}' is missing, system fonts cannot be loaded on your platform"
+        )
+
+    except subprocess.TimeoutExpired:
+        warnings.warn(
+            f"Process running '{path}' timed-out! System fonts cannot be loaded on "
+            "your platform"
+        )
+
+    except subprocess.CalledProcessError as e:
+        warnings.warn(
+            f"'{path}' failed with error code {e.returncode}! System fonts cannot be "
+            f"loaded on your platform. Error log is:\n{e.stderr}"
+        )
+
+    else:
+        for entry in proc.stdout.decode("ascii", "ignore").splitlines():
             try:
                 _parse_font_entry_unix(entry, fonts)
             except ValueError:
                 # try the next one.
                 pass
-
-    except ValueError:
-        pass
 
     return fonts
 
@@ -364,16 +348,21 @@ def initsysfonts():
 
     Has different initialisation functions for different platforms.
     """
+    global is_init
+    if is_init:
+        # no need to re-init
+        return
+
     if sys.platform == "win32":
         fonts = initsysfonts_win32()
     elif sys.platform == "darwin":
         fonts = initsysfonts_darwin()
     else:
         fonts = initsysfonts_unix()
+
     Sysfonts.update(fonts)
     create_aliases()
-    if not Sysfonts:  # dummy so we don't try to reinit
-        Sysfonts[None] = None
+    is_init = True
 
 
 def font_constructor(fontpath, size, bold, italic):
@@ -426,8 +415,7 @@ def SysFont(name, size, bold=False, italic=False, constructor=None):
     if constructor is None:
         constructor = font_constructor
 
-    if not Sysfonts:
-        initsysfonts()
+    initsysfonts()
 
     gotbold = gotitalic = False
     fontname = None
@@ -483,12 +471,11 @@ def get_fonts():
     removed. This is how pygame internally stores the font
     names for matching.
     """
-    if not Sysfonts:
-        initsysfonts()
+    initsysfonts()
     return list(Sysfonts)
 
 
-def match_font(name, bold=0, italic=0):
+def match_font(name, bold=False, italic=False):
     """pygame.font.match_font(name, bold=0, italic=0) -> name
     find the filename for the named system font
 
@@ -500,8 +487,7 @@ def match_font(name, bold=0, italic=0):
 
     If no match is found, None is returned.
     """
-    if not Sysfonts:
-        initsysfonts()
+    initsysfonts()
 
     fontname = None
     if isinstance(name, (str, bytes)):
@@ -524,6 +510,8 @@ def match_font(name, bold=0, italic=0):
                     bold = 0
                 elif not fontname:
                     fontname = list(styles.values())[0]
+
         if fontname:
             break
+
     return fontname

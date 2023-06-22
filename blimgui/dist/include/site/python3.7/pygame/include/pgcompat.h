@@ -1,10 +1,15 @@
-/* Python 2.x/3.x and SDL compatibility tools
- */
-
 #if !defined(PGCOMPAT_H)
 #define PGCOMPAT_H
 
 #include <Python.h>
+
+/* In CPython, Py_Exit finalises the python interpreter before calling C exit()
+ * This does not exist on PyPy, so use exit() directly here */
+#ifdef PYPY_VERSION
+#define PG_EXIT(n) exit(n)
+#else
+#define PG_EXIT(n) Py_Exit(n)
+#endif
 
 /* define common types where SDL is not included */
 #ifndef SDL_VERSION_ATLEAST
@@ -86,17 +91,6 @@ typedef uint8_t Uint8;
 
 #ifndef SDL_WINDOW_POPUP_MENU
 #define SDL_WINDOW_POPUP_MENU 0
-#endif
-
-#if SDL_VERSION_ATLEAST(2, 0, 4)
-/* To control the use of:
- * SDL_AUDIODEVICEADDED
- * SDL_AUDIODEVICEREMOVED
- *
- * Ref: https://wiki.libsdl.org/SDL_EventType
- * Ref: https://wiki.libsdl.org/SDL_AudioDeviceEvent
- */
-#define SDL2_AUDIODEVICE_SUPPORTED
 #endif
 
 #ifndef SDL_MOUSEWHEEL_FLIPPED

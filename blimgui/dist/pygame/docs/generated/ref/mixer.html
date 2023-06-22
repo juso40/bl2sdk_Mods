@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.mixer &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.mixer &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">pygame module for loading and playing sounds</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 36%" />
-<col style="width: 1%" />
-<col style="width: 63%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="mixer.html#pygame.mixer.init">pygame.mixer.init</a></div>
 </td>
@@ -412,8 +407,9 @@ playing on the truncated channels are stopped.</p>
 <div class="line"><span class="signature">set_reserved(count) -&gt; count</span></div>
 </div>
 <p>The mixer can reserve any number of channels that will not be automatically
-selected for playback by Sounds. If sounds are currently playing on the
-reserved channels they will not be stopped.</p>
+selected for playback by Sounds. This means that whenever you play a Sound
+without specifying a channel, a reserved channel will never be used. If sounds
+are currently playing on the reserved channels they will not be stopped.</p>
 <p>This allows the application to reserve a specific number of channels for
 important sounds that must not be dropped or have a guaranteed channel to
 play on.</p>
@@ -454,16 +450,16 @@ idle then this return <code class="docutils literal notranslate"><span class="pr
 <div class="line"><span class="signature">get_sdl_mixer_version(linked=True) -&gt; (major, minor, patch)</span></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>linked</strong> (<em>bool</em>) -- if <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) the linked version number is
 returned, otherwise the compiled version number is returned</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the mixer's SDL library version number (linked or compiled
 depending on the <code class="docutils literal notranslate"><span class="pre">linked</span></code> parameter) as a tuple of 3 integers
 <code class="docutils literal notranslate"><span class="pre">(major,</span> <span class="pre">minor,</span> <span class="pre">patch)</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
@@ -491,11 +487,6 @@ depending on the <code class="docutils literal notranslate"><span class="pre">li
 <div class="line"><span class="signature">Sound(array=object) -&gt; Sound</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 39%" />
-<col style="width: 1%" />
-<col style="width: 60%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="mixer.html#pygame.mixer.Sound.play">pygame.mixer.Sound.play</a></div>
 </td>
@@ -624,7 +615,7 @@ playing channels.</p>
 immediately affect the Sound if it is playing. It will also affect any
 future playback of this Sound.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> (<em>float</em>) -- <p>volume in the range of 0.0 to 1.0 (inclusive)</p>
 <div class="line-block">
 <div class="line">If value &lt; 0.0, the volume will not be changed</div>
@@ -688,11 +679,6 @@ future playback of this Sound.</p>
 <div class="line"><span class="signature">Channel(id) -&gt; Channel</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 36%" />
-<col style="width: 1%" />
-<col style="width: 63%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="mixer.html#pygame.mixer.Channel.play">pygame.mixer.Channel.play</a></div>
 </td>
@@ -982,14 +968,14 @@ playback of a Sound. If there is no endevent the function returns
         <li class="right" >
           <a href="midi.html" title="pygame.midi"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.mixer</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

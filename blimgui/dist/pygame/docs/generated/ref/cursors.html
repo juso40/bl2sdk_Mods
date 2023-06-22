@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.cursors &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.cursors &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">pygame module for cursor resources</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 31%" />
-<col style="width: 1%" />
-<col style="width: 68%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="cursors.html#pygame.cursors.compile">pygame.cursors.compile</a></div>
 </td>
@@ -247,16 +242,11 @@ object with the readlines method.</p>
 <div class="line"><span class="signature">Cursor() -&gt; Cursor</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 47%" />
-<col style="width: 2%" />
-<col style="width: 51%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="cursors.html#pygame.cursors.Cursor.copy">pygame.cursors.Cursor.copy</a></div>
 </td>
 <td>—</td>
-<td></td>
+<td>copy the current cursor</td>
 </tr>
 <tr class="row-even"><td><div class="line"><a class="toc reference external" href="cursors.html#pygame.cursors.Cursor.type">pygame.cursors.Cursor.type</a></div>
 </td>
@@ -332,11 +322,11 @@ correct size for the given width and height. Otherwise an exception is raised.</
 <dl class="py method definition">
 <dt class="sig sig-object py title" id="pygame.cursors.Cursor.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygame.cursors.Cursor.copy" title="Permalink to this definition">¶</a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">|</span> <span class="pre">:sl:`copy</span> <span class="pre">the</span> <span class="pre">current</span> <span class="pre">cursor`</span></span></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">|</span> <span class="pre">:sg:`copy()</span> <span class="pre">-&gt;</span> <span class="pre">Cursor`</span></span></dt>
-<dd><p>Returns a new Cursor object with the same data and hotspot as the original.</p>
+<dd><div class="line-block">
+<div class="line"><span class="summaryline">copy the current cursor</span></div>
+<div class="line"><span class="signature">copy() -&gt; Cursor</span></div>
+</div>
+<p>Returns a new Cursor object with the same data and hotspot as the original.</p>
 </dd></dl>
 
 <dl class="py attribute definition">
@@ -439,14 +429,14 @@ correct size for the given width and height. Otherwise an exception is raised.</
         <li class="right" >
           <a href="color_list.html" title="Named Colors"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.cursors</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

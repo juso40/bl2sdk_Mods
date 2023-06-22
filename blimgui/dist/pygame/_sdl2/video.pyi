@@ -4,7 +4,7 @@ from pygame.color import Color
 from pygame.rect import Rect
 from pygame.surface import Surface
 
-from .._common import _CanBeRect
+from .._common import RectValue, Literal
 
 WINDOWPOS_UNDEFINED: int
 WINDOWPOS_CENTERED: int
@@ -35,6 +35,7 @@ def messagebox(
 ) -> int: ...
 
 class Window:
+    DEFAULT_SIZE: Tuple[Literal[640], Literal[480]]
     def __init__(
         self,
         title: str = "pygame",
@@ -44,8 +45,10 @@ class Window:
         fullscreen_desktop: bool = False,
         **kwargs: bool
     ) -> None: ...
-    @staticmethod
-    def from_display_module() -> Window: ...
+    @classmethod
+    def from_display_module(cls) -> Window: ...
+    @classmethod
+    def from_window(cls, other: int) -> Window: ...
     grab: bool
     relative_mouse: bool
     def set_windowed(self) -> None: ...
@@ -65,7 +68,6 @@ class Window:
     size: Iterable[int]
     position: Union[int, Iterable[int]]
     opacity: float
-    brightness: float
     display_index: int
     def set_modal_for(self, Window) -> None: ...
 
@@ -89,29 +91,29 @@ class Texture:
     def get_rect(self, **kwargs: Any) -> Rect: ...
     def draw(
         self,
-        srcrect: Optional[_CanBeRect] = None,
-        dstrect: Optional[Union[_CanBeRect, Iterable[int]]] = None,
+        srcrect: Optional[RectValue] = None,
+        dstrect: Optional[RectValue] = None,
         angle: int = 0,
         origin: Optional[Iterable[int]] = None,
-        flipX: bool = False,
-        flipY: bool = False,
+        flip_x: bool = False,
+        flip_y: bool = False,
     ) -> None: ...
-    def update(self, surface: Surface, area: Optional[_CanBeRect] = None) -> None: ...
+    def update(self, surface: Surface, area: Optional[RectValue] = None) -> None: ...
 
 class Image:
     def __init__(
         self,
         textureOrImage: Union[Texture, Image],
-        srcrect: Optional[_CanBeRect] = None,
+        srcrect: Optional[RectValue] = None,
     ) -> None: ...
     def get_rect(self, **kwargs: Any) -> Rect: ...
     def draw(
-        self, srcrect: Optional[_CanBeRect] = None, dstrect: Optional[_CanBeRect] = None
+        self, srcrect: Optional[RectValue] = None, dstrect: Optional[RectValue] = None
     ) -> None: ...
     angle: float
     origin: Optional[Iterable[float]]
-    flipX: bool
-    flipY: bool
+    flip_x: bool
+    flip_y: bool
     color: Color
     alpha: float
     blend_mode: int
@@ -127,28 +129,32 @@ class Renderer:
         vsync: bool = False,
         target_texture: bool = False,
     ) -> None: ...
-    @staticmethod
-    def from_window(window: Window) -> Renderer: ...
+    @classmethod
+    def from_window(cls, window: Window) -> Renderer: ...
     draw_blend_mode: int
     draw_color: Color
     def clear(self) -> None: ...
     def present(self) -> None: ...
     def get_viewport(self) -> Rect: ...
-    def set_viewport(self, area: Optional[_CanBeRect]) -> None: ...
+    def set_viewport(self, area: Optional[RectValue]) -> None: ...
     logical_size: Iterable[int]
     scale: Iterable[float]
-    target: Union[Texture, None]
+    target: Optional[Texture]
     def blit(
         self,
         source: Union[Texture, Image],
-        dest: Optional[_CanBeRect] = None,
-        area: Optional[_CanBeRect] = None,
+        dest: Optional[RectValue] = None,
+        area: Optional[RectValue] = None,
         special_flags: int = 0,
     ) -> Rect: ...
     def draw_line(self, p1: Iterable[int], p2: Iterable[int]) -> None: ...
     def draw_point(self, point: Iterable[int]) -> None: ...
-    def draw_rect(self, rect: _CanBeRect) -> None: ...
-    def fill_rect(self, rect: _CanBeRect) -> None: ...
+    def draw_rect(self, rect: RectValue) -> None: ...
+    def fill_rect(self, rect: RectValue) -> None: ...
     def to_surface(
-        self, surface: Optional[Surface] = None, area: Optional[_CanBeRect] = None
+        self, surface: Optional[Surface] = None, area: Optional[RectValue] = None
     ) -> Surface: ...
+    @staticmethod
+    def compose_custom_blend_mode(
+        color_mode: Tuple[int, int, int], alpha_mode: Tuple[int, int, int]
+    ) -> int: ...

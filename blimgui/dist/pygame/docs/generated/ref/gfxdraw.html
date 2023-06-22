@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pygame.gfxdraw &#8212; pygame v2.1.2 documentation</title>
+    <title>pygame.gfxdraw &#8212; pygame v2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygame.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="shortcut icon" href="../_static/pygame.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -23,15 +25,14 @@
     <div class="document">
 
   <div class="header">
-    <table>
-      <tr>
-	<td class="logo">
+	<div class="flex-container">
+	<div class="logo">
 	  <a href="https://www.pygame.org/">
 	    <img src="../_static/pygame_tiny.png"/>
 	  </a>
 	  <h5>pygame documentation</h5>
-	</td>
-	<td class="pagelinks">
+	</div>
+	<div class="pagelinks">
 	  <div class="top">
 	    <a href="https://www.pygame.org/">Pygame Home</a> ||
 	    <a href="../index.html">Help Contents</a> ||
@@ -88,9 +89,8 @@
 	    <a href="touch.html">touch</a> | 
 	    <a href="pygame.html#module-pygame.version">version</a>
 	  </p>
-	</td>
-      </tr>
-    </table>
+</div>
+</div>
   </div>
 
       <div class="documentwrapper">
@@ -104,11 +104,6 @@
 <div class="line"><span class="summaryline">pygame module for drawing shapes</span></div>
 </div>
 <table class="toc docutils align-default">
-<colgroup>
-<col style="width: 42%" />
-<col style="width: 1%" />
-<col style="width: 57%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="line"><a class="toc reference external" href="gfxdraw.html#pygame.gfxdraw.pixel">pygame.gfxdraw.pixel</a></div>
 </td>
@@ -277,7 +272,7 @@ rather than using modified versions.</p>
 </div>
 <p>Draws a single pixel, at position (x ,y), on the given surface.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the pixel</p></li>
@@ -286,10 +281,10 @@ rather than using modified versions.</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -305,7 +300,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>Draws a straight horizontal line (<code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y)</span></code>) on the given
 surface. There are no endcaps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x1</strong> (<em>int</em>) -- x coordinate of one end of the line</p></li>
@@ -315,10 +310,10 @@ surface. There are no endcaps.</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -334,7 +329,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>Draws a straight vertical line (<code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y1)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y2)</span></code>) on the given
 surface. There are no endcaps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the line</p></li>
@@ -344,10 +339,10 @@ surface. There are no endcaps.</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -363,7 +358,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>Draws a straight line (<code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code>) on the given surface.
 There are no endcaps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x1</strong> (<em>int</em>) -- x coordinate of one end of the line</p></li>
@@ -374,10 +369,10 @@ There are no endcaps.</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -393,7 +388,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>Draws an unfilled rectangle on the given surface. For a filled rectangle use
 <a class="reference internal" href="#pygame.gfxdraw.box" title="pygame.gfxdraw.box"><code class="xref py py-meth docutils literal notranslate"><span class="pre">box()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>rect</strong> (<a class="reference internal" href="rect.html#pygame.Rect" title="pygame.Rect"><em>Rect</em></a>) -- rectangle to draw, position and dimensions</p></li>
@@ -401,10 +396,10 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -426,7 +421,7 @@ values will not be included as part of the drawing.</p>
 <p>Draws a filled rectangle on the given surface. For an unfilled rectangle use
 <a class="reference internal" href="#pygame.gfxdraw.rectangle" title="pygame.gfxdraw.rectangle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rectangle()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>rect</strong> (<a class="reference internal" href="rect.html#pygame.Rect" title="pygame.Rect"><em>Rect</em></a>) -- rectangle to draw, position and dimensions</p></li>
@@ -434,10 +429,10 @@ values will not be included as part of the drawing.</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -466,7 +461,7 @@ modes.</p>
 <p>Draws an unfilled circle on the given surface. For a filled circle use
 <a class="reference internal" href="#pygame.gfxdraw.filled_circle" title="pygame.gfxdraw.filled_circle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filled_circle()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the circle</p></li>
@@ -476,10 +471,10 @@ modes.</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -494,7 +489,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 </div>
 <p>Draws an unfilled antialiased circle on the given surface.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the circle</p></li>
@@ -504,10 +499,10 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -523,7 +518,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>Draws a filled circle on the given surface. For an unfilled circle use
 <a class="reference internal" href="#pygame.gfxdraw.circle" title="pygame.gfxdraw.circle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">circle()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the circle</p></li>
@@ -533,10 +528,10 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -552,7 +547,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>Draws an unfilled ellipse on the given surface. For a filled ellipse use
 <a class="reference internal" href="#pygame.gfxdraw.filled_ellipse" title="pygame.gfxdraw.filled_ellipse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filled_ellipse()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the ellipse</p></li>
@@ -563,10 +558,10 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -581,7 +576,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 </div>
 <p>Draws an unfilled antialiased ellipse on the given surface.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the ellipse</p></li>
@@ -592,10 +587,10 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -611,7 +606,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>Draws a filled ellipse on the given surface. For an unfilled ellipse use
 <a class="reference internal" href="#pygame.gfxdraw.ellipse" title="pygame.gfxdraw.ellipse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ellipse()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the ellipse</p></li>
@@ -622,10 +617,10 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -645,7 +640,7 @@ positions of the arc. The arc is drawn in a clockwise direction from the
 <code class="docutils literal notranslate"><span class="pre">start_angle</span></code> to the <code class="docutils literal notranslate"><span class="pre">stop_angle</span></code>. If <code class="docutils literal notranslate"><span class="pre">start_angle</span> <span class="pre">==</span> <span class="pre">stop_angle</span></code>,
 nothing will be drawn</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the arc</p></li>
@@ -657,10 +652,10 @@ nothing will be drawn</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -686,7 +681,7 @@ positions of the pie. The pie is drawn in a clockwise direction from the
 a straight line will be drawn from the center position at the given angle,
 to a length of the radius.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x</strong> (<em>int</em>) -- x coordinate of the center of the pie</p></li>
@@ -698,10 +693,10 @@ to a length of the radius.</p>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -719,7 +714,7 @@ trigon use <a class="reference internal" href="#pygame.gfxdraw.filled_trigon" ti
 <p>A trigon can also be drawn using <a class="reference internal" href="#pygame.gfxdraw.polygon" title="pygame.gfxdraw.polygon"><code class="xref py py-meth docutils literal notranslate"><span class="pre">polygon()</span></code></a> e.g.
 <code class="docutils literal notranslate"><span class="pre">polygon(surface,</span> <span class="pre">((x1,</span> <span class="pre">y1),</span> <span class="pre">(x2,</span> <span class="pre">y2),</span> <span class="pre">(x3,</span> <span class="pre">y3)),</span> <span class="pre">color)</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x1</strong> (<em>int</em>) -- x coordinate of the first corner of the trigon</p></li>
@@ -732,10 +727,10 @@ trigon use <a class="reference internal" href="#pygame.gfxdraw.filled_trigon" ti
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -752,7 +747,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 <p>An aatrigon can also be drawn using <a class="reference internal" href="#pygame.gfxdraw.aapolygon" title="pygame.gfxdraw.aapolygon"><code class="xref py py-meth docutils literal notranslate"><span class="pre">aapolygon()</span></code></a> e.g.
 <code class="docutils literal notranslate"><span class="pre">aapolygon(surface,</span> <span class="pre">((x1,</span> <span class="pre">y1),</span> <span class="pre">(x2,</span> <span class="pre">y2),</span> <span class="pre">(x3,</span> <span class="pre">y3)),</span> <span class="pre">color)</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x1</strong> (<em>int</em>) -- x coordinate of the first corner of the trigon</p></li>
@@ -765,10 +760,10 @@ tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</spa
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -786,7 +781,7 @@ trigon use <a class="reference internal" href="#pygame.gfxdraw.trigon" title="py
 <p>A filled_trigon can also be drawn using <a class="reference internal" href="#pygame.gfxdraw.filled_polygon" title="pygame.gfxdraw.filled_polygon"><code class="xref py py-meth docutils literal notranslate"><span class="pre">filled_polygon()</span></code></a> e.g.
 <code class="docutils literal notranslate"><span class="pre">filled_polygon(surface,</span> <span class="pre">((x1,</span> <span class="pre">y1),</span> <span class="pre">(x2,</span> <span class="pre">y2),</span> <span class="pre">(x3,</span> <span class="pre">y3)),</span> <span class="pre">color)</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>x1</strong> (<em>int</em>) -- x coordinate of the first corner of the trigon</p></li>
@@ -799,10 +794,10 @@ trigon use <a class="reference internal" href="#pygame.gfxdraw.trigon" title="py
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
 </dl>
@@ -823,7 +818,7 @@ e.g. For the points <code class="docutils literal notranslate"><span class="pre"
 be drawn from <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code>, from <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code> to
 <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code>, and from <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>points</strong> (<em>tuple</em><em>(</em><em>coordinate</em><em>) or </em><em>list</em><em>(</em><em>coordinate</em><em>)</em>) -- a sequence of 3 or more (x, y) coordinates, where each
@@ -834,13 +829,13 @@ will be truncated)</p></li>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(points)</span> <span class="pre">&lt;</span> <span class="pre">3</span></code> (must have at least 3 points)</p></li>
 <li><p><strong>IndexError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(coordinate)</span> <span class="pre">&lt;</span> <span class="pre">2</span></code> (each coordinate must have
@@ -864,7 +859,7 @@ e.g. For the points <code class="docutils literal notranslate"><span class="pre"
 be drawn from <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code>, from <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code> to
 <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code>, and from <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>points</strong> (<em>tuple</em><em>(</em><em>coordinate</em><em>) or </em><em>list</em><em>(</em><em>coordinate</em><em>)</em>) -- a sequence of 3 or more (x, y) coordinates, where each
@@ -875,13 +870,13 @@ will be truncated)</p></li>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(points)</span> <span class="pre">&lt;</span> <span class="pre">3</span></code> (must have at least 3 points)</p></li>
 <li><p><strong>IndexError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(coordinate)</span> <span class="pre">&lt;</span> <span class="pre">2</span></code> (each coordinate must have
@@ -906,7 +901,7 @@ e.g. For the points <code class="docutils literal notranslate"><span class="pre"
 be drawn from <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code>, from <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code> to
 <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code>, and from <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>points</strong> (<em>tuple</em><em>(</em><em>coordinate</em><em>) or </em><em>list</em><em>(</em><em>coordinate</em><em>)</em>) -- a sequence of 3 or more (x, y) coordinates, where each
@@ -917,13 +912,13 @@ will be truncated)`</p></li>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(points)</span> <span class="pre">&lt;</span> <span class="pre">3</span></code> (must have at least 3 points)</p></li>
 <li><p><strong>IndexError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(coordinate)</span> <span class="pre">&lt;</span> <span class="pre">2</span></code> (each coordinate must have
@@ -951,7 +946,7 @@ e.g. For the points <code class="docutils literal notranslate"><span class="pre"
 be drawn from <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code>, from <code class="docutils literal notranslate"><span class="pre">(x2,</span> <span class="pre">y2)</span></code> to
 <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code>, and from <code class="docutils literal notranslate"><span class="pre">(x3,</span> <span class="pre">y3)</span></code> to <code class="docutils literal notranslate"><span class="pre">(x1,</span> <span class="pre">y1)</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>points</strong> (<em>tuple</em><em>(</em><em>coordinate</em><em>) or </em><em>list</em><em>(</em><em>coordinate</em><em>)</em>) -- a sequence of 3 or more (x, y) coordinates, where each
@@ -963,13 +958,13 @@ will be truncated)</p></li>
 <li><p><strong>ty</strong> (<em>int</em>) -- y offset of the texture</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(points)</span> <span class="pre">&lt;</span> <span class="pre">3</span></code> (must have at least 3 points)</p></li>
 <li><p><strong>IndexError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(coordinate)</span> <span class="pre">&lt;</span> <span class="pre">2</span></code> (each coordinate must have
@@ -988,7 +983,7 @@ at least 2 items)</p></li>
 </div>
 <p>Draws a Bézier curve on the given surface.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>surface</strong> (<a class="reference internal" href="surface.html#pygame.Surface" title="pygame.Surface"><em>Surface</em></a>) -- surface to draw on</p></li>
 <li><p><strong>points</strong> (<em>tuple</em><em>(</em><em>coordinate</em><em>) or </em><em>list</em><em>(</em><em>coordinate</em><em>)</em>) -- a sequence of 3 or more (x, y) coordinates used to form a
@@ -1000,13 +995,13 @@ will be truncated)</p></li>
 tuple <code class="docutils literal notranslate"><span class="pre">(RGB[A])</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NoneType</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> -- if <code class="docutils literal notranslate"><span class="pre">steps</span> <span class="pre">&lt;</span> <span class="pre">2</span></code></p></li>
 <li><p><strong>ValueError</strong> -- if <code class="docutils literal notranslate"><span class="pre">len(points)</span> <span class="pre">&lt;</span> <span class="pre">3</span></code> (must have at least 3 points)</p></li>
@@ -1045,14 +1040,14 @@ at least 2 items)</p></li>
         <li class="right" >
           <a href="freetype.html" title="pygame.freetype"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pygame v2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pygame.gfxdraw</span></code></a></li>
     <script type="text/javascript" src="https://www.pygame.org/comment/jquery.plugin.docscomments.js"></script>
 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2000-2021, pygame developers.
+        &#169; Copyright 2000-2023, pygame developers.
     </div>
   </body>
 </html>

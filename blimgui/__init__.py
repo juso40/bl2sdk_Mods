@@ -1,19 +1,27 @@
 import site
-from typing import Any, Callable, Union
+from typing import Any, Callable, Union, cast
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from ..ModMenu import EnabledSaveType, LoadModSettings, ModPriorities, ModTypes, Options, RegisterMod, SDKMod, \
-    SaveAllModSettings
+from Mods.ModMenu import (
+    EnabledSaveType,
+    LoadModSettings,
+    ModPriorities,
+    ModTypes,
+    Options,
+    RegisterMod,
+    SaveAllModSettings,
+    SDKMod,
+)
 
 site.addsitedir("Mods/blimgui/dist")
 
-__version__ = "0.2.0"
+__version__ = "2.0"
 
-import pyglet
-from pyglet import gl
-import imgui
-from imgui.integrations.pyglet import create_renderer
+import imgui  # noqa: E402
+import pyglet  # noqa: E402
+from imgui.integrations.pyglet import PygletRenderer, create_renderer  # noqa: E402
+from pyglet import gl  # noqa: E402
 
 DRAW_FUN = Callable[[], None]
 
@@ -23,16 +31,18 @@ IMPL = None
 SizeX = Options.Hidden("WindowX", StartingValue=1280)
 SizeY = Options.Hidden("WindowY", StartingValue=720)
 ImguiStyle = Options.Spinner(
-    "ImguiStyle", Description="Change the look of the Imgui window",
-    Choices=["Classic", "Dark", "Light", "Modern Dark"], StartingChoice="Modern Dark"
+    "ImguiStyle",
+    Description="Change the look of the Imgui window",
+    Choices=["Classic", "Dark", "Light", "Modern Dark"],
+    StartingChoice="Modern Dark",
 )
 
 
 def create_window(
-        caption: str,
-        width: Union[int, Options.Hidden] = SizeX,
-        height: Union[int, Options.Hidden] = SizeY,
-        resizable: bool = True
+    caption: str,
+    width: Union[int, Options.Hidden] = SizeX,
+    height: Union[int, Options.Hidden] = SizeY,
+    resizable: bool = True,
 ) -> None:
     """
     Create a new window with the given parameters. If a window already exists, rename only.
@@ -52,7 +62,7 @@ def create_window(
             width=width if isinstance(width, int) else width.CurrentValue,
             height=height if isinstance(height, int) else height.CurrentValue,
             resizable=resizable,
-            caption=caption
+            caption=caption,
         )
         IMPL = create_renderer(WINDOW)
 
@@ -79,9 +89,8 @@ def close_window() -> bool:
     global IMPL
     global ACTIVE_CALLBACK
     try:
-
-        IMPL.shutdown()
-        WINDOW.close()
+        cast(PygletRenderer, IMPL).shutdown()
+        cast(pyglet.window.Window, WINDOW).close()
 
         WINDOW = None
         IMPL = None
@@ -95,10 +104,7 @@ def close_window() -> bool:
 def update() -> None:
     if imgui.begin_main_menu_bar():
         if imgui.begin_menu("File", True):
-
-            clicked_quit, selected_quit = imgui.menu_item(
-                "Quit", "Cmd+Q", False, True
-            )
+            clicked_quit, selected_quit = imgui.menu_item("Quit", "Cmd+Q", False, True)
             if clicked_quit:
                 close_window()
             imgui.end_menu()
@@ -106,7 +112,7 @@ def update() -> None:
 
     imgui.begin("Hello World", True)
     imgui.text("This is a text!")
-    imgui.text_colored("Colored Text, wow!", 0.2, 1., 0.)
+    imgui.text_colored("Colored Text, wow!", 0.2, 1.0, 0.0)
 
     imgui.end()
 
@@ -123,7 +129,7 @@ def draw() -> None:
     ACTIVE_CALLBACK()
     WINDOW.clear()
     imgui.render()
-    IMPL.render(imgui.get_draw_data())
+    cast(PygletRenderer, IMPL).render(imgui.get_draw_data())
 
 
 ACTIVE_CALLBACK = update
@@ -140,7 +146,9 @@ def set_draw_callback(callback: DRAW_FUN) -> None:
     ACTIVE_CALLBACK = callback
 
 
-def _OnTick(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct) -> bool:
+def _on_tick(
+    caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: unrealsdk.FStruct
+) -> bool:
     draw()
     for w in pyglet.app.windows:
         w.switch_to()
@@ -150,7 +158,7 @@ def _OnTick(caller: unrealsdk.UObject, function: unrealsdk.UFunction, params: un
     return True
 
 
-unrealsdk.RunHook("WillowGame.WillowGameViewportClient.Tick", "WindowTick", _OnTick)
+unrealsdk.RunHook("WillowGame.WillowGameViewportClient.Tick", "WindowTick", _on_tick)
 
 
 def style_ui(new_style: str) -> None:
@@ -212,8 +220,10 @@ def style_ui(new_style: str) -> None:
 
 class BLImgui(SDKMod):
     Name = "BLImgui"
-    Author = "Juso"
-    Description = "A library that allows the creation of a separate window with imgui support."
+    Author = "juso"
+    Description = (
+        "A library that allows the creation of a separate window with imgui support."
+    )
     Version = __version__
 
     Options = [SizeX, SizeY, ImguiStyle]
@@ -222,11 +232,12 @@ class BLImgui(SDKMod):
     Priority = ModPriorities.Library
     Status = "Enabled"
 
-    def ModOptionChanged(self, option, new_value: Any) -> None:
+    def ModOptionChanged(self, option, new_value: Any) -> None:  # noqa: N802
         if option == ImguiStyle:
-            if not WINDOW:
+            if WINDOW:
+                style_ui(new_value)
+            else:
                 return
-            style_ui(new_value)
 
 
 instance = BLImgui()
