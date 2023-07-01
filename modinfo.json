@@ -407,9 +407,9 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.6",
+      "latest": "1.7",
       "versions": {
-        "1.6": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
+        "1.7": "https://github.com/juso40/bl2sdk_Mods/raw/master/InventoryEditor/InventoryEditor.zip"
       },
       "requirements": {
         "blimgui": ">=2.0"

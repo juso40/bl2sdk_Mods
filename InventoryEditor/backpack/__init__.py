@@ -81,6 +81,7 @@ class BackpackProxy:
             self.on_weapon_part_changed(part_attr, part)
         else:
             self.on_item_part_changed(part_attr, part)
+        self.item.DefinitionData.UniqueId = self.item.GenerateUniqueID()
 
     def on_weapon_part_changed(self, part_attr: str, part: unrealsdk.UObject) -> None:
         setattr(self.item.DefinitionData, part_attr, part)

@@ -36,7 +36,7 @@ class InventoryEditor(SDKMod):
     Description: str = (
         "Allows you to edit/add/remove items in your Inventory while ingame."
     )
-    Version: str = "1.6"
+    Version: str = "1.7"
 
     Types: ModTypes = ModTypes.Utility
     Priority: int = ModPriorities.Standard
