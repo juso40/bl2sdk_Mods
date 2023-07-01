@@ -1,9 +1,4 @@
-import pathlib
-from functools import lru_cache
-from typing import Dict, List, Sequence, Tuple
-
-import imgui
-import unrealsdk  # type: ignore
+from typing import Sequence
 
 from Mods import blimgui
 from Mods.ModMenu import (
@@ -38,7 +33,7 @@ class MaterialEditor(SDKMod):
     Description: str = (
         "Allows you to edit MaterialInstanceConstant Objects in realtime."
     )
-    Version: str = "1.2"
+    Version: str = "1.3"
 
     Types: ModTypes = ModTypes.Utility
     Priority: int = ModPriorities.Standard

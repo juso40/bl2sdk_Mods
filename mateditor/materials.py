@@ -1,5 +1,6 @@
+import random
 from functools import lru_cache
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, Iterable, List, Optional, Tuple, Union
 
 import unrealsdk  # type: ignore
 
@@ -76,7 +77,9 @@ class MaterialInstanceConstant:
                 self.vector_parameters[expression.ParameterName] = (1.0, 1.0, 1.0, 1.0)
 
         # Walk from root to our material and update all VectorParameters
-        for material in parents[:-1]:
+        for material in parents[::-1]:
+            if not material.VectorParameterValues:
+                continue
             for param in material.VectorParameterValues:
                 p_val = param.ParameterValue
                 self.vector_parameters[param.ParameterName] = (
@@ -98,9 +101,13 @@ class MaterialInstanceConstant:
                 self.scalar_parameters[expression.ParameterName] = 1.0
 
         # Walk from root to our material and update all ScalarParameters
-        for material in parents[:-1]:
+        for material in parents[::-1]:
+            if not material.ScalarParameterValues:
+                continue
             for param in material.ScalarParameterValues:
-                self.scalar_parameters[param.ParameterName] = param.ParameterValue
+                self.scalar_parameters[
+                    param.ParameterName
+                ] = material.GetScalarParameterValue(param.ParameterName, 0)[1]
 
     def update_texture_parameters(self) -> None:
         parents = self.parents()
@@ -115,17 +122,53 @@ class MaterialInstanceConstant:
                 self.texture_parameters[expression.ParameterName] = ""
 
         # Walk from root to our material and update all TextureParameters
-        for material in parents[:-1]:
+        for material in parents[::-1]:
+            if not material.TextureParameterValues:
+                continue
             for param in material.TextureParameterValues:
                 self.texture_parameters[param.ParameterName] = param.ParameterValue
 
     def update_parameters(self) -> None:
+        self.texture_parameters = {}
         self.vector_parameters = {}
         self.scalar_parameters = {}
-        self.texture_parameters = {}
+        self.update_texture_parameters()
         self.update_vector_parameters()
         self.update_scalar_parameters()
-        self.update_texture_parameters()
+
+    def randomize_parameters(
+        self, locked_parameters: Optional[Iterable[str]] = None
+    ) -> None:
+        if locked_parameters is None:
+            locked_parameters = []
+
+        for parameter_name in self.vector_parameters:
+            if parameter_name not in locked_parameters:
+                if "color" in parameter_name.lower():
+                    r = random.random() * 2.55
+                    g = random.random() * 2.55
+                    b = random.random() * 2.55
+                    a = random.random() * 2.55
+                else:
+                    r = random.random() * 20
+                    g = random.random() * 20
+                    b = random.random() * 20
+                    a = random.random() * 20
+                self.set_vector_parameter_value(parameter_name, (r, g, b, a))
+
+        for parameter_name in self.scalar_parameters:
+            if parameter_name not in locked_parameters:
+                self.set_scalar_parameter_value(parameter_name, random.random() * 10)
+
+        for parameter_name in self.texture_parameters:
+            if parameter_name not in locked_parameters:
+                textures = Texture2D.all_textures("")
+                if not textures:
+                    return
+                texture = random.choice(textures)
+                self.set_texture_parameter_value(parameter_name, texture)
+
+        self.update_parameters()
 
     def set_texture_parameter_value(
         self, parameter_name: str, parameter_value: Union[str, unrealsdk.UObject]
@@ -143,7 +186,7 @@ class MaterialInstanceConstant:
             return
         return Materials.selected.material_instance_constant.GetTextureParameterValue(
             parameter_name
-        )
+        )[1]
 
     def set_vector_parameter_value(
         self, parameter_name: str, parameter_value: Tuple[float, float, float, float]
