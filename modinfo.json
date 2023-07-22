@@ -856,6 +856,28 @@
         "TPS",
         "AoDK"
       ]
+    },
+    {
+      "name": "Weapon Randomizer",
+      "description": [
+        "Auto randomizes the weapon in the first slot every X seconds, or on pressing a configurable keybind.\n",
+        "![yt](https://youtu.be/wasQYpeb6jA?si=Kp6Qelmywa84o73E)"
+      ],
+      "tagline": "Randomizes your first weapon slot.",
+      "types": [
+        "Gameplay",
+        "Content"
+      ],
+      "latest": "1.0",
+      "versions": {
+        "1.0": "https://github.com/juso40/bl2sdk_Mods/raw/master/WeaponRandomizer/WeaponRandomizer.zip"
+      },
+      "requirements": {},
+      "supports": [
+        "BL2",
+        "TPS",
+        "AoDK"
+      ]
     }
   ]
 }

@@ -2,9 +2,45 @@
 target-version = "py37"
 line-length = 120
 show-fixes = true
-extend-select = ["C4", "SIM", "TCH", "B", "BLE", "I", "PIE", "N", "ISC", "TID"]
-ignore = ["N999"]
+select = [
+    "E",
+    "W",   # pycodestyle
+    "F",   # pyflakes
+    "I",   # isort
+    "PL",  # pylint
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "N",
+    "ANN",
+    "BLE",
+    "B",
+    "A",
+    "COM",
+    "C4",
+    "ISC",
+    "PYI",
+    "PT",
+    "Q",
+    "RET",
+    "SIM",
+    "TID",
+    "ARG",
+    "RUF",
+]
+ignore = [
+    "E713",
+    "PLR2004",
+    "ANN101",
+    "N999",
+
+    # handled by black
+    "E1",
+    "E4",
+    "E5",
+    "W2",
+    "W5",
+]
 
 
-[tool.ruff.mccabe]
-max-complexity = 10
+[tool.black]
+line-length = 120
