@@ -103,9 +103,9 @@
       "types": [
         "Gameplay"
       ],
-      "latest": "1.5.1",
+      "latest": "1.6",
       "versions": {
-        "1.5.1": "https://github.com/juso40/bl2sdk_Mods/raw/master/BL2Eternal/BL2Eternal.zip"
+        "1.6": "https://github.com/juso40/bl2sdk_Mods/raw/master/BL2Eternal/BL2Eternal.zip"
       },
       "supports": [
         "BL2",

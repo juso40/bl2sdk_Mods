@@ -1,4 +1,9 @@
-import unrealsdk
+import unrealsdk  # type: ignore
+
+BLACKLIST = [
+    "bugmorph",
+    "snowminion",
+]
 
 
 class GloryKill:
@@ -9,18 +14,15 @@ class GloryKill:
     GLORY_KILL_MARKER2 = "FX_GOR_Particles.Particles.DeathFX.Part_ShockDeath_Large"
     GLORY_KILL_KILLED_PARTICLE = "FX_WEP_Explosions.Particles.Default.Part_ExplosiveExplosion_Small"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.glory_killed = set()
-        self.glory_kill_state = dict()
+        self.glory_kill_state = {}
 
     @property
     def emitter_pool(self) -> unrealsdk.UObject:
         return unrealsdk.GetEngine().GetCurrentWorldInfo().MyEmitterPool
 
-    def check_glory_kill_state(
-            self,
-            pawn: unrealsdk.UObject
-    ) -> bool:
+    def check_glory_kill_state(self, pawn: unrealsdk.UObject) -> bool:
         if (pawn.GetHealth() / pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
             pawn_path_name = pawn.PathName(pawn)
             self.glory_kill_state.setdefault(pawn_path_name, 5)  # Stay 5 seconds in glory kill state
@@ -28,10 +30,10 @@ class GloryKill:
         return False
 
     def on_take_damage(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        _function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         if not self.check_glory_kill_state(caller):
             return True
@@ -69,35 +71,38 @@ class GloryKill:
         return True
 
     def enter_glory_kill_state(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        _function: unrealsdk.UFunction,
+        _params: unrealsdk.FStruct,
     ) -> bool:
         if not self.check_glory_kill_state(caller.MyWillowPawn):
             return True
 
-        if "bugmorph" in caller.PathName(caller.MyWillowPawn.AIClass).lower():
-            return True
+        # Don't allow glory kills on blacklisted enemies
+        enemy_name = caller.PathName(caller.MyWillowPawn.AIClass).lower()
+        for blacklisted in BLACKLIST:
+            if blacklisted in enemy_name:
+                return True
 
         self.emitter_pool.SpawnEmitterMeshAttachment(
             unrealsdk.FindObject("ParticleSystem", self.GLORY_KILL_MARKER1),
             caller.MyWillowPawn.Mesh,
-            "root"
+            "root",
         )
         self.emitter_pool.SpawnEmitterMeshAttachment(
             unrealsdk.FindObject("ParticleSystem", self.GLORY_KILL_MARKER2),
             caller.MyWillowPawn.Mesh,
-            "root"
+            "root",
         )
 
         return True
 
     def drop_loot_on_death(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        _function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         try:
             self.glory_killed.remove(caller.PathName(caller))
@@ -109,10 +114,10 @@ class GloryKill:
         return True
 
     def tick_glory_states(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        _caller: unrealsdk.UObject,
+        _function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
     ) -> bool:
         # Enemies will stay 5 seconds in glory kill state and then are immune to glory kills for 10 seconds
         for p, t in list(self.glory_kill_state.items()):
@@ -121,33 +126,29 @@ class GloryKill:
                 del self.glory_kill_state[p]  # Remove if time is up
         return True
 
-    def enable(
-            self
-    ) -> None:
+    def enable(self) -> None:
         unrealsdk.RegisterHook(
             "WillowGame.WillowAIPawn.TakeDamage",
             "GloryKillTakeDamage",
-            lambda c, f, p: self.on_take_damage(c, f, p)
+            lambda c, f, p: self.on_take_damage(c, f, p),
         )
         unrealsdk.RegisterHook(
             "WillowGame.WillowMind.NotifyAttackedBy",
             "GloryKillState",
-            lambda c, f, p: self.enter_glory_kill_state(c, f, p)
+            lambda c, f, p: self.enter_glory_kill_state(c, f, p),
         )
         unrealsdk.RegisterHook(
             "WillowGame.WillowPawn.DropLootOnDeath",
             "GloryKillLoot",
-            lambda c, f, p: self.drop_loot_on_death(c, f, p)
+            lambda c, f, p: self.drop_loot_on_death(c, f, p),
         )
         unrealsdk.RegisterHook(
             "WillowGame.WillowPlayerController.PlayerTick",
             "GloryKillStateTick",
-            lambda c, f, p: self.tick_glory_states(c, f, p)
+            lambda c, f, p: self.tick_glory_states(c, f, p),
         )
 
-    def disable(
-            self
-    ) -> None:
+    def disable(self) -> None:
         unrealsdk.RemoveHook("WillowGame.WillowAIPawn.TakeDamage", "GloryKillTakeDamage")
         unrealsdk.RemoveHook("WillowGame.WillowMind.NotifyAttackedBy", "GloryKillState")
         unrealsdk.RemoveHook("WillowGame.WillowPawn.DropLootOnDeath", "GloryKillLoot")

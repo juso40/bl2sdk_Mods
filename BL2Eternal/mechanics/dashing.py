@@ -1,6 +1,6 @@
 from math import sqrt
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
 from Mods.coroutines import TickCoroutine, Time, WaitForSeconds, WaitWhile, start_coroutine_tick
 
@@ -17,7 +17,7 @@ class Dash:
 
     SCREEN_PARTICLE: str = "FX_INT_Screen.Particles.Char_Assassin.Part_Assassin_Screen_Dash"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.first_dash = False
         self.second_dash = False
         self.dash_cooldown = 0
@@ -27,10 +27,10 @@ class Dash:
         self.enabled = False
 
     def wants_to_dash(
-            self,
-            caller: unrealsdk.UObject,
-            function: unrealsdk.UFunction,
-            params: unrealsdk.FStruct
+        self,
+        caller: unrealsdk.UObject,
+        _function: unrealsdk.UFunction,
+        _params: unrealsdk.FStruct,
     ) -> bool:
         pc = caller.Outer
         if not pc.Pawn:
@@ -45,11 +45,11 @@ class Dash:
         pawn = pc.Pawn
 
         x, y = pawn.Acceleration.X, pawn.Acceleration.Y
-        mag = sqrt(x ** 2 + y ** 2)
+        mag = sqrt(x**2 + y**2)
         if mag == 0:  # No directional input, so don't dash
             return
 
-        def impl():
+        def impl() -> None:
             if self.b_dash_particles:
                 self.add_screen_particles(pc)
             pawn.PlayAkEvent(unrealsdk.FindObject("AkEvent", self.DASH_SOUND1))
@@ -90,7 +90,7 @@ class Dash:
                 self.dash_duration = 0
                 self.remove_screen_particles(pc)
                 _x, _y = pawn.Velocity.X, pawn.Velocity.Y
-                mag = sqrt(_x ** 2 + _y ** 2)
+                mag = sqrt(_x**2 + _y**2)
                 pawn.Velocity = ((_x / mag) * 200, (_y / mag) * 200, -10)  # Slight Downward velocity because of TPS
                 unrealsdk.CallPostEdit(True)
                 return None
@@ -108,29 +108,25 @@ class Dash:
             20,  # ParticleDepth
             4,  # ScalingMode
             (),  # StopParamsOT
-            True  # bOnlyOwnerSee
+            True,  # bOnlyOwnerSee
         )
         pc.ShowScreenParticle(particle_params)
 
     def remove_screen_particles(self, pc: unrealsdk.UObject) -> None:
         pc.HideScreenParticle(unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE), "", False)
 
-    def enable(
-            self
-    ) -> None:
+    def enable(self) -> None:
         unrealsdk.RegisterHook(
             "WillowGame.WillowPlayerInput.SprintPressed",
             "EternalDashInput",
-            lambda c, f, p: self.wants_to_dash(c, f, p)
+            lambda c, f, p: self.wants_to_dash(c, f, p),
         )
 
         if self.b_dash_particles:
             unrealsdk.LoadPackage("GD_Assassin_Streaming_SF")
             unrealsdk.KeepAlive(unrealsdk.FindObject("ParticleSystem", self.SCREEN_PARTICLE))
 
-    def disable(
-            self
-    ) -> None:
+    def disable(self) -> None:
         unrealsdk.RemoveHook("WillowGame.WillowPlayerInput.SprintPressed", "EternalDashInput")
 
     def enable_dash_particle(self, val: bool) -> None:
