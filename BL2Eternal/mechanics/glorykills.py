@@ -23,7 +23,7 @@ class GloryKill:
         return unrealsdk.GetEngine().GetCurrentWorldInfo().MyEmitterPool
 
     def check_glory_kill_state(self, pawn: unrealsdk.UObject) -> bool:
-        if (pawn.GetHealth() / pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
+        if pawn.GetHealth() > 0 and pawn.GetMaxHealth() > 0 and (pawn.GetHealth() / pawn.GetMaxHealth()) < self.HEALTH_THRESHOLD:
             pawn_path_name = pawn.PathName(pawn)
             self.glory_kill_state.setdefault(pawn_path_name, 5)  # Stay 5 seconds in glory kill state
             return self.glory_kill_state[pawn_path_name] > 0  # Only first 5 seconds in glory kill state
