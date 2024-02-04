@@ -2,7 +2,7 @@ from typing import Any, List
 
 import unrealsdk  # type: ignore
 
-from Mods.ModMenu import EnabledSaveType, Game, ModTypes, OptionManager, SDKMod
+from Mods.ModMenu import EnabledSaveType, Game, ModTypes, OptionManager, SDKMod, RegisterMod
 
 from .mechanics import dash, glory_kill
 
@@ -24,7 +24,7 @@ class Eternal(SDKMod):
     Name: str = "BL2 Eternal"
     Description: str = "Doom Eternal, but it's BL2."
     Author: str = "juso"
-    Version: str = "1.6"
+    Version: str = "1.7"
     SupportedGames = Game.BL2 | Game.TPS | Game.AoDK
     Types: ModTypes = ModTypes.Gameplay
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadWithSettings
@@ -59,4 +59,4 @@ class Eternal(SDKMod):
             dash.enable_dash_particle(new_value)
 
 
-unrealsdk.RegisterMod(Eternal())
+RegisterMod(Eternal())
