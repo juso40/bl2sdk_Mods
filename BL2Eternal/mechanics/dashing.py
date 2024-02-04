@@ -7,8 +7,7 @@ from Mods.coroutines import TickCoroutine, Time, WaitForSeconds, WaitWhile, star
 
 def _wait_for_pawn_on_ground() -> bool:
     pc = unrealsdk.GetEngine().GamePlayers[0].Actor
-    pawn = pc.Pawn
-    return pc.IsPaused() or not pawn.IsOnGroundOrShortFall()
+    return pc.IsPaused() or pc.Pawn is None or not pc.Pawn.IsOnGroundOrShortFall()
 
 
 class Dash:
