@@ -1,8 +1,8 @@
 from typing import List, Tuple, Union
 
-import unrealsdk
+import unrealsdk  # type: ignore
 
-from .. import bl2tools
+from .. import bl2tools  # noqa: TID252
 
 
 def set_materials(ai_pawn: unrealsdk.UObject, materials: List[unrealsdk.UObject]) -> None:
@@ -35,17 +35,22 @@ def instantiate(ai_pawn_balance: unrealsdk.UObject) -> unrealsdk.UObject:
     pc = bl2tools.get_player_controller()
     _loc = (pc.Location.X, pc.Location.Y, pc.Location.Z)
     pop_master = unrealsdk.FindAll("WillowPopulationMaster")[-1]
-    pawn = pop_master.SpawnPopulationControlledActor(ai_pawn_balance.AIPawnArchetype.Class,
-                                                     None, "", _loc, (0, 0, 0),
-                                                     ai_pawn_balance.AIPawnArchetype,
-                                                     False, False)
+    pawn = pop_master.SpawnPopulationControlledActor(
+        ai_pawn_balance.AIPawnArchetype.Class,
+        None,
+        "",
+        _loc,
+        (0, 0, 0),
+        ai_pawn_balance.AIPawnArchetype,
+        False,
+        False,
+    )
 
     if pc.GetCurrentPlaythrough() != 2:
         will_pop = unrealsdk.FindAll("WillowPopulationOpportunityPoint")[1:]
         pop = unrealsdk.FindAll("PopulationOpportunityPoint")[1:]
         regions = pop if len(pop) > len(will_pop) else will_pop
-        region_game_stage = max(pc.GetGameStageFromRegion(x.GameStageRegion)
-                                for x in regions if x.GameStageRegion)
+        region_game_stage = max(pc.GetGameStageFromRegion(x.GameStageRegion) for x in regions if x.GameStageRegion)
     else:
         region_game_stage = max(x.GetGameStage() for x in unrealsdk.FindAll("WillowPlayerPawn") if x.Arms)
     # PopulationFactoryBalancedAIPawn 105-120:
@@ -63,5 +68,3 @@ def instantiate(ai_pawn_balance: unrealsdk.UObject) -> unrealsdk.UObject:
     ai.TargetSearchRadius = 12000
 
     return pawn
-
-
