@@ -96,34 +96,11 @@ def instantiate(io_definition: unrealsdk.UObject) -> unrealsdk.UObject:
         io_definition.SetupInteractiveObjectLoot(iobject, x)
         iobject.InitializeFromDefinition(io_definition.DefaultInteractiveObject, False)
 
-        if bl2tools.obj_is_in_class(iobject, "WillowVendingMachine"):
-            vending_name = bl2tools.get_obj_path_name(iobject.InteractiveObjectDefinition).lower()
-            markup = unrealsdk.FindObject(
-                "AttributeInitializationDefinition",
-                "GD_Economy.VendingMachine.Init_MarkupCalc_P1",
-            )
-            iobject.CommerceMarkup.InitializationDefinition = markup
-            iobject.FeaturedItemCommerceMarkup.InitializationDefinition = markup
-            iobject.InventoryConfigurationName = "Inventory"
-            iobject.FeaturedItemConfigurationName = "FeaturedItem"
-            item_stage = unrealsdk.FindObject(
-                "AttributeInitializationDefinition",
-                "GD_Population_Shopping.Balance.Init_FeaturedItem_GameStage",
-            )
-            item_awesome = unrealsdk.FindObject(
-                "AttributeInitializationDefinition",
-                "GD_Population_Shopping.Balance.Init_FeaturedItem_AwesomeLevel",
-            )
-            iobject.FeaturedItemGameStage.InitializationDefinition = item_stage
-            iobject.FeaturedItemAwesomeLevel.InitializationDefinition = item_awesome
-            if "health" in vending_name:
-                iobject.ShopType = 2
-            elif "ammo" in vending_name:
-                iobject.ShopType = 1
-            elif "weapon" in vending_name:
-                iobject.ShopType = 0
-
-            iobject.ResetInventory()
+        if bl2tools.obj_is_in_class(iobject, "WillowVendingMachine") or bl2tools.obj_is_in_class(
+            iobject,
+            "WillowVendingMachineBlackMarket",
+        ):
+            _initialize_vending_machine(iobject)
     else:
         iobject.InitializeFromDefinition(io_definition, False)
 
@@ -135,3 +112,70 @@ def destroy(iobject: unrealsdk.UObject) -> None:
         set_location(iobject, (-9999999, -9999999, -9999999))
         set_scale(iobject, 0)
         iobject.Destroyed()
+
+
+def _initialize_vending_machine(iobject: unrealsdk.UObject) -> None:
+    vending_name: str = bl2tools.get_obj_path_name(iobject.InteractiveObjectDefinition).lower()
+
+    if "health" in vending_name:
+        iobject.ShopType = 2
+    elif "ammo" in vending_name:
+        iobject.ShopType = 1
+    else:
+        iobject.ShopType = 0
+
+    gamestage = unrealsdk.FindObject(
+        "AttributeInitializationDefinition",
+        "GD_Population_Shopping.Balance.Init_FeaturedItem_GameStage",
+    )
+    if "seraph" in vending_name:
+        iobject.FixedItemCost = 120
+        iobject.FixedFeaturedItemCost = 50
+        iobject.FormOfCurrency = 2
+        markup = None
+        awesome = None
+    elif "torgue" in vending_name:
+        iobject.FixedItemCost = -1
+        iobject.FixedFeaturedItemCost = 613
+        iobject.FormOfCurrency = 4
+        markup = unrealsdk.FindObject(
+            "AttributeInitializationDefinition",
+            "GD_Iris_TorgueTokenVendor.CommerceMarkup",
+        )
+        gamestage = unrealsdk.FindObject(
+            "AttributeInitializationDefinition",
+            "GD_Iris_TorgueTokenVendor.Balance.Init_FeaturedItem_GameStage",
+        )
+        awesome = None
+    else:
+        iobject.FixedItemCost = -1
+        iobject.FixedFeaturedItemCost = -1
+        iobject.FormOfCurrency = 0
+        markup = unrealsdk.FindObject(
+            "AttributeInitializationDefinition",
+            "GD_Economy.VendingMachine.Init_MarkupCalc_P1",
+        )
+        awesome = unrealsdk.FindObject(
+            "AttributeInitializationDefinition",
+            "GD_Population_Shopping.Balance.Init_FeaturedItem_AwesomeLevel",
+        )
+
+    iobject.bOverrideFormOfCurrency = True
+
+    iobject.CommerceMarkup = (1, None, markup, 1)
+    iobject.InventoryConfigurationName = "Inventory"
+    iobject.FeaturedItemCommerceMarkup = (int("togue" in vending_name), None, markup, 1)
+    iobject.FeaturedItemConfigurationName = "FeaturedItem"
+    iobject.FeaturedItemGameStage = (int(awesome is None), None, gamestage, 1)
+    iobject.FeaturedItemAwesomeLevel = (0, None, awesome, 1)
+
+    iobject.ResetInventory()
+
+    if "blackmarket" in vending_name:
+        iobject.ShopType = 3
+        iobject.DefinitionData = unrealsdk.FindObject(
+            "BlackMarketDefinition",
+            "GD_BlackMarket.BlackMarket.MarketDef_BlackMarket",
+        )
+        iobject.FixedItemCost = 0
+        iobject.FixedFeaturedItemCost = 0
