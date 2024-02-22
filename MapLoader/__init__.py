@@ -13,7 +13,7 @@ from . import bl2tools, placeablehelper
 
 class MapLoader(SDKMod):
     Name = "Map Loader"
-    Version = "1.4.2"
+    Version = "1.4.3"
     Types = ModTypes.Utility | ModTypes.Content
     Description = (
         "Allows the use of custom map files created by the MapEditor.\n "

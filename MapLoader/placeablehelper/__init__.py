@@ -15,10 +15,14 @@ class TaggedObject:
     uclass: str
     tags: List[str]
     metadata: str
+    _cached_uobj: Optional[unrealsdk.UObject] = None
 
     @property
     def uobj(self) -> Optional[unrealsdk.UObject]:
-        return unrealsdk.FindObject(self.uclass, self.path_name)
+        if self._cached_uobj is not None:
+            return self._cached_uobj
+        self._cached_uobj = unrealsdk.FindObject(self.uclass, self.path_name)
+        return self._cached_uobj
 
 
 CREATED_OBJECTS: Dict[str, List[str]] = {

@@ -473,9 +473,9 @@
         "Utility",
         "Content"
       ],
-      "latest": "1.4.2",
+      "latest": "1.4.3",
       "versions": {
-        "1.4.2": "https://github.com/juso40/bl2sdk_Mods/raw/master/MapLoader/MapLoader.zip"
+        "1.4.3": "https://github.com/juso40/bl2sdk_Mods/raw/master/MapLoader/MapLoader.zip"
       },
       "requirements": {},
       "supports": [
