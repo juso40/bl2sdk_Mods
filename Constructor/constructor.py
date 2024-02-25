@@ -347,7 +347,7 @@ def projectile_body_composition_helper(template_obj: unrealsdk.UObject, new_obj:
 @logging.log_all_calls(logging.call_logger)
 class Constructor:
 
-    def __init__(self, path: os.PathLike):
+    def __init__(self, path: os.PathLike) -> None:
         self.PATH = path
         self.c_files = []
         self.l_files = []
@@ -361,7 +361,7 @@ class Constructor:
         pass
 
     def load_files(self) -> None:
-        for root, dirs, filenames in os.walk(self.PATH):
+        for root, _dirs, filenames in os.walk(self.PATH):
             for file in filenames:
                 if file.lower().endswith(".construct"):
                     self.c_files.append(os.path.join(root, file))

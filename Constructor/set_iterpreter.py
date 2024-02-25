@@ -16,34 +16,50 @@ def set_cmd(line: str) -> None:
         return
     re_line = re.match(pattern, line)
     if re_line:
-        setattr(unrealsdk.FindObject("Object", re_line[2]),
-                re_line[3], [unrealsdk.FindObject("Object", x.strip()) for x in re_line[4].split(",")])
+        try:
+            setattr(
+                unrealsdk.FindObject("Object", re_line[2]),
+                re_line[3],
+                [unrealsdk.FindObject("Object", x.strip()) for x in re_line[4].split(",")],
+            )
+        except Exception as e:
+            bl2tools.console_command(line)
+            logging.logger.debug(e)
+            logging.logger.debug(f"Could not manually parse and set command: {line}")
+            logging.logger.debug(
+                "The line above was instead set using normal console set command. "
+                "Please obj dump and make sure everything is correct.",
+            )
+
     else:
         try:
             attributes = line.split()[2].split(".")
             val = unrealsdk.FindObject("Object", line.split()[3])  # assume our val is an object
-            if not val:
+            if not val:  # Our val is not an object because FindObject returned None
                 try:
-                    val = float(line.split()[3])  # assume it's a float
-                except ValueError:  # obviously not a float nor object
-                    val = line.split()[3]
-                    if val.lower() == "true":
-                        val = True
-                    elif val.lower() == "false":
-                        val = False
-                    elif val.lower() == "none":
-                        val = None
+                    val = int(line.split()[3])  # try to convert to int
+                except ValueError:
+                    try:
+                        val = float(line.split()[3])  # assume it's a float
+                    except ValueError:  # obviously not a float nor object
+                        val = line.split()[3]
+                        if val.lower() == "true":
+                            val = True
+                        elif val.lower() == "false":
+                            val = False
+                        elif val.lower() == "none":
+                            val = None
             while len(attributes) > 1:
                 attribute = attributes.pop(0)
                 if "[" in attribute and "]" in attribute:
-                    index = int(attribute[attribute.find("[") + 1:attribute.find("]")])
-                    obj = getattr(obj, attribute[:attribute.find("[")])[index]
+                    index = int(attribute[attribute.find("[") + 1 : attribute.find("]")])
+                    obj = getattr(obj, attribute[: attribute.find("[")])[index]
                 else:
                     obj = getattr(obj, attribute)
             if "[" in attributes[0] and "]" in attributes[0]:
                 attribute = attributes[0]
-                index = int(attribute[attribute.find("[") + 1:attribute.find("]")])
-                obj = getattr(obj, attribute[:attribute.find("[")])
+                index = int(attribute[attribute.find("[") + 1 : attribute.find("]")])
+                obj = getattr(obj, attribute[: attribute.find("[")])
                 obj[index] = val
             else:
                 setattr(obj, attributes[0], val)
@@ -57,8 +73,7 @@ def set_cmd(line: str) -> None:
 def is_mission_done(required_mission: str) -> bool:
     pc = bl2tools.get_player_controller()
     for Mission in pc.MissionPlaythroughs[pc.GetCurrentPlaythrough()].MissionList:
-        if bl2tools.get_obj_path_name(Mission.MissionDef) == required_mission \
-                and Mission.Status == 4:
+        if bl2tools.get_obj_path_name(Mission.MissionDef) == required_mission and Mission.Status == 4:
             return True
     return False
 
@@ -69,8 +84,7 @@ def get_current_region_stage() -> int:
         will_pop = unrealsdk.FindAll("WillowPopulationOpportunityPoint")[1:]
         pop = unrealsdk.FindAll("PopulationOpportunityPoint")[1:]
         regions = pop if len(pop) > len(will_pop) else will_pop
-        region_game_stage = max(pc.GetGameStageFromRegion(x.GameStageRegion)
-                                for x in regions if x.GameStageRegion)
+        region_game_stage = max(pc.GetGameStageFromRegion(x.GameStageRegion) for x in regions if x.GameStageRegion)
     else:
         # op_choice = pc.OverpowerChoiceValue
         region_game_stage = pc.Pawn.GetGameStage()  # (op_choice if op_choice is not None else 0)
