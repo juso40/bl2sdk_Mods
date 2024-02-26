@@ -11,7 +11,7 @@ class Bossbar(SDKMod):
         "Adds a bossbar to minibosses and named enemies."
     )
     Author: str = "Juso"
-    Version: str = "1.1"
+    Version: str = "1.2"
     SaveEnabledState: EnabledSaveType = EnabledSaveType.LoadOnMainMenu
     
 
@@ -20,6 +20,7 @@ class Bossbar(SDKMod):
         self.boss_pawn: Optional[unrealsdk.UObject] = None
         self.bar_active: bool = False
 
+    @Hook("Engine.Pawn.Destroyed")
     @Hook("WillowGame.WillowPawn.Died")
     def hk_pawn_died(
         self,
@@ -31,6 +32,7 @@ class Bossbar(SDKMod):
             self.boss_pawn = None
             gri = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI
             gri.UpdateBossBarInfo()
+            unrealsdk.DoInjectedCallNext()
             gri.InitBossBar(False, self.boss_pawn)
             self.bar_active = False
         return True
@@ -43,14 +45,30 @@ class Bossbar(SDKMod):
         params: unrealsdk.FStruct,
     ) -> bool:
         if BBInstance.boss_pawn is None and (caller.IsChampion() or caller.IsBoss()):
-            self.boss_pawn = caller
-            gri: unrealsdk.UObject = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI
-            if gri:
-                gri.InitBossBar(True, self.boss_pawn)
-                self.bar_active = True
+            if caller.IsEnemy(unrealsdk.GetEngine().GamePlayers[0].Actor.Pawn): # Not friendly NPCs (flamerock citizens get here)
+                if "Badass " not in caller.GetTargetName():
+                    self.boss_pawn = caller
+                    gri: unrealsdk.UObject = unrealsdk.GetEngine().GetCurrentWorldInfo().GRI
+                    if gri:
+                        unrealsdk.DoInjectedCallNext()
+                        gri.InitBossBar(True, self.boss_pawn)
+                        self.bar_active = True
 
         return True
 
+    @Hook("WillowGame.WillowGameReplicationInfo.InitBossBar")
+    def hk_init_bossbar(
+        self,
+        caller: unrealsdk.UObject,
+        function: unrealsdk.UFunction,
+        params: unrealsdk.FStruct,
+    ) -> bool:
+        # Hooking into this also sets actual bosses so we don't overwrite them
+        if params.bEnable:
+            self.boss_pawn = params.BossActor
+        else:
+            self.boss_pawn = None
+        return True
 
 BBInstance = Bossbar()
 RegisterMod(BBInstance)
